@@ -1,0 +1,29 @@
+config:
+  target: "http://localhost:7003"
+  # 10 users per second linearly ramped up to 50 users per second within 20s
+  phases:
+    - duration: 20
+      arrivalRate: 10
+      rampTo: 50
+      name: "Warm up"
+  # Stress stest with 50 users per second for 300s
+    - duration: 40
+      arrivalRate: 50
+      name: "Under load"
+  cothority:
+    service: "evoting"
+    rosterToml: "/Users/gaurav/go/src/github.com/dedis/cothority/conode/public.toml"
+  engines:
+    cothority: {}
+scenarios:
+  - engine: "cothority"
+    name: "Ping"
+    flow:
+      - send:
+          request: "Ping"
+          response: "Ping"
+          data:
+            nonce: "{{ $randomNumber(1, 1000) }}"
+          capture:
+            - nonce
+      - log: "{{ nonce }}"

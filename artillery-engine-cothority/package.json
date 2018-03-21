@@ -1,0 +1,31 @@
+{
+  "name": "artillery-engine-cothority",
+  "version": "1.0.0",
+  "description": "Cothority engine for Artillery",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "artillery",
+    "cothority"
+  ],
+  "author": "DEDIS",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "eslint": "^4.19.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "prettier": "1.11.1"
+  },
+  "dependencies": {
+    "@dedis/cothority": "^1.0.2",
+    "async": "^2.6.0",
+    "debug": "^3.1.0",
+    "lodash": "^4.17.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dedis/student_18_evoting"
+  }
+}
