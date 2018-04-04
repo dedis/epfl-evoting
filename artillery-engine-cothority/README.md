@@ -26,6 +26,10 @@ npm install -g artillery-engine-cothority
 ```yaml
 config:
   target: "http://localhost:7003"
+  # Authentication Server Host
+  authHost: "http://localhost:3000"
+  # External javascript file
+  processor: "./processor.js"
   phases:
   # 10 users per second linearly ramped up to 50 users per second within 120s
     - duration: 120
@@ -44,10 +48,12 @@ config:
 scenarios:
   - engine: "cothority"
     name: "Ping"
+    beforeScenario: "somefunction"
     flow:
       - send:
           request: "Ping"
           response: "Ping"
+		  beforeRequest: "somefunction2"
           data:
             nonce: "{{ $randomNumber(1, 1000) }}"
           capture:
