@@ -15,6 +15,26 @@ class CothorityPlugin {
   createScenario(scenarioSpec, ee) {
     this._ensurePropertyIsAList(scenarioSpec, "beforeRequest");
     this._ensurePropertyIsAList(scenarioSpec, "afterResponse");
+    this._ensurePropertyIsAList(scenarioSpec, "beforeScenario");
+    this._ensurePropertyIsAList(scenarioSpec, "afterScenario");
+
+    const beforeScenarioFns = _.map(scenarioSpec.beforeScenario, function(
+      hookFunctionName
+    ) {
+      return { function: hookFunctionName };
+    });
+    const afterScenarioFns = _.map(scenarioSpec.afterScenario, function(
+      hookFunctionName
+    ) {
+      return { function: hookFunctionName };
+    });
+
+    const newFlow = beforeScenarioFns.concat(
+      scenarioSpec.flow.concat(afterScenarioFns)
+    );
+
+    scenarioSpec.flow = newFlow;
+
     let tasks = scenarioSpec.flow.map(rs => {
       return this.step(rs, ee, {
         beforeRequest: scenarioSpec.beforeRequest,
@@ -92,10 +112,14 @@ class CothorityPlugin {
               ),
               context
             );
+          } else if (funcName in this.config.processor) {
+            return this.config.processor.apply(null, _.concat(context, args));
           }
         }
       } else {
         if (!o.match(/{{/)) {
+          if (o.match(/\s*/)) {
+          }
           return context.vars[o] || o;
         }
 
@@ -110,7 +134,7 @@ class CothorityPlugin {
     const { config } = this;
     if (rs.log) {
       return (context, callback) => {
-        console.log(this.helpers.template(rs.log, context));
+        console.log(this._template(rs.log, context));
         return process.nextTick(() => {
           callback(null, context);
         });
@@ -128,6 +152,21 @@ class CothorityPlugin {
         rs,
         _.get(this.config, "defaults.think", {})
       );
+    }
+
+    if (rs.function) {
+      return (context, callback) => {
+        let processFunc = this.config.processor[rs.function];
+        if (processFunc) {
+          return processFunc(this.config, context, ee, function() {
+            return callback(null, context);
+          });
+        } else {
+          return process.nextTick(function() {
+            callback(null, context);
+          });
+        }
+      };
     }
 
     if (rs.send) {
@@ -157,7 +196,6 @@ class CothorityPlugin {
               return callback(err, context);
             }
             data = that._template(data, context);
-            debug("data: %o", data);
             ee.emit("request");
             const startedAt = process.hrtime();
 
@@ -223,7 +261,12 @@ class CothorityPlugin {
   compile(tasks, scenarioSpec, ee) {
     return (initialContext, callback) => {
       const init = next => {
-        const { rosterToml, service } = this.config.cothority;
+        const {
+          rosterToml,
+          service,
+          maxCount,
+          voterCount
+        } = this.config.cothority;
         if (!rosterToml) {
           const err = new Error("Please specify a roster");
           ee.emit("error", err);
@@ -241,8 +284,8 @@ class CothorityPlugin {
             cothority.Roster.fromTOML(roster),
             service
           );
-          initialContext.maxCount = this.config.maxCount || 1;
-          initialContext.voterCount = this.config.voterCount || 7;
+          initialContext.maxCount = maxCount || 1;
+          initialContext.voterCount = voterCount || 7;
           ee.emit("started");
           return next(null, initialContext);
         });

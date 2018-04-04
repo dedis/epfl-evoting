@@ -1,6 +1,6 @@
 {
   "name": "artillery-engine-cothority",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cothority engine for Artillery",
   "main": "index.js",
   "scripts": {
@@ -19,10 +19,12 @@
     "prettier": "1.11.1"
   },
   "dependencies": {
-    "@dedis/cothority": "^1.0.2",
+    "@dedis/cothority": "^1.0.3",
     "async": "^2.6.0",
     "debug": "^3.1.0",
-    "lodash": "^4.17.5"
+    "esprima": "^4.0.0",
+    "lodash": "^4.17.5",
+    "traverse": "^0.6.6"
   },
   "repository": {
     "type": "git",
