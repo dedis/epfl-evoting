@@ -5,6 +5,7 @@ const net = cothority.net;
 const debug = require("debug")("artillery-engine-cothority");
 const fs = require("fs");
 const traverse = require("traverse");
+const esprima = require("esprima");
 
 class CothorityPlugin {
   constructor(script, ee, helpers) {
@@ -101,7 +102,7 @@ class CothorityPlugin {
           syntax.body[0].type === "ExpressionStatement"
         ) {
           let funcName = syntax.body[0].expression.callee.name;
-          let args = L.map(syntax.body[0].expression.arguments, function(arg) {
+          let args = _.map(syntax.body[0].expression.arguments, function(arg) {
             return arg.value;
           });
           if (funcName in context.funcs) {
@@ -113,7 +114,10 @@ class CothorityPlugin {
               context
             );
           } else if (funcName in this.config.processor) {
-            return this.config.processor.apply(null, _.concat(context, args));
+            return this.config.processor[funcName].apply(
+              null,
+              _.concat(context, args)
+            );
           }
         }
       } else {

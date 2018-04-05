@@ -1,6 +1,6 @@
 {
   "name": "artillery-engine-cothority",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cothority engine for Artillery",
   "main": "index.js",
   "scripts": {
