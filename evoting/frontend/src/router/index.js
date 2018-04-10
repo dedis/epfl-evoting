@@ -72,7 +72,9 @@ router.beforeEach((to, from, next) => {
       store.commit('SET_ISADMIN', data.isAdmin)
       next()
     }).catch((err) => {
+      // probably a stale signature
       console.log(err.message)
+      next('/logout')
     })
 })
 
