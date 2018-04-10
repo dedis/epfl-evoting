@@ -204,7 +204,7 @@ class CothorityPlugin {
             const startedAt = process.hrtime();
 
             debug(
-              `rosterSocket send: rosterSocket.send(${request}, ${response}, %o)`,
+              `loaderSocket send: leaderSocket.send(${request}, ${response}, %o)`,
               data
             );
 
@@ -284,7 +284,7 @@ class CothorityPlugin {
         }
 
         fs.readFile(rosterToml, "utf8", (err, roster) => {
-          initialContext.ws = new net.RosterSocket(
+          initialContext.ws = new net.LeaderSocket(
             cothority.Roster.fromTOML(roster),
             service
           );
