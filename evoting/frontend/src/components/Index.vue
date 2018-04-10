@@ -1,7 +1,7 @@
 <template>
-  <div v-if='$store.getters.hasLoginReply'>
+  <div v-if='$store.getters.hasElections'>
     <div>
-      <div v-if="$store.state.loginReply.admin">
+      <div v-if="$store.state.isAdmin">
         <v-btn
           fixed
           dark
@@ -61,7 +61,7 @@
   <div v-else>
     <v-layout row wrap align-center>
       <v-flex xs12 class='text-xs-center'>
-        <div v-if='$store.getters.hasLoginReply'>
+        <div v-if='$store.getters.hasElections'>
           <p>Welcome, {{ $store.state.user.name }}</p>
         </div>
         <div v-else>
@@ -110,12 +110,12 @@ export default {
   methods: {
     active: (elections) => {
       return createArray(elections.filter(e => {
-        return e.stage === 0
+        return e.stage === 1
       }))
     },
     finalized: (elections) => {
       return createArray(elections.filter(e => {
-        return e.stage === 2
+        return e.stage === 3
       }))
     },
     getId: (id) => {
@@ -124,7 +124,7 @@ export default {
   },
   computed: {
     elections () {
-      return this.$store.state.loginReply.elections
+      return this.$store.getters.elections
     }
   }
 }

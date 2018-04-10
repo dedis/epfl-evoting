@@ -52,29 +52,27 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
-  if (store.getters.hasLoginReply) {
-    console.log('Have login reply')
+  if (store.getters.hasElections) {
     next()
     return
   }
   const { user } = store.state
   const deviceMessage = {
-    id: config.masterKey,
     user: parseInt(user.sciper),
+    master: config.masterKey,
+    stage: 0,
     signature: Uint8Array.from(user.signature)
   }
-  const sendingMessageName = 'Login'
-  const expectedMessageName = 'LoginReply'
+  const sendingMessageName = 'GetElections'
+  const expectedMessageName = 'GetElectionsReply'
   const { socket } = store.state
   socket.send(sendingMessageName, expectedMessageName, deviceMessage)
     .then((data) => {
-      console.log(data)
-      store.commit('SET_LOGIN_REPLY', data)
+      store.commit('SET_ELECTIONS', data.elections)
+      store.commit('SET_ISADMIN', data.isAdmin)
       next()
     }).catch((err) => {
       console.log(err.message)
-      // probably a stale signature? Remove token and redirect to tequila
-      next('/logout')
     })
 })
 

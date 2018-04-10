@@ -15,13 +15,13 @@
       </v-card-title>
       <v-card-actions>
         <v-layout row wrap>
-        <v-flex v-if="stage === 0" xs6>
+        <v-flex v-if="stage === 1" xs6>
           <v-btn :disabled="disabled || $store.state.now > end || $store.state.now < start" :to="voteLink" color="primary">Vote</v-btn>
         </v-flex>
-        <v-flex v-if="$store.state.loginReply.admin && stage === 0 && creator === parseInt($store.state.user.sciper)" class="text-xs-right" xs6>
+        <v-flex v-if="$store.state.isAdmin && stage === 1 && creator === parseInt($store.state.user.sciper)" class="text-xs-right" xs6>
           <v-btn :disabled="disabled || $store.state.now < start" v-on:click.native="finalize" color="orange">Finalize</v-btn>
         </v-flex>
-        <v-flex v-if="stage === 2" xs12>
+        <v-flex v-if="stage === 3" xs12>
           <v-btn :disabled="disabled" :to="resultLink" color="success">View Results</v-btn>
         </v-flex>
         </v-layout>
@@ -67,9 +67,13 @@ export default {
     finalize (event) {
       const { socket } = this.$store.state
       this.disabled = true
+      let { sciper, signature } = this.$store.state.user
+      sciper = parseInt(sciper)
+      signature = Uint8Array.from(signature)
       const msg = {
-        token: this.$store.state.loginReply.token,
-        id: Uint8Array.from(atob(this.id.replace(/-/g, '/')).split(',').map(x => parseInt(x)))
+        id: Uint8Array.from(atob(this.id.replace(/-/g, '/')).split(',').map(x => parseInt(x))),
+        user: sciper,
+        signature
       }
       socket.send('Shuffle', 'ShuffleReply', msg)
         .then(() => {
@@ -84,15 +88,17 @@ export default {
           })
           this.disabled = false
           const { sciper, signature } = this.$store.state.user
-          const id = config.masterKey
-          return socket.send('Login', 'LoginReply', {
-            id,
-            user: parseInt(sciper),
-            signature: Uint8Array.from(signature)
+          const master = config.masterKey
+          return socket.send('GetElections', 'GetElectionsReply', {
+            user: sciper,
+            master,
+            stage: 0,
+            signature
           })
         })
         .then(response => {
-          this.$store.commit('SET_LOGIN_REPLY', response)
+          this.$store.commit('SET_ELECTIONS', response.elections)
+          this.$store.commit('SET_ISADMIN', response.isAdmin)
           this.$router.push('/')
         })
         .catch(e => {

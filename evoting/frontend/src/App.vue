@@ -49,13 +49,15 @@ export default {
 
     setInterval(() => {
       const { socket, user } = this.$store.state
-      socket.send('Login', 'LoginReply', {
-        id: config.masterKey,
+      socket.send('GetElections', 'GetElectionsReply', {
         user: parseInt(user.sciper),
+        master: config.masterKey,
+        stage: 0,
         signature: Uint8Array.from(user.signature)
       })
-        .then((loginReply) => {
-          this.$store.commit('SET_LOGIN_REPLY', loginReply)
+        .then((reply) => {
+          this.$store.commit('SET_ELECTIONS', reply.elections)
+          this.$store.commit('SET_ISADMIN', reply.isAdmin)
         })
     }, 570000)
   },
