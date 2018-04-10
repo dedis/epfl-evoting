@@ -11,6 +11,7 @@ const LdapClient = require('promised-ldap')
 
 const PORT = process.env.PORT || 3000
 const isProd = process.env.NODE_ENV === 'production'
+const isTest = process.env.NODE_ENV === 'test'
 
 const tequilaRequest = (path, data) => {
   dataStr = util.dict2txt(data)
@@ -37,12 +38,12 @@ if (!isProd) {
   router.use('/static', express.static(path.join(__dirname, '/dist/static')))
 }
 
-const generateSignature = sciper => {
+const generateSignature = (sciper, masterKey) => {
   sciper = typeof sciper === 'string' ? sciper : sciper.toString()
-  const message = new Uint8Array(config.masterKey.length + sciper.length)
-  message.set(config.masterKey)
+  const message = new Uint8Array(masterKey.length + sciper.length)
+  message.set(masterKey)
   for (let i = 0; i < sciper.length; i++) {
-    message[i + config.masterKey.length] = sciper[i] - '0'
+    message[i + masterKey.length] = sciper[i] - '0'
   }
   const suite = new kyber.curve.edwards25519.Curve()
   const key = suite.scalar()
@@ -72,6 +73,15 @@ router.get('/auth/login', (req, res) => {
 
 router.get('/auth/verify', (req, res) => {
   payload = { key: req.query.key }
+  if (isTest) {
+    const { sciper } = req.query
+    const masterKey = process.env.MASTER_KEY.trim().split(" ").map(x => parseInt(x))
+    signature = generateSignature(sciper, masterKey);
+    res.setHeader('Content-Type', 'application/json')
+    res.send(JSON.stringify({ signature: Array.from(signature), masterKey }));
+    return
+  }
+
   return tequilaRequest('/cgi-bin/tequila/fetchattributes', payload)
     .then(response => {
       const data = util.txt2dict(response.data.trim())
@@ -91,7 +101,7 @@ router.get('/auth/verify', (req, res) => {
       }
 
       // Sign the data
-      signature = generateSignature(sciper)
+      signature = generateSignature(sciper, config.masterKey)
       user = {
         name,
         sciper,
