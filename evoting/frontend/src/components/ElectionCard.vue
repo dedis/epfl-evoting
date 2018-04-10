@@ -16,10 +16,10 @@
       <v-card-actions>
         <v-layout row wrap>
         <v-flex v-if="stage === 1" xs6>
-          <v-btn :disabled="disabled || $store.state.now > end || $store.state.now < start" :to="voteLink" color="primary">Vote</v-btn>
+          <v-btn :disabled="disabled || $store.state.now > end || $store.state.now < start" :to="voteLink" color="primary">{{ $t("message.vote") }}</v-btn>
         </v-flex>
         <v-flex v-if="$store.state.isAdmin && stage === 1 && creator === parseInt($store.state.user.sciper)" class="text-xs-right" xs6>
-          <v-btn :disabled="disabled || $store.state.now < start" v-on:click.native="finalize" color="orange">Finalize</v-btn>
+          <v-btn :disabled="disabled || $store.state.now < start" v-on:click.native="finalize" color="orange">{{ $t("message.finalize") }} </v-btn>
         </v-flex>
         <v-flex v-if="stage === 3" xs12>
           <v-btn :disabled="disabled" :to="resultLink" color="success">View Results</v-btn>

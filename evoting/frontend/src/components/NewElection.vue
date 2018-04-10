@@ -290,7 +290,7 @@ export default {
           const { sciper, signature } = this.$store.state.user
           const master = config.masterKey
           return socket.send('GetElections', 'GetElectionsReply', {
-            user: sciper,
+            user: parseInt(sciper),
             master,
             stage: 0,
             signature: Uint8Array.from(signature)

@@ -15,7 +15,7 @@
         </v-btn>
       </div>
       <div class="election-group">
-        <h3>Active Elections</h3>
+        <h3>{{ $t("message.activeElections") }}</h3>
         <v-layout
           v-for="(layout, idx) in active(elections)"
           :key="idx"
@@ -36,7 +36,7 @@
         </v-layout>
       </div>
       <div class="election-group">
-        <h3>Finalized Elections</h3>
+        <h3>{{ $t("message.finalizedElections") }}</h3>
         <v-layout
           v-for="(layout, idx) in finalized(elections)"
           :key="idx"
