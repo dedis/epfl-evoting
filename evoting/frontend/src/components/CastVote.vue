@@ -60,7 +60,7 @@ const curve = new kyber.curve.edwards25519.Curve()
 export default {
   computed: {
     election () {
-      return this.$store.state.loginReply.elections.find(e => {
+      return this.$store.state.elections.find(e => {
         return btoa(e.id).replace('/\\/g', '-') === this.$route.params.id
       })
     }
@@ -95,13 +95,14 @@ export default {
 
       // prepare and the message
       const castMsg = {
-        token: this.$store.state.loginReply.token,
         id: this.election.id,
         ballot: {
           user: parseInt(this.$store.state.user.sciper),
           alpha: u.marshalBinary(),
           beta: v.marshalBinary()
-        }
+        },
+        user: parseInt(this.$store.state.user.sciper),
+        signature: Uint8Array.from(this.$store.state.user.signature)
       }
       const { socket } = this.$store.state
       socket.send('Cast', 'CastReply', castMsg)

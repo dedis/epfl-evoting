@@ -255,11 +255,9 @@ export default {
       this.submitted = true
 
       const openProto = {
-        token: this.$store.state.loginReply.token,
         id: config.masterKey,
         election: {
           name: this.name,
-          creator: parseInt(this.$store.state.user.sciper),
           users: this.voterScipers,
           subtitle: this.subtitle,
           moreInfo: this.moreInfo,
@@ -274,7 +272,9 @@ export default {
             contactEmail: this.footerContactEmail,
             contactPhone: this.footerContactPhone
           }
-        }
+        },
+        user: parseInt(this.$store.state.user.sciper),
+        signature: Uint8Array.from(this.$store.state.user.signature)
       }
       const { socket } = this.$store.state
       socket.send('Open', 'OpenReply', openProto)
@@ -287,11 +287,12 @@ export default {
             timeout: 6000,
             model: true
           })
-          // refresh the election list - TODO: replace with get elections message
           const { sciper, signature } = this.$store.state.user
-          const id = config.masterKey
-          return socket.send('Login', 'LoginReply', { id,
-            user: parseInt(sciper),
+          const master = config.masterKey
+          return socket.send('GetElections', 'GetElectionsReply', {
+            user: sciper,
+            master,
+            stage: 0,
             signature: Uint8Array.from(signature)
           })
         })

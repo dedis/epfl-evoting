@@ -14,8 +14,9 @@ console.log('Creating new store')
 const store = new Vuex.Store({
   state: {
     user: null,
-    loginReply: null,
-    socket: new net.RosterSocket(roster, 'evoting'),
+    elections: null,
+    isAdmin: false,
+    socket: new net.LeaderSocket(roster, 'evoting'),
     snackbar: {
       text: '',
       timeout: 6000,
@@ -30,19 +31,25 @@ const store = new Vuex.Store({
     isAuthenticated: state => {
       return state.user !== null
     },
-    hasLoginReply: state => {
-      return state.loginReply !== null
+    hasElections: state => {
+      return state.elections !== null
+    },
+    elections: state => {
+      return state.elections
     },
     snackbar: state => {
       return state.snackbar
     }
   },
   mutations: {
-    SET_LOGIN_REPLY (state, loginReply) {
-      state.loginReply = loginReply
+    SET_ELECTIONS (state, elections) {
+      state.elections = elections
     },
     SET_USER (state, data) {
       state.user = data
+    },
+    SET_ISADMIN (state, isAdmin) {
+      state.isAdmin = isAdmin
     },
     SET_SNACKBAR (state, snackbar) {
       state.snackbar = snackbar

@@ -46,7 +46,7 @@ const curve = new kyber.curve.edwards25519.Curve()
 export default {
   computed: {
     election () {
-      return this.$store.state.loginReply.elections.find(e => {
+      return this.$store.state.elections.find(e => {
         return btoa(e.id).replace('/\\/g', '-') === this.$route.params.id
       })
     }
@@ -137,8 +137,7 @@ export default {
     }
     const { socket } = this.$store.state
     socket.send('Reconstruct', 'ReconstructReply', {
-      id: this.election.id,
-      token: this.$store.state.loginReply.token
+      id: this.election.id
     })
       .then(data => {
         const { points } = data
