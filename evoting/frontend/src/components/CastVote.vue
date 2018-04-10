@@ -20,7 +20,7 @@
             <v-form v-model="valid" v-on:submit="submitHandler">
               <v-layout row wrap>
                 <v-flex xs12>
-                  <p>In the following list, please select at most {{ election.maxChoices }} candidates. You may click on a name to see their motivation and presentation</p>
+                  <p>{{ $t("message.electionInstruction") }}</p>
                     <v-checkbox
                       v-for="candidate in election.candidates"
                       :key="candidate"

@@ -12,16 +12,22 @@
       <v-menu offset-y>
         <v-btn slot="activator" icon><v-icon>translate</v-icon></v-btn>
         <v-list>
-          <v-list-tile>
-            <v-list-tile-title>English</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile>
+          <v-list-tile @click="changeLanguage('fr')">
             <v-list-tile-title>Français</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="changeLanguage('de')">
+            <v-list-tile-title>Deutsch</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="changeLanguage('it')">
+            <v-list-tile-title>Italiano</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="changeLanguage('en')">
+            <v-list-tile-title>English</v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
     </v-toolbar-items>
-    <v-toolbar-items v-if="$store.getters.hasLoginReply" class="hidden-md-and-up">
+    <v-toolbar-items v-if="$store.getters.hasElections" class="hidden-md-and-up">
       <v-menu>
         <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
         <v-list>
@@ -40,7 +46,7 @@
         </v-list>
       </v-menu>
     </v-toolbar-items>
-    <v-toolbar-items v-if="$store.getters.hasLoginReply" class="hidden-sm-and-down">
+    <v-toolbar-items v-if="$store.getters.hasElections" class="hidden-sm-and-down">
         <v-btn flat>{{ $store.state.user.name }}</v-btn>
         <v-btn to="/logout" flat><v-icon>exit_to_app</v-icon></v-btn>
     </v-toolbar-items>
@@ -59,6 +65,11 @@
 export default {
   props: {
     title: String
+  },
+  methods: {
+    changeLanguage: function (lang) {
+      this.$i18n.locale = lang
+    }
   },
   data () {
     return {
