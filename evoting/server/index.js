@@ -59,7 +59,8 @@ router.get('/auth/login', (req, res) => {
     client: 'evoting-auth',
     urlaccess: `${req.protocol}://${req.hostname}/auth/verify`,
     service: 'Evoting App',
-    request: 'uniqueid'
+    request: 'uniqueid',
+    forcelogin: '1'
   }
   tequilaRequest ('/cgi-bin/tequila/createrequest', data)
     .then(response => {
