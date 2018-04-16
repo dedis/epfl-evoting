@@ -1,0 +1,46 @@
+config:
+  processor: "./proc.js"
+  target: "http://localhost"
+  authHost: "http://auth-service.dedis.svc.k8s.iccluster.epfl.ch"
+  # authHost: "http://auth-service.default.svc.cluster.local"
+  phases:
+    # - duration: 121
+      # arrivalRate: 20
+      # rampTo: 50
+    - duration: 100
+      arrivalRate: 10
+  cothority:
+    service: "evoting"
+    rosterToml: "/etc/conode/roster.toml"
+    maxCount: 4
+    candidateCount: 6
+    maxVoters: 10000
+  engines:
+    cothority: {}
+scenarios:
+  - engine: "cothority"
+    name: "Vote"
+    beforeScenario: "getSignatureAndMasterKey"
+    flow:
+      - send:
+          request: "GetElections"
+          response: "GetElectionsReply"
+          afterResponse: "createRandomBallot"
+          data:
+            user: sciper
+            master: master
+            state: 0
+            signature: signature
+          capture:
+           - elections
+      - send:
+          request: "Cast"
+          response: "CastReply"
+          data:
+            id: "{{ $getLastElectionId() }}"
+            ballot:
+              user: sciper
+              alpha: alpha
+              beta: beta
+            user: sciper
+            signature: signature

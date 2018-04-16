@@ -1,0 +1,19 @@
+{
+  "name": "evoting-loadttest",
+  "version": "1.0.0",
+  "description": "Loadtesting evoting service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gaurav Narula",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "@dedis/cothority": "^1.1.0",
+    "@dedis/kyber-js": "0.0.7",
+    "artillery": "^1.6.0-15",
+    "artillery-engine-cothority": "^1.0.3",
+    "debug": "^3.1.0",
+    "lodash": "^4.17.5"
+  }
+}

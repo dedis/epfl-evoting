@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: loadtest
+  labels:
+    job: loadtest
+spec:
+  template:
+    spec:
+      containers:
+        - name: "evoting"
+          image: gnarula/evoting:loadtest
+          imagePullPolicy: Always
+          # command: ["sleep", "24h"]
+          volumeMounts:
+            - name: roster
+              mountPath: /etc/conode/
+            - name: loadtest
+              mountPath: /etc/loadtest/
+            - name: dedis-scratch
+              mountPath: /mnt/dedis
+      volumes:
+        - name: roster
+          configMap:
+            name: roster
+        - name: loadtest
+          configMap:
+            name: loadtest
+        - name: dedis-scratch
+          persistentVolumeClaim:
+            claimName: dedis-scratch
+      restartPolicy: Never

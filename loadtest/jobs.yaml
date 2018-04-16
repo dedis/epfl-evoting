@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: initiateskipchain
+  labels:
+    job: initiateskipchain
+spec:
+  template:
+    spec:
+      containers:
+        - name: "evoting"
+          image: dedis/conode:evoting-app
+          command: ["./evoting", "-roster=/etc/config/roster.toml", "-pin=$(PIN)", "-key=ade2b431ccfdd5c6f1d9215a466e0da12fbfe041d0399c88959d1eddb7ae871c", "-admins=294116"]
+          volumeMounts:
+            - name: roster
+              mountPath: /etc/config
+          env:
+            - name: PIN
+              valueFrom:
+                secretKeyRef:
+                  name: conode1-pin
+                  key: pin
+      volumes:
+        - name: roster
+          configMap:
+            name: roster
+      restartPolicy: Never

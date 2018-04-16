@@ -1,0 +1,118 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: conode1-service
+spec:
+  selector:
+    app: conode1
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 6879
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 6880
+    targetPort: 6880
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: conode2-service
+spec:
+  selector:
+    app: conode2
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 6879
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 6880
+    targetPort: 6880
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: conode3-service
+spec:
+  selector:
+    app: conode3
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 6879
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 6880
+    targetPort: 6880
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: conode4-service
+spec:
+  selector:
+    app: conode4
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 6879
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 6880
+    targetPort: 6880
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: conode5-service
+spec:
+  selector:
+    app: conode5
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 6879
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 6880
+    targetPort: 6880
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: conode6-service
+spec:
+  selector:
+    app: conode6
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 6879
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 6880
+    targetPort: 6880
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: conode7-service
+spec:
+  selector:
+    app: conode7
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 6879
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 6880
+    targetPort: 6880

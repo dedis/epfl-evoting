@@ -1,0 +1,228 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: conode1-deployment
+  labels:
+    app: conode1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conode1
+  template:
+    metadata:
+      labels:
+        app: conode1
+    spec:
+      volumes:
+        - name: "conode-data"
+          emptyDir: {}
+      containers:
+        - name: conode1
+          # image: dedis/conode:e2d7253a
+          image: gnarula/conode:evoting-global-lock
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/conode_data"
+              name: "conode-data"
+          ports:
+            - containerPort: 6879
+              containerPort: 6880
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: conode2-deployment
+  labels:
+    app: conode2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conode2
+  template:
+    metadata:
+      labels:
+        app: conode2
+    spec:
+      volumes:
+        - name: "conode-data"
+          emptyDir: {}
+      containers:
+        - name: conode2
+          # image: dedis/conode:6543f7bb
+          # image: dedis/conode:90cc69cc
+          # image: dedis/conode:e2d7253a
+          image: gnarula/conode:evoting-global-lock
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/conode_data"
+              name: "conode-data"
+          ports:
+            - containerPort: 6879
+              containerPort: 6880
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: conode3-deployment
+  labels:
+    app: conode3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conode3
+  template:
+    metadata:
+      labels:
+        app: conode3
+    spec:
+      volumes:
+        - name: "conode-data"
+          emptyDir: {}
+      containers:
+        - name: conode3
+          # image: dedis/conode:6543f7bb
+          # image: dedis/conode:90cc69cc
+          # image: dedis/conode:e2d7253a
+          image: gnarula/conode:evoting-global-lock
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/conode_data"
+              name: "conode-data"
+          ports:
+            - containerPort: 6879
+              containerPort: 6880
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: conode4-deployment
+  labels:
+    app: conode4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conode4
+  template:
+    metadata:
+      labels:
+        app: conode4
+    spec:
+      volumes:
+        - name: "conode-data"
+          emptyDir: {}
+      containers:
+        - name: conode4
+          # image: dedis/conode:6543f7bb
+          # image: dedis/conode:90cc69cc
+          # image: dedis/conode:e2d7253a
+          image: gnarula/conode:evoting-global-lock
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/conode_data"
+              name: "conode-data"
+          ports:
+            - containerPort: 6879
+              containerPort: 6880
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: conode5-deployment
+  labels:
+    app: conode5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conode5
+  template:
+    metadata:
+      labels:
+        app: conode5
+    spec:
+      volumes:
+        - name: "conode-data"
+          emptyDir: {}
+      containers:
+        - name: conode5
+          # image: dedis/conode:6543f7bb
+          # image: dedis/conode:90cc69cc
+          # image: dedis/conode:e2d7253a
+          image: gnarula/conode:evoting-global-lock
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/conode_data"
+              name: "conode-data"
+          ports:
+            - containerPort: 6879
+              containerPort: 6880
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: conode6-deployment
+  labels:
+    app: conode6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conode6
+  template:
+    metadata:
+      labels:
+        app: conode6
+    spec:
+      volumes:
+        - name: "conode-data"
+          emptyDir: {}
+      containers:
+        - name: conode6
+          # image: dedis/conode:6543f7bb
+          # image: dedis/conode:90cc69cc
+          # image: dedis/conode:e2d7253a
+          image: gnarula/conode:evoting-global-lock
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/conode_data"
+              name: "conode-data"
+          ports:
+            - containerPort: 6879
+              containerPort: 6880
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: conode7-deployment
+  labels:
+    app: conode7
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conode7
+  template:
+    metadata:
+      labels:
+        app: conode7
+    spec:
+      volumes:
+        - name: "conode-data"
+          emptyDir: {}
+      containers:
+        - name: conode7
+          # image: dedis/conode:6543f7bb
+          # image: dedis/conode:90cc69cc
+          # image: dedis/conode:e2d7253a
+          image: gnarula/conode:evoting-global-lock
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/conode_data"
+              name: "conode-data"
+          ports:
+            - containerPort: 6879
+              containerPort: 6880

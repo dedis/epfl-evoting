@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: busybox
+  labels:
+    job: busybox
+spec:
+  template:
+    spec:
+      containers:
+        - name: "busybox"
+          image: busybox
+          command: ["sleep", "24h"]
+          volumeMounts:
+            - name: dedis-scratch
+              mountPath: /mnt/dedis
+      volumes:
+        - name: dedis-scratch
+          persistentVolumeClaim:
+            claimName: dedis-scratch
+      restartPolicy: Never

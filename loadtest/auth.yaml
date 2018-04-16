@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  labels:
+    app: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: gnarula/evoting:auth
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              value: "test"
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth
+                  key: PRIVATE_KEY
+            - name: MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth
+                  key: MASTER_KEY
+          ports:
+            - containerPort: 3000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth
+  ports:
+  - name: authport
+    protocol: TCP
+    port: 80
+    targetPort: 3000
