@@ -3,7 +3,7 @@
     <v-flex sm12 offset-md3 md6>
       <v-card>
         <v-toolbar card dark :class="election.theme">
-          <v-toolbar-title class="white--text">{{ election.name }}</v-toolbar-title>
+          <v-toolbar-title class="white--text">{{ $t(`election_${getId(election)}.name`) }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <div v-if="election.moreInfo">
             <a class="election-info" target="_blank" :href="election.moreInfo"><v-icon>info</v-icon></a>
@@ -13,7 +13,7 @@
           <v-container fluid>
             <v-layout>
               <v-flex xs12>
-                {{ election.subtitle }}
+                {{ $t(`election_${getId(election)}.subtitle`) }}
               </v-flex>
             </v-layout>
             <v-layout
@@ -40,18 +40,21 @@
 
 <script>
 import kyber from '@dedis/kyber-js'
-import { timestampToString } from '@/utils'
+import { Uint8ArrayToHex, timestampToString } from '@/utils'
 
 const curve = new kyber.curve.edwards25519.Curve()
 export default {
   computed: {
     election () {
       return this.$store.state.elections.find(e => {
-        return btoa(e.id).replace('/\\/g', '-') === this.$route.params.id
+        return Uint8ArrayToHex(e.id) === this.$route.params.id
       })
     }
   },
   methods: {
+    getId (election) {
+      return Uint8ArrayToHex(election.id)
+    },
     candidates (data) {
       const arr = []
       for (let i = 0; i < data.length; i += 3) {

@@ -3,30 +3,76 @@
     <v-flex sm12 offset-md3 md6>
       <v-card>
         <v-toolbar card dark :class="theme">
-          <v-toolbar-title class="white--text">New Election</v-toolbar-title>
+          <v-toolbar-title class="white--text">{{ name[$i18n.locale] || 'New Election' }}</v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
           <v-form v-model="valid" v-on:submit="submitHandler">
           <v-layout row wrap>
             <v-flex xs12>
-              <v-text-field
-                label="Election Name"
-                v-model="name"
-                :counter=20
-                prepend-icon="create"
-                :rules=[validateName]
-                required
-              ></v-text-field>
+              <v-expansion-panel>
+                <v-expansion-panel-content>
+                  <div slot="header">
+                    <div class="depad">
+                      <v-text-field
+                        :label="getTitleLabel($i18n.locale)"
+                        v-model="name[$i18n.locale]"
+                        :counter=20
+                        prepend-icon="create"
+                        :rules=[validateName]
+                        :validate-on-blur="true"
+                        required
+                      ></v-text-field>
+                    </div>
+                  </div>
+                  <v-card>
+                    <v-card-text>
+                      <v-text-field v-for="lang in langOrder"
+                        :key="lang"
+                        :label="getTitleLabel(lang)"
+                        v-model="name[lang]"
+                        :counter=20
+                        prepend-icon="create"
+                        :rules=[validateName]
+                        :validate-on-blur="true"
+                        required
+                      ></v-text-field>
+                    </v-card-text>
+                  </v-card>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
             </v-flex>
             <v-flex md6 xs12>
-              <v-text-field
-                label="Election Subtitle"
-                v-model="subtitle"
-                :counter=100
-                prepend-icon="mode_comment"
-                :rules=[validateSubtitle]
-                required
-              ></v-text-field>
+              <v-expansion-panel>
+                <v-expansion-panel-content>
+                  <div slot="header">
+                    <div class="depad">
+                      <v-text-field
+                        :label="getSubtitleLabel($i18n.locale)"
+                        v-model="subtitle[$i18n.locale]"
+                        :counter=100
+                        prepend-icon="mode_comment"
+                        :rules=[validateSubtitle]
+                        :validate-on-blur="true"
+                        required
+                      ></v-text-field>
+                    </div>
+                  </div>
+                  <v-card>
+                    <v-card-text>
+                      <v-text-field v-for="lang in langOrder"
+                        :key="lang"
+                        :label="getSubtitleLabel(lang)"
+                        v-model="subtitle[lang]"
+                        :counter=100
+                        prepend-icon="mode_comment"
+                        :rules=[validateSubtitle]
+                        :validate-on-blur="true"
+                        required
+                      ></v-text-field>
+                    </v-card-text>
+                  </v-card>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
             </v-flex>
             <v-flex md6 xs12>
               <v-text-field
@@ -142,7 +188,12 @@
               ></v-text-field>
             </v-flex>
             <v-flex xs12 class="text-xs-center">
-              <v-btn type="submit" :disabled="!valid || submitted || voterScipers.length === 0" color="primary">Create Election</v-btn>
+              <v-btn
+                type="submit"
+                :disabled="!valid || this.name[$i18n.locale] === null || this.subtitle[$i18n.locale] === null || submitted || voterScipers.length === 0"
+                color="primary">
+                Create Election
+               </v-btn>
             </v-flex>
           </v-layout>
         </v-form>
@@ -159,7 +210,22 @@ import UploadButton from './UploadButton'
 import { timestampToString } from '@/utils'
 
 export default {
+  computed: {
+    langOrder () {
+      let langs = ['en', 'fr', 'de', 'it']
+      let { locale } = this.$i18n
+      const lpos = langs.indexOf(locale)
+      langs.splice(lpos, 1)
+      return langs
+    }
+  },
   methods: {
+    getTitleLabel (locale) {
+      return `Election Title (${locale})`
+    },
+    getSubtitleLabel (locale) {
+      return `Election Subtitle (${locale})`
+    },
     parseVoterList (file) {
       if (file == null || file.type !== 'text/plain') {
         // show snackbar
@@ -230,10 +296,12 @@ export default {
       return /\w+/.test(items[items.length - 1]) || 'Invalid Group'
     },
     validateName (name) {
-      return !!name || 'Name field is required'
+      let { locale } = this.$i18n
+      return name === null || !!this.name[locale] || 'Name field in current locale is required'
     },
     validateSubtitle (subtitle) {
-      return !!subtitle || 'Subtitle field is required'
+      let { locale } = this.$i18n
+      return subtitle === null || !!this.subtitle[locale] || 'Subtitle field is required for the current locale'
     },
     validateMaxChoices (maxChoices) {
       if (!maxChoices) {
@@ -253,13 +321,20 @@ export default {
     submitHandler (e) {
       e.preventDefault()
       this.submitted = true
-
+      const name = {}
+      const subtitle = {}
+      const langs = ['en', 'fr', 'de', 'it']
+      for (let i = 0; i < langs.length; i++) {
+        const lang = langs[i]
+        name[lang] = this.name[lang] === null ? '' : this.name[lang]
+        subtitle[lang] = this.subtitle[lang] === null ? '' : this.subtitle[lang]
+      }
       const openProto = {
         id: config.masterKey,
         election: {
-          name: this.name,
+          name,
           users: this.voterScipers,
-          subtitle: this.subtitle,
+          subtitle,
           moreInfo: this.moreInfo,
           start: Math.floor(this.start / 1000),
           end: Math.floor(this.end / 1000),
@@ -276,6 +351,7 @@ export default {
         user: parseInt(this.$store.state.user.sciper),
         signature: Uint8Array.from(this.$store.state.user.signature)
       }
+      console.log(openProto)
       const { socket } = this.$store.state
       socket.send('Open', 'OpenReply', openProto)
         .then(data => {
@@ -297,7 +373,7 @@ export default {
           })
         })
         .then(response => {
-          this.$store.commit('SET_LOGIN_REPLY', response)
+          this.$store.commit('SET_ELECTIONS', response.elections)
           this.$router.push('/')
         })
         .catch(e => {
@@ -315,10 +391,20 @@ export default {
   data () {
     const today = timestampToString(this.$store.state.now, false)
     return {
-      name: null,
+      name: {
+        en: null,
+        fr: null,
+        de: null,
+        it: null
+      },
       end: new Date(`${today} 23:59:00`).getTime(),
       start: new Date(`${today} 00:00:00`).getTime(),
-      subtitle: null,
+      subtitle: {
+        en: null,
+        fr: null,
+        de: null,
+        it: null
+      },
       modal: false,
       groups: [],
       voterScipers: [],
@@ -354,3 +440,17 @@ export default {
 }
 </script>
 
+<style scoped>
+.expansion-panel {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.depad {
+  margin: -12px -24px;
+}
+
+.card__text {
+  padding: 0;
+}
+</style>

@@ -68,12 +68,13 @@ router.beforeEach((to, from, next) => {
   const { socket } = store.state
   socket.send(sendingMessageName, expectedMessageName, deviceMessage)
     .then((data) => {
+      console.log('elections', data.elections)
       store.commit('SET_ELECTIONS', data.elections)
       store.commit('SET_ISADMIN', data.isAdmin)
       next()
     }).catch((err) => {
       // probably a stale signature
-      console.log(err.message)
+      console.error(err)
       next('/logout')
     })
 })

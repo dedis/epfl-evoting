@@ -11,7 +11,7 @@
             target="_blank"
             :key="item.text"
           >
-            {{ item.text }}
+            {{ $t(`message.${item.text}`) }}
           </v-breadcrumbs-item>
         </v-breadcrumbs>
         </v-card>
@@ -22,7 +22,7 @@
           v-model="$store.getters.snackbar.model"
         >
           {{ $store.getters.snackbar.text }}
-          <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
+          <v-btn dark flat @click.native="$store.state.snackbar.model = false">Close</v-btn>
         </v-snackbar>
       </v-container>
   </v-app>

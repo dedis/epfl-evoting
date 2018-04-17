@@ -2,7 +2,7 @@
   <div class="flex sm12 md4 election-card">
     <v-card>
       <v-toolbar card dark :class="theme">
-        <v-toolbar-title class="white--text">{{ name }}</v-toolbar-title>
+        <v-toolbar-title class="white--text">{{ $t(`election_${this.id}.name`)}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <div v-if="moreInfo">
           <a class="election-info" target="_blank" :href="moreInfo"><v-icon>info</v-icon></a>
@@ -10,7 +10,7 @@
       </v-toolbar>
       <v-card-title class="election-card-name">
         <v-layout>
-          <v-flex xs12>{{ subtitle }}</v-flex>
+          <v-flex xs12>{{ $t(`election_${this.id}.subtitle`) }}</v-flex>
         </v-layout>
       </v-card-title>
       <v-card-actions>
@@ -22,15 +22,10 @@
           <v-btn :disabled="disabled || $store.state.now < start" v-on:click.native="finalize" color="orange">{{ $t("message.finalize") }} </v-btn>
         </v-flex>
         <v-flex v-if="stage === 3" xs12>
-          <v-btn :disabled="disabled" :to="resultLink" color="success">View Results</v-btn>
+          <v-btn :disabled="disabled" :to="resultLink" color="success">{{ $t("message.viewResults") }}</v-btn>
         </v-flex>
         </v-layout>
       </v-card-actions>
-      <v-slide-y-transition>
-        <v-card-text class="grey--text" v-show="show">
-          {{ subtitle }}
-        </v-card-text>
-      </v-slide-y-transition>
     </v-card>
   </div>
 </template>
@@ -44,7 +39,7 @@
 
 <script>
 import config from '@/config'
-import { timestampToString } from '@/utils'
+import { hexToUint8Array, timestampToString } from '@/utils'
 
 export default {
   computed: {
@@ -53,11 +48,11 @@ export default {
     }
   },
   props: {
-    name: String,
+    // name: String,
     end: Number,
     start: Number,
     creator: Number,
-    subtitle: String,
+    // subtitle: String,
     moreInfo: String,
     stage: Number,
     id: String,
@@ -71,7 +66,7 @@ export default {
       sciper = parseInt(sciper)
       signature = Uint8Array.from(signature)
       const msg = {
-        id: Uint8Array.from(atob(this.id.replace(/-/g, '/')).split(',').map(x => parseInt(x))),
+        id: hexToUint8Array(this.id),
         user: sciper,
         signature
       }

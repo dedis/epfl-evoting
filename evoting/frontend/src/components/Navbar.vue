@@ -19,8 +19,7 @@
             <v-list-tile-title>Deutsch</v-list-tile-title>
           </v-list-tile>
           <v-list-tile @click="changeLanguage('it')">
-            <v-list-tile-title>Italiano</v-list-tile-title>
-          </v-list-tile>
+            <v-list-tile-title>Italiano</v-list-tile-title> </v-list-tile>
           <v-list-tile @click="changeLanguage('en')">
             <v-list-tile-title>English</v-list-tile-title>
           </v-list-tile>

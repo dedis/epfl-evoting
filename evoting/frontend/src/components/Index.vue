@@ -86,6 +86,7 @@
 
 <script>
 import ElectionCard from './ElectionCard'
+import { Uint8ArrayToHex } from '@/utils'
 
 const createArray = filteredArray => {
   const res = []
@@ -119,7 +120,7 @@ export default {
       }))
     },
     getId: (id) => {
-      return btoa(id).replace(/\\/g, '-')
+      return Uint8ArrayToHex(id)
     }
   },
   computed: {
