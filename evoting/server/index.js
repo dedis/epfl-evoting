@@ -72,6 +72,50 @@ router.get('/auth/login', (req, res) => {
     })
 })
 
+router.get('/auth/login/txt', (req, res) => {
+  let data = {
+    client: 'evoting-auth',
+    urlaccess: `${req.protocol}://${req.hostname}/auth/verify/txt`,
+    service: 'Evoting App',
+    request: 'uniqueid',
+    forcelogin: '1'
+  }
+  tequilaRequest ('/cgi-bin/tequila/createrequest', data)
+    .then(response => {
+      const data = util.txt2dict(response.data.trim())
+      res.redirect(307, `https://${config.tequila.hostname}/cgi-bin/tequila/auth?requestkey=${data.key}`)
+    })
+    .catch(e => {
+      console.error(e.message)
+    })
+})
+
+router.get('/auth/verify/txt', (req, res) => {
+  payload = { key: req.query.key }
+
+  return tequilaRequest('/cgi-bin/tequila/fetchattributes', payload)
+    .then(response => {
+      const data = util.txt2dict(response.data.trim())
+      const sciper = data.uniqueid
+
+      // Sign the data
+      signature = generateSignature(sciper, config.masterKey)
+
+      // Prepare result
+      user = {
+        sciper,
+        signature: util.Uint8ArrayToHex(signature),
+      }
+
+      // Send it
+      res.send(JSON.stringify({ user }))
+    })
+    .catch(e => {
+      console.error(e)
+      res.end()
+    })
+})
+
 router.get('/auth/verify', (req, res) => {
   payload = { key: req.query.key }
   if (isTest) {
