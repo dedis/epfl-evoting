@@ -12,6 +12,12 @@
             <v-icon slot="activator" class="results-download" @click="downloadVoteCount()">file_download</v-icon>
             <span>{{ $t('message.exportResults') }}</span>
           </v-tooltip>
+          <div v-if="voted">
+            <v-tooltip bottom>
+              <v-icon dark class="election-voted" color="white" slot="activator">check</v-icon>
+              <span>{{ $t('message.ballotCast', { block: voted }) }} </span>
+            </v-tooltip>
+          </div>
         </v-toolbar>
         <v-card-title>
           <v-container fluid>
@@ -57,6 +63,10 @@ export default {
       return this.$store.state.elections.find(e => {
         return Uint8ArrayToHex(e.id) === this.$route.params.id
       })
+    },
+    voted () {
+      const shortId = Uint8ArrayToHex(this.election.id).substring(0, 10)
+      return this.$store.state.voted[shortId]
     }
   },
   methods: {

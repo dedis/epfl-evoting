@@ -125,5 +125,10 @@ export default {
   .election-info {
     text-decoration: none !important;
   }
+
+  .election-voted {
+    padding: 0 5px;
+    cursor: pointer;
+  }
 </style>
 

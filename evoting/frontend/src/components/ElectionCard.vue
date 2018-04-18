@@ -7,6 +7,12 @@
         <div v-if="moreInfo">
           <a class="election-info" target="_blank" :href="moreInfo"><v-icon>info</v-icon></a>
         </div>
+        <div v-if="voted">
+          <v-tooltip bottom>
+            <v-icon dark class="election-voted" color="white" slot="activator">check</v-icon>
+            <span>{{ $t('message.ballotCast', { block: voted }) }} </span>
+          </v-tooltip>
+        </div>
       </v-toolbar>
       <v-card-title class="election-card-name">
         <v-layout>
@@ -45,6 +51,9 @@ export default {
   computed: {
     endDate () {
       return timestampToString(this.end, true)
+    },
+    voted () {
+      return this.$store.state.voted[this.id.substring(0, 10)]
     }
   },
   props: {
@@ -70,7 +79,8 @@ export default {
         user: sciper,
         signature
       }
-      socket.send('Shuffle', 'ShuffleReply', msg)
+      socket
+        .send('Shuffle', 'ShuffleReply', msg)
         .then(() => {
           return socket.send('Decrypt', 'DecryptReply', msg)
         })
@@ -122,9 +132,10 @@ export default {
       this.creatorName = this.$store.state.names[this.creator]
       return
     }
-    this.$store.state.socket.send('LookupSciper', 'LookupSciperReply', {
-      sciper: this.creator.toString()
-    })
+    this.$store.state.socket
+      .send('LookupSciper', 'LookupSciperReply', {
+        sciper: this.creator.toString()
+      })
       .then(response => {
         this.creatorName = response.fullName
         // cache

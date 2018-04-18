@@ -32,7 +32,8 @@
             :creator="election.creator"
             :subtitle="election.subtitle"
             :moreInfo="election.moreInfo"
-            :stage="election.stage"></election-card>
+            :stage="election.stage"
+            ></election-card>
         </v-layout>
       </div>
       <div class="election-group">

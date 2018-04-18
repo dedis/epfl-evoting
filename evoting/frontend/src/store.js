@@ -75,7 +75,9 @@ const store = new Vuex.Store({
           const id = `election_${Uint8ArrayToHex(e.id)}`
           messages[lang][id] = {
             name: e.name[lang] ? e.name[lang] : e.name[fallbackLocale],
-            subtitle: e.subtitle[lang] ? e.subtitle[lang] : e.subtitle[fallbackLocale]
+            subtitle: e.subtitle[lang]
+              ? e.subtitle[lang]
+              : e.subtitle[fallbackLocale]
           }
         }
         i18n.mergeLocaleMessage(lang, messages[lang])
@@ -93,14 +95,21 @@ const store = new Vuex.Store({
     },
     SET_NOW (state, now) {
       state.now = now
+    },
+    SET_VOTED (store, votedElections) {
+      const obj = {}
+      for (let i = 0; i < votedElections.length; i++) {
+        const election = votedElections[i]
+        obj[Uint8ArrayToHex(election.id).substring(0, 10)] = Uint8ArrayToHex(
+          election.voted
+        ).substring(0, 10)
+      }
+      store.voted = obj
     }
   },
-  plugins: [createPersistedState({ key: 'evoting', paths: ['user'] })]
+  plugins: [createPersistedState({ key: 'evoting', paths: ['user', 'voted'] })]
 })
 
 export default store
 
-export {
-  store,
-  i18n
-}
+export { store, i18n }

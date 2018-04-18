@@ -56,22 +56,36 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
-  const { user } = store.state
+  let { user, voted } = store.state
+  voted = voted || {}
+  const checkVoted = Object.keys(voted).length === 0
   const deviceMessage = {
     user: parseInt(user.sciper),
     master: config.masterKey,
     stage: 0,
-    signature: Uint8Array.from(user.signature)
+    signature: Uint8Array.from(user.signature),
+    checkVoted
   }
   const sendingMessageName = 'GetElections'
   const expectedMessageName = 'GetElectionsReply'
   const { socket } = store.state
+<<<<<<< HEAD
   socket.send(sendingMessageName, expectedMessageName, deviceMessage)
     .then((data) => {
+=======
+  socket
+    .send(sendingMessageName, expectedMessageName, deviceMessage)
+    .then(data => {
+>>>>>>> show tick icon if user has already voted
       store.commit('SET_ELECTIONS', data.elections)
       store.commit('SET_ISADMIN', data.isAdmin)
+      if (checkVoted) {
+        const votedElections = data.elections.filter(e => e.voted.length > 0)
+        store.commit('SET_VOTED', votedElections)
+      }
       next()
-    }).catch((err) => {
+    })
+    .catch(err => {
       // probably a stale signature
       console.error(err)
       next('/logout')

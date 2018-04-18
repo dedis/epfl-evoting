@@ -10,7 +10,8 @@ const messages = {
       epfl: 'EPFL',
       epflAssembly: 'EPFL Assembly',
       elections2018: 'Elections 2018',
-      exportResults: 'Export results in CSV'
+      exportResults: 'Export results in CSV',
+      ballotCast: 'Ballot cast in block {block}'
     }
   },
   fr: {
@@ -24,7 +25,8 @@ const messages = {
       epfl: 'EPFL',
       epflAssembly: 'Assemblée d\'école de l\'EPFL',
       elections2018: 'Élections 2018',
-      exportResults: 'Exporter les résultats au format CSV'
+      exportResults: 'Exporter les résultats au format CSV',
+      ballotCast: 'Vote enregistrée sous {block}'
     }
   },
   de: {
@@ -38,7 +40,8 @@ const messages = {
       epfl: 'EPFL',
       epflAssembly: 'EPFL Schulversammlung',
       elections2018: 'Wahlen 2018',
-      exportResults: 'Exportieren Sie die Ergebnisse im CSV-Format'
+      exportResults: 'Exportieren Sie die Ergebnisse im CSV-Format',
+      ballotCast: 'Stimme in block {block} abgegeben'
     }
   },
   it: {
@@ -52,7 +55,8 @@ const messages = {
       epfl: 'EPFL',
       epflAssembly: 'Assemblea della scuola EPFL',
       elections2018: 'Elezioni 2018',
-      exportResults: 'Esporta i risultati in formato CSV'
+      exportResults: 'Esporta i risultati in formato CSV',
+      ballotCast: 'Ballot cast in block {block}'
     }
   }
 }

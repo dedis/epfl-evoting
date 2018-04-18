@@ -8,6 +8,12 @@
           <div v-if="election.moreInfo">
             <a class="election-info" target="_blank" :href="election.moreInfo"><v-icon>info</v-icon></a>
           </div>
+          <div v-if="voted">
+            <v-tooltip bottom>
+              <v-icon class="election-voted" dark color="white" slot="activator">check</v-icon>
+              <span>{{ $t('message.ballotCast', { block: voted }) }} </span>
+            </v-tooltip>
+          </div>
         </v-toolbar>
         <v-card-title>
           <v-container fluid>
@@ -21,6 +27,7 @@
               <v-layout row wrap>
                 <v-flex xs12>
                   <p>{{ $t("message.electionInstruction", { maxChoices: election.maxChoices }) }}</p>
+                  <v-radio-group>
                     <v-checkbox
                       v-for="candidate in election.candidates"
                       :key="candidate"
@@ -53,7 +60,11 @@
 
 <script>
 import kyber from '@dedis/kyber-js'
-import { Uint8ArrayToHex, scipersToUint8Array, timestampToString } from '../utils'
+import {
+  Uint8ArrayToHex,
+  scipersToUint8Array,
+  timestampToString
+} from '../utils'
 
 const curve = new kyber.curve.edwards25519.Curve()
 
@@ -63,6 +74,10 @@ export default {
       return this.$store.state.elections.find(e => {
         return Uint8ArrayToHex(e.id) === this.$route.params.id
       })
+    },
+    voted () {
+      const shortId = Uint8ArrayToHex(this.election.id).substring(0, 10)
+      return this.$store.state.voted[shortId]
     }
   },
   methods: {
@@ -74,7 +89,10 @@ export default {
     },
     validateBallot (ballot) {
       const { election } = this
-      return ballot.length <= election.maxChoices || `Maximum ${election.maxChoices} allowed`
+      return (
+        ballot.length <= election.maxChoices ||
+        `Maximum ${election.maxChoices} allowed`
+      )
     },
     dateStr (timestamp) {
       return timestampToString(timestamp, true)
@@ -110,9 +128,12 @@ export default {
         signature: Uint8Array.from(this.$store.state.user.signature)
       }
       const { socket } = this.$store.state
-      socket.send('Cast', 'CastReply', castMsg)
-        .then(() => {
+      socket
+        .send('Cast', 'CastReply', castMsg)
+        .then(data => {
           this.submitted = false
+          this.$store.state.voted[Uint8ArrayToHex(this.election.id).substring(0, 10)] =
+            Uint8ArrayToHex(data.id).substring(0, 10)
           this.$store.commit('SET_SNACKBAR', {
             color: 'success',
             text: 'Your vote has been cast successfully',
@@ -145,9 +166,10 @@ export default {
     if (this.election.creator in this.$store.state.names) {
       this.creatorName = this.$store.state.names[this.election.creator]
     } else {
-      this.$store.state.socket.send('LookupSciper', 'LookupSciperReply', {
-        sciper: this.election.creator.toString()
-      })
+      this.$store.state.socket
+        .send('LookupSciper', 'LookupSciperReply', {
+          sciper: this.election.creator.toString()
+        })
         .then(response => {
           this.creatorName = response.fullName
           // cache
@@ -161,11 +183,15 @@ export default {
       if (this.candidateNames[sciper]) {
         continue
       }
-      this.$store.state.socket.send('LookupSciper', 'LookupSciperReply', {
-        sciper: sciper.toString()
-      })
+      this.$store.state.socket
+        .send('LookupSciper', 'LookupSciperReply', {
+          sciper: sciper.toString()
+        })
         .then(response => {
-          this.candidateNames = {...this.candidateNames, [sciper]: response.fullName}
+          this.candidateNames = {
+            ...this.candidateNames,
+            [sciper]: response.fullName
+          }
           // cache
           this.$store.state.names[sciper] = this.candidateNames[sciper]
         })
