@@ -11,7 +11,8 @@ Vue.use(Vuex)
 Vue.use(VueI18n)
 
 const net = cothority.net
-const roster = cothority.Roster.fromTOML(rosterTOML)
+const wss = window.location.protocol === 'https:'
+const roster = cothority.Roster.fromTOML(rosterTOML, wss)
 
 console.log('Creating new store')
 
