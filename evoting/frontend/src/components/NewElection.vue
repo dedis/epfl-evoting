@@ -351,7 +351,6 @@ export default {
         user: parseInt(this.$store.state.user.sciper),
         signature: Uint8Array.from(this.$store.state.user.signature)
       }
-      console.log(openProto)
       const { socket } = this.$store.state
       socket.send('Open', 'OpenReply', openProto)
         .then(data => {

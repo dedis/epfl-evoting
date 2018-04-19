@@ -23,7 +23,7 @@
           row
           wrap>
           <election-card
-            v-for="election in layout" :key="election.id.toString()"
+            v-for="election in layout" :key="getId(election.id)"
             :id="getId(election.id)"
             :name="election.name"
             :end="election.end"
@@ -44,7 +44,7 @@
           row
           wrap>
           <election-card
-            v-for="election in layout" :key="election.name"
+            v-for="election in layout" :key="getId(election.id)"
             :id="getId(election.id)"
             :name="election.name"
             :end="election.end"

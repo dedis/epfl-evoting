@@ -82,7 +82,6 @@ export default {
             timeout: 6000
           })
           this.disabled = false
-          const { sciper, signature } = this.$store.state.user
           const master = config.masterKey
           return socket.send('GetElections', 'GetElectionsReply', {
             user: sciper,

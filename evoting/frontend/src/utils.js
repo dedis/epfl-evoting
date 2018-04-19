@@ -10,6 +10,20 @@ export const scipersToUint8Array = scipers => {
   })))
 }
 
+export const Uint8ArrayToScipers = bytes => {
+  if (bytes.length % 3 !== 0) {
+    // invalid ballot
+    return []
+  }
+  const res = []
+  for (let i = 0; i < bytes.length; i += 3) {
+    const sciper = bytes[i] + bytes[i + 1] * (1 << 8) + bytes[i + 2] * (1 << 16)
+    res.push(sciper)
+  }
+  // return unique scipers
+  return Array.from(new Set(res))
+}
+
 /**
  * This assumes that the encoded data was indeed a byte array initially
  */

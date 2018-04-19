@@ -85,7 +85,9 @@ export default {
 
       const { key } = this.election
       // encrypt the ballot
-      const embedMsg = scipersToUint8Array(this.ballot)
+      let { ballot } = this
+      ballot = new Set(ballot)
+      const embedMsg = scipersToUint8Array(Array.from(ballot))
       const m = curve.point().embed(embedMsg)
       const r = curve.scalar().pick()
       // u = gr

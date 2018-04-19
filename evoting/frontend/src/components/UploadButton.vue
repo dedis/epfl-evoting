@@ -34,7 +34,6 @@
           if (e.target.files[0]) {
             this.fileName = e.target.files[0].name
             this.selectedCallback(e.target.files[0])
-            console.log(this.$store.state.scipersReadFromFile)
           } else {
             this.selectedCallback(null)
           }

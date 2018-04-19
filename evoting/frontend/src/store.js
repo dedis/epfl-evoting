@@ -80,7 +80,6 @@ const store = new Vuex.Store({
         }
         i18n.mergeLocaleMessage(lang, messages[lang])
       }
-      console.log(i18n.messages)
       state.elections = elections
     },
     SET_USER (state, data) {

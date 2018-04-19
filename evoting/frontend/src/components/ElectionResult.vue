@@ -8,6 +8,10 @@
           <div v-if="election.moreInfo">
             <a class="election-info" target="_blank" :href="election.moreInfo"><v-icon>info</v-icon></a>
           </div>
+          <v-tooltip bottom>
+            <v-icon slot="activator" class="results-download" @click="downloadVoteCount()">file_download</v-icon>
+            <span>{{ $t('message.exportResults') }}</span>
+          </v-tooltip>
         </v-toolbar>
         <v-card-title>
           <v-container fluid>
@@ -40,7 +44,11 @@
 
 <script>
 import kyber from '@dedis/kyber-js'
-import { Uint8ArrayToHex, timestampToString } from '@/utils'
+import {
+  Uint8ArrayToScipers,
+  Uint8ArrayToHex,
+  timestampToString
+} from '@/utils'
 
 const curve = new kyber.curve.edwards25519.Curve()
 export default {
@@ -52,6 +60,29 @@ export default {
     }
   },
   methods: {
+    downloadVoteCount () {
+      // https://stackoverflow.com/a/18849208
+      const filename = Uint8ArrayToHex(this.election.id).substring(0, 10) + '_result.csv'
+      const csvContent = this.votes.join('\n')
+
+      // https://stackoverflow.com/a/24922761
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, filename)
+      } else {
+        const link = document.createElement('a')
+        if (link.download !== undefined) {
+          // Browsers that support HTML5 download attribute
+          var url = URL.createObjectURL(blob)
+          link.setAttribute('href', url)
+          link.setAttribute('download', filename)
+          link.style.visibility = 'hidden'
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        }
+      }
+    },
     getId (election) {
       return Uint8ArrayToHex(election.id)
     },
@@ -83,6 +114,7 @@ export default {
       totalCount: 0,
       creatorName: '',
       candidateNames: {},
+      votes: [],
       colors: [
         'green accent-4',
         'green accent-3',
@@ -148,11 +180,13 @@ export default {
           const point = curve.point()
           point.unmarshalBinary(points[i])
           const d = point.data()
-          for (let j = 0; j < d.length; j += 3) {
-            const sciper = d[j] + d[j + 1] * (1 << 8) + d[j + 2] * (1 << 16)
+          const scipers = Uint8ArrayToScipers(d)
+          for (let j = 0; j < scipers.length; j++) {
+            const sciper = scipers[j]
             this.counts[sciper] += 1
           }
-          this.totalCount += d.length / 3
+          this.votes.push(scipers.join(','))
+          this.totalCount += scipers.length
         }
       })
       .catch(e => {
@@ -177,6 +211,11 @@ export default {
   line-height: 30px;
   font-size: 12px;
   font-weight: 500;
+  padding: 0 5px;
+}
+
+.results-download {
+  cursor: pointer;
   padding: 0 5px;
 }
 </style>
