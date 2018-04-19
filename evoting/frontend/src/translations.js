@@ -56,7 +56,7 @@ const messages = {
       epflAssembly: 'Assemblea della scuola EPFL',
       elections2018: 'Elezioni 2018',
       exportResults: 'Esporta i risultati in formato CSV',
-      ballotCast: 'Ballot cast in block {block}'
+      ballotCast: 'Ballot registrato sul blocco {block}'
     }
   }
 }
