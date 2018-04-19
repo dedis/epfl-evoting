@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@dedis/cothority": "^1.1.3",
+    "@dedis/cothority": "^1.1.4",
     "@dedis/kyber-js": "^0.0.7",
     "vue": "^2.5.2",
     "vue-i18n": "^7.6.0",
