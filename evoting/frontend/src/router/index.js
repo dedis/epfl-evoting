@@ -69,14 +69,9 @@ router.beforeEach((to, from, next) => {
   const sendingMessageName = 'GetElections'
   const expectedMessageName = 'GetElectionsReply'
   const { socket } = store.state
-<<<<<<< HEAD
-  socket.send(sendingMessageName, expectedMessageName, deviceMessage)
-    .then((data) => {
-=======
   socket
     .send(sendingMessageName, expectedMessageName, deviceMessage)
     .then(data => {
->>>>>>> show tick icon if user has already voted
       store.commit('SET_ELECTIONS', data.elections)
       store.commit('SET_ISADMIN', data.isAdmin)
       if (checkVoted) {
