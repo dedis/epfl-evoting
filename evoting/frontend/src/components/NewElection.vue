@@ -16,7 +16,6 @@
                       <v-text-field
                         :label="getTitleLabel($i18n.locale)"
                         v-model="name[$i18n.locale]"
-                        :counter=20
                         prepend-icon="create"
                         :rules=[validateName]
                         :validate-on-blur="true"
@@ -30,7 +29,6 @@
                         :key="lang"
                         :label="getTitleLabel(lang)"
                         v-model="name[lang]"
-                        :counter=20
                         prepend-icon="create"
                         :rules=[validateName]
                         :validate-on-blur="true"
@@ -49,7 +47,6 @@
                       <v-text-field
                         :label="getSubtitleLabel($i18n.locale)"
                         v-model="subtitle[$i18n.locale]"
-                        :counter=100
                         prepend-icon="mode_comment"
                         :rules=[validateSubtitle]
                         :validate-on-blur="true"
@@ -63,7 +60,6 @@
                         :key="lang"
                         :label="getSubtitleLabel(lang)"
                         v-model="subtitle[lang]"
-                        :counter=100
                         prepend-icon="mode_comment"
                         :rules=[validateSubtitle]
                         :validate-on-blur="true"
@@ -159,7 +155,6 @@
               <v-text-field
                 label="Footer Text"
                 v-model="footerText"
-                :counter=80
                 prepend-icon="create"
               ></v-text-field>
             </v-flex>
@@ -167,7 +162,6 @@
               <v-text-field
                 label="Contact Title"
                 v-model="footerContactTitle"
-                :counter=20
                 prepend-icon="create"
               ></v-text-field>
             </v-flex>
@@ -182,7 +176,6 @@
               <v-text-field
                 label="Contact Email"
                 v-model="footerContactEmail"
-                :counter=50
                 prepend-icon="email"
                 :rules=[validateEmail]
               ></v-text-field>
