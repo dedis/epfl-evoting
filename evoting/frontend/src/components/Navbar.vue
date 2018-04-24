@@ -9,6 +9,7 @@
     <v-toolbar-title v-text="title"></v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
+      <v-btn href="http://voting-web-prod.epfl.ch/" flat><v-icon color="grey lighten-2">group_work</v-icon></v-btn>
       <v-menu offset-y>
         <v-btn slot="activator" icon><v-icon>translate</v-icon></v-btn>
         <v-list>
