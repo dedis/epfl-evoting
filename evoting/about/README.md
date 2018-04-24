@@ -4,11 +4,13 @@ Electronic voting seems like it should be so simple. Like e-mail... it's the sam
 
 But when you look more closely at how voting works, and how to make sure that the voters have confidence in the results, adding computers into the mix opens up new problems and new possible solutions.
 
-Electronic voting has been around for decades, just think of the online polls used for marketing purposes, political purposes, and entertainment purposes. But online polls often deliver surprising or inaccurate results, as a result of people casting too many votes, or the votes being counted in ways that are not transparent to the voters. Furthermore, with typical online polls, you give up your privacy to whoever is in control of the tabulation system. They get to know who you are, and what you voted for. For "what's your favorite beverage" this might be ok, but for more serious issues, it becomes a problem. And even if you could somehow trust the one administrator to respect your privacy, what if you could distribute the responsibility for your privacy, so that several unrelated institutions would have to collude to compromise the security of the election?
+Electronic voting has been around for decades, just think of the online polls used for marketing purposes, political purposes, and entertainment purposes. But online polls often deliver surprising or inaccurate results, as a result of people casting too many votes, or the votes being counted or miscounted in ways that are not transparent to the voters. Furthermore, with typical online polls, you give up your privacy to whoever is in control of the tabulation system. 
 
-So some problems that need to be solved to make a voting system are:
-1. Protecting the privacy of the voter
+And even if you could somehow trust the one administrator to respect your privacy, wouldn't it be better if you could distribute the responsibility for your privacy, so that several unrelated institutions would have to collude to compromise the security of the election?
+
+Thus, some problems that need to be solved to make a voting system are:
 2. Providing transparency that the votes were counted correctly
+1. Protecting the privacy of the voter
 3. Distribute the responsibility for safeguarding the privacy of the voters
 
 Before we look at how the EPFL e-voting system works, it would be helpful to imagine how to implement an online poll. The simplest way would be to have one database table like this:
@@ -33,6 +35,8 @@ A solution to this is that the voting system can make each transaction it receiv
 If Alice and Bob convert their votes into data and hide it via public key encryption before they send it in to the voting system, they can have privacy. But the voting system must be able to unlock the votes later, in order to count them. And once the votes are unlocked, the privacy is lost.
 
 What is needed is to separate the votes from who cast them, so that the votes can be unlocked without losing privacy. In this system, privacy is assured using ideas from Andrew Neff, and from the Helios voting system [1,2].
+
+## Distributing secret key material
 
 No single node can hold the keys for decryption alone, or else that node could violate the privacy or even falsify the votes. A Distributed Key Generation algorithm is used to ensure that each election has a public key to use to encrypt the ballots, but the private key to unlock them later is not available in any one single server. [4]
 
