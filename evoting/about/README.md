@@ -35,9 +35,11 @@ No single node can hold the keys for decryption alone, or else that node could v
 - [HTML/JS UI](https://github.com/dedis/epfl-evoting/tree/master/evoting/frontend)
 - [Status UI](https://github.com/dedis/student_17_cothority-web/tree/evoting)
 
-## Related work in e-voting
+## Related work in e-voting in Switzerland
 
-There are other aspects of e-voting that need to be taken into consideration. The security of the device making the vote is a serious concern, because a compromised browser or smartphone might change the ballot before it is cast. See the [CHvote specification](https://chvote.virvum.ch/about) for an approach to solving this "cast as intended" problem which is currently [being implemented](https://republique-et-canton-de-geneve.github.io/index-en.html) by the Canton of Geneva.
+There are other aspects of e-voting that need to be taken into consideration. The security of the device making the vote is a serious concern, because a compromised browser or smartphone might change the ballot before it is cast. See the [CHvote specification](https://chvote.virvum.ch/about) for an approach to solving this "cast as intended" problem which is currently [being implemented](https://www.ge.ch/dossier/chvote-plateforme-vote-electronique-du-canton-geneve) by the Canton of Geneva.
+
+The Swiss Post is also [active in e-voting](https://www.post.ch/en/business/a-z-of-subjects/industry-solutions/swiss-post-e-voting). Their [blog](https://blog.evoting.ch/en) explains the issues involved in scaling up e-voting in a democracy like Switzerland.
 
 # What you see on the E-voting status page
 
