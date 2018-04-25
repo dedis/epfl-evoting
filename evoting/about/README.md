@@ -1,13 +1,13 @@
 # How the EPFL e-voting system works
 
-Running an election seems simple, doesn't it? Get some paper ballots, mark them, put them intoa ballot box, and then count them.
+Running an election seems simple, doesn't it? Get some paper ballots, mark them, put them into a ballot box, and then count them.
 
 Running an electronic seems simple as well: make electronic ballots, put them in an electronic ballot box and count them, right?
 
-But for voters to have confidence in the outcome of an election, they need to be able to see what's going on. That's why there are protocols for how ballot papers are handled, how ballot boxes are opened, and who is present when they are counted.
+But for voters to have confidence in the outcome of an election, they need to be able to see what's going on. That's why in modern democratic elections there are specific protocols for how ballot papers are handled, how ballot boxes are opened, and who is present when they are counted.
 
-If we want voters using an e-voting system to have the same confidence, we need to solve those same problems:
-1. Providing transparency that the votes were counted correctly
+If we want voters using an e-voting system to have the same confidence they have in physical voting systems, we need to solve those same problems:
+1. Providing transparency that the votes were recorded and counted correctly
 1. Protecting the privacy of the voter
 1. Distribute the responsibility for safeguarding the privacy of the voters
 
