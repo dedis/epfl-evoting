@@ -51,7 +51,7 @@ export default {
       const { socket, user } = this.$store.state
       socket.send('GetElections', 'GetElectionsReply', {
         user: parseInt(user.sciper),
-        master: config.masterKey,
+        master: config.masterID,
         stage: 0,
         signature: Uint8Array.from(user.signature)
       })

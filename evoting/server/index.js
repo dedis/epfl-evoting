@@ -38,12 +38,12 @@ if (!isProd) {
   router.use('/static', express.static(path.join(__dirname, '/dist/static')))
 }
 
-const generateSignature = (sciper, masterKey) => {
+const generateSignature = (sciper, masterID) => {
   sciper = typeof sciper === 'string' ? sciper : sciper.toString()
-  const message = new Uint8Array(masterKey.length + sciper.length)
-  message.set(masterKey)
+  const message = new Uint8Array(masterID.length + sciper.length)
+  message.set(masterID)
   for (let i = 0; i < sciper.length; i++) {
-    message[i + masterKey.length] = sciper[i] - '0'
+    message[i + masterID.length] = sciper[i] - '0'
   }
   const suite = new kyber.curve.edwards25519.Curve()
   const key = suite.scalar()
@@ -99,7 +99,7 @@ router.get('/auth/verify/txt', (req, res) => {
       const sciper = data.uniqueid
 
       // Sign the data
-      signature = generateSignature(sciper, config.masterKey)
+      signature = generateSignature(sciper, config.masterID)
 
       // Prepare result
       user = {
@@ -120,10 +120,10 @@ router.get('/auth/verify', (req, res) => {
   payload = { key: req.query.key }
   if (isTest) {
     const { sciper } = req.query
-    const masterKey = process.env.MASTER_KEY.trim().split(" ").map(x => parseInt(x))
-    signature = generateSignature(sciper, masterKey);
+    const masterID = process.env.MASTER_ID.trim().split(" ").map(x => parseInt(x))
+    signature = generateSignature(sciper, masterID);
     res.setHeader('Content-Type', 'application/json')
-    res.send(JSON.stringify({ signature: Array.from(signature), masterKey }));
+    res.send(JSON.stringify({ signature: Array.from(signature), masterID }));
     return
   }
 
@@ -146,7 +146,7 @@ router.get('/auth/verify', (req, res) => {
       }
 
       // Sign the data
-      signature = generateSignature(sciper, config.masterKey)
+      signature = generateSignature(sciper, config.masterID)
       user = {
         name,
         sciper,

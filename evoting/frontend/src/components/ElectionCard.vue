@@ -92,7 +92,7 @@ export default {
             timeout: 6000
           })
           this.disabled = false
-          const master = config.masterKey
+          const master = config.masterID
           return socket.send('GetElections', 'GetElectionsReply', {
             user: sciper,
             master,

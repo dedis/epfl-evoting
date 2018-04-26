@@ -61,7 +61,7 @@ router.beforeEach((to, from, next) => {
   const checkVoted = Object.keys(voted).length === 0
   const deviceMessage = {
     user: parseInt(user.sciper),
-    master: config.masterKey,
+    master: config.masterID,
     stage: 0,
     signature: Uint8Array.from(user.signature),
     checkVoted

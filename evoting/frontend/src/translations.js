@@ -11,7 +11,9 @@ const messages = {
       epflAssembly: 'EPFL Assembly',
       elections2018: 'Elections 2018',
       exportResults: 'Export results in CSV',
-      ballotCast: 'Ballot cast in block {block}'
+      ballotCast: 'Ballot cast in block {block}',
+      logout: 'Logout',
+      howItWorks: 'How it works'
     }
   },
   fr: {
@@ -26,7 +28,9 @@ const messages = {
       epflAssembly: 'Assemblée d\'école de l\'EPFL',
       elections2018: 'Élections 2018',
       exportResults: 'Exporter les résultats au format CSV',
-      ballotCast: 'Vote enregistrée sous {block}'
+      ballotCast: 'Vote enregistrée sous {block}',
+      logout: 'Déconnexion',
+      howItWorks: 'Comment ça marche'
     }
   },
   de: {
@@ -41,7 +45,9 @@ const messages = {
       epflAssembly: 'EPFL Schulversammlung',
       elections2018: 'Wahlen 2018',
       exportResults: 'Exportieren Sie die Ergebnisse im CSV-Format',
-      ballotCast: 'Stimme in block {block} abgegeben'
+      ballotCast: 'Stimme in block {block} abgegeben',
+      logout: 'Ausloggen',
+      howItWorks: 'Wie es funktioniert'
     }
   },
   it: {
@@ -56,7 +62,9 @@ const messages = {
       epflAssembly: 'Assemblea della scuola EPFL',
       elections2018: 'Elezioni 2018',
       exportResults: 'Esporta i risultati in formato CSV',
-      ballotCast: 'Ballot registrato sul blocco {block}'
+      ballotCast: 'Ballot registrato sul blocco {block}',
+      logout: 'Disconnessione',
+      howItWorks: 'Come funziona'
     }
   }
 }

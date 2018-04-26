@@ -323,7 +323,7 @@ export default {
         subtitle[lang] = this.subtitle[lang] === null ? '' : this.subtitle[lang]
       }
       const openProto = {
-        id: config.masterKey,
+        id: config.masterID,
         election: {
           name,
           users: this.voterScipers,
@@ -356,7 +356,7 @@ export default {
             model: true
           })
           const { sciper, signature } = this.$store.state.user
-          const master = config.masterKey
+          const master = config.masterID
           return socket.send('GetElections', 'GetElectionsReply', {
             user: parseInt(sciper),
             master,
