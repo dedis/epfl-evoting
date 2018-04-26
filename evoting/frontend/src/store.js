@@ -14,6 +14,12 @@ const net = cothority.net
 const wss = window.location.protocol === 'https:'
 const roster = cothority.Roster.fromTOML(rosterTOML, wss)
 
+var path = 'evoting'
+if (roster.identities[0].addr.startsWith('tls://demos.epfl.ch')) {
+  console.log('activating demos.epfl.ch hack')
+  path = 'conode/evoting'
+}
+
 console.log('Creating new store')
 
 const getLang = () => {
@@ -33,7 +39,7 @@ const store = new Vuex.Store({
     user: null,
     elections: null,
     isAdmin: false,
-    socket: new net.LeaderSocket(roster, 'evoting'),
+    socket: new net.LeaderSocket(roster, path),
     snackbar: {
       text: '',
       timeout: 6000,
