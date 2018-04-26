@@ -52,7 +52,7 @@
       </v-menu>
     </v-toolbar-items>
     <v-toolbar-items v-if="$store.getters.hasElections" class="hidden-sm-and-down">
-        <v-btn ripple="false" href="http://voting-web-prod.epfl.ch/" flat><v-icon color="grey lighten-2">group_work</v-icon></v-btn>
+        <v-btn href="http://voting-web-prod.epfl.ch/" flat><v-icon color="grey lighten-2">group_work</v-icon></v-btn>
         <v-btn flat>{{ $store.state.user.name }}</v-btn>
         <v-btn to="/logout" flat><v-icon>exit_to_app</v-icon></v-btn>
     </v-toolbar-items>

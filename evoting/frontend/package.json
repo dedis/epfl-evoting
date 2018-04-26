@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@dedis/cothority": "^1.1.8",
-    "@dedis/kyber-js": "^0.0.8",
+    "@dedis/kyber-js": "^0.0.9",
     "vue": "^2.5.2",
     "vue-i18n": "^7.6.0",
     "vue-material": "^1.0.0-beta-8",
