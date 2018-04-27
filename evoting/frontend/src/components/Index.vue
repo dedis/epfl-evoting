@@ -112,7 +112,7 @@ export default {
   methods: {
     active: (elections) => {
       return createArray(elections.filter(e => {
-        return e.stage === 1
+        return e.stage < 3
       }))
     },
     finalized: (elections) => {

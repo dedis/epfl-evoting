@@ -21,10 +21,10 @@
       </v-card-title>
       <v-card-actions>
         <v-layout row wrap>
-        <v-flex v-if="stage === 1" xs6>
-          <v-btn :disabled="disabled || $store.state.now > end || $store.state.now < start" :to="voteLink" color="primary">{{ $t("message.vote") }}</v-btn>
+        <v-flex v-if="stage < 3" xs6>
+          <v-btn :disabled="stage == 2 || disabled || $store.state.now > end || $store.state.now < start" :to="voteLink" color="primary">{{ $t("message.vote") }}</v-btn>
         </v-flex>
-        <v-flex v-if="$store.state.isAdmin && stage === 1 && creator === parseInt($store.state.user.sciper)" class="text-xs-right" xs6>
+        <v-flex v-if="$store.state.isAdmin && stage < 3 && creator === parseInt($store.state.user.sciper)" class="text-xs-right" xs6>
           <v-btn :disabled="disabled || $store.state.now < start" v-on:click.native="finalize" color="orange">{{ $t("message.finalize") }} </v-btn>
         </v-flex>
         <v-flex v-if="stage === 3" xs12>
@@ -68,7 +68,7 @@ export default {
     theme: String
   },
   methods: {
-    finalize (event) {
+    async finalize (event) {
       const { socket } = this.$store.state
       this.disabled = true
       let { sciper, signature } = this.$store.state.user
@@ -79,41 +79,46 @@ export default {
         user: sciper,
         signature
       }
-      socket
-        .send('Shuffle', 'ShuffleReply', msg)
-        .then(() => {
-          return socket.send('Decrypt', 'DecryptReply', msg)
+      const setError = (e) => {
+        this.$store.commit('SET_SNACKBAR', {
+          color: 'error',
+          text: e.message,
+          model: true,
+          timeout: 6000
         })
-        .then(() => {
-          this.$store.commit('SET_SNACKBAR', {
-            color: 'success',
-            text: 'Election finalized',
-            model: true,
-            timeout: 6000
-          })
-          this.disabled = false
-          const master = config.masterID
-          return socket.send('GetElections', 'GetElectionsReply', {
-            user: sciper,
-            master,
-            stage: 0,
-            signature
-          })
+        this.disabled = false
+      }
+      try {
+        await socket.send('Shuffle', 'ShuffleReply', msg)
+      } catch (e) {
+        if (e.message.indexOf('already shuffled') === -1) {
+          throw e
+        } else {
+          setError(e)
+        }
+      }
+      try {
+        await socket.send('Decrypt', 'DecryptReply', msg)
+        this.$store.commit('SET_SNACKBAR', {
+          color: 'success',
+          text: 'Election finalized',
+          model: true,
+          timeout: 6000
         })
-        .then(response => {
-          this.$store.commit('SET_ELECTIONS', response.elections)
-          this.$store.commit('SET_ISADMIN', response.isAdmin)
-          this.$router.push('/')
+        this.disabled = false
+        const master = config.masterID
+        const response = await socket.send('GetElections', 'GetElectionsReply', {
+          user: sciper,
+          master,
+          stage: 0,
+          signature
         })
-        .catch(e => {
-          this.$store.commit('SET_SNACKBAR', {
-            color: 'error',
-            text: e.message,
-            model: true,
-            timeout: 6000
-          })
-          this.disabled = false
-        })
+        this.$store.commit('SET_ELECTIONS', response.elections)
+        this.$store.commit('SET_ISADMIN', response.isAdmin)
+        this.$router.push('/')
+      } catch (e) {
+        setError(e)
+      }
     }
   },
   data () {
