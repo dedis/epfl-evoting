@@ -24,6 +24,11 @@
           {{ $store.getters.snackbar.text }}
           <v-btn dark flat @click.native="$store.state.snackbar.model = false">Close</v-btn>
         </v-snackbar>
+	
+    	<v-footer class="grey--text justify-right">
+	    <v-spacer></v-spacer>
+            <div>Version: 0.0.1 </div>
+        </v-footer>
       </v-container>
   </v-app>
 </template>
