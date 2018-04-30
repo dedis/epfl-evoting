@@ -27,7 +27,7 @@
 	
     	<v-footer class="grey--text justify-right">
 	    <v-spacer></v-spacer>
-            <div>Version: 0.0.1 </div>
+            <div>Version: 1.0.0 </div>
         </v-footer>
       </v-container>
   </v-app>
