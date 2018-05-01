@@ -13,7 +13,8 @@ const messages = {
       exportResults: 'Export results in CSV',
       ballotCast: 'Ballot cast in block {block}',
       logout: 'Logout',
-      howItWorks: 'How it works'
+      howItWorks: 'How it works',
+      invalidBallots: '{invalidCount} ballots were ignored while counting because they were invalid. Please check the browser console for more information.'
     }
   },
   fr: {
@@ -30,7 +31,8 @@ const messages = {
       exportResults: 'Exporter les résultats au format CSV',
       ballotCast: 'Vote enregistrée sous {block}',
       logout: 'Déconnexion',
-      howItWorks: 'Comment ça marche'
+      howItWorks: 'Comment ça marche',
+      invalidBallots: '{invalidCount} votes ont été ignorés pendant le dépouillement parce qu’ils étaient invalides. Veuillez vérifier la console du navigateur pour plus d’informations.'
     }
   },
   de: {
@@ -47,7 +49,8 @@ const messages = {
       exportResults: 'Exportieren Sie die Ergebnisse im CSV-Format',
       ballotCast: 'Stimme in block {block} abgegeben',
       logout: 'Ausloggen',
-      howItWorks: 'Wie es funktioniert'
+      howItWorks: 'Wie es funktioniert',
+      invalidBallots: '{invalidCount} Stimmzettel wurden während der Zählung ignoriert, weil sie ungültig waren. Weitere Informationen finden Sie im Protokoll der Browserkonsole.'
     }
   },
   it: {
@@ -64,7 +67,8 @@ const messages = {
       exportResults: 'Esporta i risultati in formato CSV',
       ballotCast: 'Ballot registrato sul blocco {block}',
       logout: 'Disconnessione',
-      howItWorks: 'Come funziona'
+      howItWorks: 'Come funziona',
+      invalidBallots: '{invalidCount} voti sono stati ignorati durante il conteggio perché non erano validi. Si prega di controllare la console del browser per ulteriori informazioni.'
     }
   }
 }

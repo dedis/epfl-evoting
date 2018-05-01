@@ -26,25 +26,47 @@
                 {{ $t(`election_${getId(election)}.subtitle`) }}
               </v-flex>
             </v-layout>
-            <v-layout
-              v-for="(val, idx) in sortCounts(counts)"
-              :key="val.sciper"
-              row
-              wrap>
-              <v-flex xs5 md3>
-                <p class="candidate">{{ candidateNames[val.sciper] }}</p>
-              </v-flex>
-              <v-flex xs5 md7>
-                <v-progress-linear :color="colors[idx % colors.length]" :value="percentage(val.count, totalCount)"></v-progress-linear>
-              </v-flex>
-              <v-flex xs2 md2 class="text-md-center">
-                <span class="count">({{ val.count }}/{{ totalCount }})</span>
-              </v-flex>
-            </v-layout>
+            <div v-if="counted">
+              <v-layout
+                v-for="(val, idx) in sortCounts(counts)"
+                :key="val.sciper"
+                row
+                wrap>
+                <v-flex xs5 md3>
+                  <p class="candidate">{{ candidateNames[val.sciper] }}</p>
+                </v-flex>
+                <v-flex xs5 md7>
+                  <v-progress-linear :color="colors[idx % colors.length]" :value="percentage(val.count, totalCount)"></v-progress-linear>
+                </v-flex>
+                <v-flex xs2 md2 class="text-md-center">
+                  <span class="count">({{ val.count }}/{{ totalCount }})</span>
+                </v-flex>
+              </v-layout>
+              <v-layout v-if="invalidCount > 0">
+                <v-flex xs12>
+                  <p>{{ $t('message.invalidBallots', { invalidCount })}}</p>
+                </v-flex>
+              </v-layout>
+            </div>
+            <div v-else>
+              <v-layout>
+                <v-flex xs12 class="text-xs-center">
+                  <v-progress-circular indeterminate ></v-progress-circular>
+                </v-flex>
+              </v-layout>
+            </div>
           </v-container>
         </v-card-title>
       </v-card>
     </v-flex>
+    <v-footer app>
+      <v-layout row wrap>
+        <v-flex xs6 text-xs-left>
+          &copy; 2018 {{ election.footer.text }}
+        </v-flex>
+        <v-flex xs6 text-xs-right>{{ election.footer.contactPhone }}, <a :href="`mailto:${election.footer.contactEmail}`">{{ election.footer.contactTitle }}</a> <span class="grey--text">v{{ version }}</span></v-flex>
+      </v-layout>
+    </v-footer>
   </v-layout>
 </template>
 
@@ -55,6 +77,7 @@ import {
   Uint8ArrayToHex,
   timestampToString
 } from '@/utils'
+import config from '@/config'
 
 const curve = new kyber.curve.edwards25519.Curve()
 export default {
@@ -122,7 +145,6 @@ export default {
     return {
       counts: {},
       totalCount: 0,
-      creatorName: '',
       candidateNames: {},
       votes: [],
       colors: [
@@ -145,22 +167,13 @@ export default {
         'orange darken-2',
         'orange darken-3',
         'orange darken-4'
-      ]
+      ],
+      invalidCount: 0,
+      counted: false,
+      version: config.version
     }
   },
   created () {
-    if (this.election.creator in this.$store.state.names) {
-      this.creatorName = this.$store.state.names[this.election.creator]
-    } else {
-      this.$store.state.socket.send('LookupSciper', 'LookupSciperReply', {
-        sciper: this.election.creator.toString()
-      })
-        .then(response => {
-          this.creatorName = response.fullName
-          // cache
-          this.$store.state.names[this.creator] = this.creatorName
-        })
-    }
     const c = this.election.candidates
     for (let i = 0; i < c.length; i++) {
       this.counts[c[i]] = 0
@@ -191,6 +204,17 @@ export default {
           point.unmarshalBinary(points[i])
           const d = point.data()
           const scipers = Uint8ArrayToScipers(d)
+          if (scipers.length !== d.length / 3) {
+            console.log(`iteration ${i} invalid ballot: duplicate scipers`)
+            this.invalidCount++
+            continue
+          }
+          const filtered = scipers.filter(x => c.includes(x))
+          if (filtered.length !== scipers.length) {
+            this.invalidCount++
+            console.log(`iteration ${i} invalid ballot: invalid candidate`)
+            continue
+          }
           for (let j = 0; j < scipers.length; j++) {
             const sciper = scipers[j]
             this.counts[sciper] += 1
@@ -198,9 +222,16 @@ export default {
           this.votes.push(scipers.join(','))
           this.totalCount += scipers.length
         }
+        this.counted = true
       })
       .catch(e => {
         console.error(e.message)
+        this.$store.commit('SET_SNACKBAR', {
+          color: 'error',
+          text: e.message,
+          model: true,
+          timeout: 6000
+        })
       })
   },
   watch: {

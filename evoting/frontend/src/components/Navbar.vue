@@ -30,10 +30,10 @@
       <v-menu>
         <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
         <v-list>
-	  <v-list-tile href="http://voting-web-prod.epfl.ch/">
-            <v-list-tile-avatar><v-icon color="grey lighten-2">group_work</v-icon></v-list-tile-avatar>
+          <v-list-tile href="http://voting-web-prod.epfl.ch/">
+            <v-list-tile-avatar><v-icon>group_work</v-icon></v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title color="grey lighten-2">{{ $t("message.howItWorks") }}</v-list-tile-title>
+              <v-list-tile-title>{{ $t("message.howItWorks") }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-list-tile>
@@ -52,7 +52,7 @@
       </v-menu>
     </v-toolbar-items>
     <v-toolbar-items v-if="$store.getters.hasElections" class="hidden-sm-and-down">
-        <v-btn href="http://voting-web-prod.epfl.ch/" flat><v-icon color="grey lighten-2">group_work</v-icon></v-btn>
+        <v-btn href="http://voting-web-prod.epfl.ch/" flat><v-icon>group_work</v-icon></v-btn>
         <v-btn flat>{{ $store.state.user.name }}</v-btn>
         <v-btn to="/logout" flat><v-icon>exit_to_app</v-icon></v-btn>
     </v-toolbar-items>

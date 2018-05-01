@@ -58,6 +58,11 @@
         </v-layout>
       </div>
     </div>
+    <v-footer app>
+      <v-layout row wrap>
+        <v-flex><span class="grey--text">v{{ version }}</span></v-flex>
+      </v-layout>
+    </v-footer>
   </div>
   <div v-else>
     <v-layout row wrap align-center>
@@ -88,6 +93,7 @@
 <script>
 import ElectionCard from './ElectionCard'
 import { Uint8ArrayToHex } from '@/utils'
+import config from '@/config'
 
 const createArray = filteredArray => {
   const res = []
@@ -127,6 +133,11 @@ export default {
   computed: {
     elections () {
       return this.$store.getters.elections
+    }
+  },
+  data () {
+    return {
+      version: config.version
     }
   }
 }

@@ -52,7 +52,10 @@
     </v-flex>
     <v-footer app>
       <v-layout row wrap>
-        <v-flex xs6 text-xs-left>&copy; 2018 {{ election.footer.text }}</v-flex><v-flex text-xs-right>{{ election.footer.contactPhone }}, <a :href="`mailto:${election.footer.contactEmail}`">{{ election.footer.contactTitle }}</a></v-flex>
+        <v-flex xs6 text-xs-left>
+          &copy; 2018 {{ election.footer.text }}
+        </v-flex>
+        <v-flex xs6 text-xs-right>{{ election.footer.contactPhone }}, <a :href="`mailto:${election.footer.contactEmail}`">{{ election.footer.contactTitle }}</a> <span class="grey--text">v{{ version }}</span></v-flex>
       </v-layout>
     </v-footer>
   </v-layout>
@@ -65,6 +68,7 @@ import {
   scipersToUint8Array,
   timestampToString
 } from '../utils'
+import config from '@/config'
 
 const curve = new kyber.curve.edwards25519.Curve()
 
@@ -159,7 +163,8 @@ export default {
       valid: false,
       submitted: false,
       creatorName: '',
-      candidateNames: {}
+      candidateNames: {},
+      version: config.version
     }
   },
   created () {
