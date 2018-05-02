@@ -27,8 +27,19 @@ const Uint8ArrayToHex = data => {
   }).join('')
 }
 
+const hexToUint8Array = hex => {
+  const result = []
+  let hexString = hex
+  while (hexString.length >= 2) {
+    result.push(parseInt(hexString.substring(0, 2), 16))
+    hexString = hexString.substring(2, hexString.length)
+  }
+  return Uint8Array.from(result)
+}
+
 module.exports = {
   Uint8ArrayToHex,
+  hexToUint8Array,
   txt2dict,
   dict2txt
 }

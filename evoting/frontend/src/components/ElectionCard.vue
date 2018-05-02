@@ -91,10 +91,9 @@ export default {
       try {
         await socket.send('Shuffle', 'ShuffleReply', msg)
       } catch (e) {
+        setError(e)
         if (e.message.indexOf('already shuffled') === -1) {
           throw e
-        } else {
-          setError(e)
         }
       }
       try {

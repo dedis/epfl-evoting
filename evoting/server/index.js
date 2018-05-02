@@ -120,10 +120,10 @@ router.get('/auth/verify', (req, res) => {
   payload = { key: req.query.key }
   if (isTest) {
     const { sciper } = req.query
-    const masterID = process.env.MASTER_ID.trim().split(" ").map(x => parseInt(x))
+    const masterID = util.hexToUint8Array(process.env.MASTER_ID.trim())
     signature = generateSignature(sciper, masterID);
     res.setHeader('Content-Type', 'application/json')
-    res.send(JSON.stringify({ signature: Array.from(signature), masterID }));
+    res.send(JSON.stringify({ signature: Array.from(signature), masterID: Array.from(masterID) }));
     return
   }
 
