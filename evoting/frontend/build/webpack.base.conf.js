@@ -78,6 +78,13 @@ module.exports = {
       {
         test: /\.toml$/,
         loader: 'raw-loader'
+      },
+      {
+        test: /\.worker.js$/,
+        loader: 'worker-loader',
+        options: {
+          name: utils.assetsPath('js/[name].[hash:7].[ext]')
+        }
       }
     ]
   },

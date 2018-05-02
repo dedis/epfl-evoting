@@ -71,15 +71,13 @@
 </template>
 
 <script>
-import kyber from '@dedis/kyber-js'
 import {
-  Uint8ArrayToScipers,
   Uint8ArrayToHex,
   timestampToString
 } from '@/utils'
 import config from '@/config'
+import ReconstructWorker from '@/reconstruct.worker.js'
 
-const curve = new kyber.curve.edwards25519.Curve()
 export default {
   computed: {
     election () {
@@ -193,46 +191,34 @@ export default {
           this.$store.state.names[sciper] = this.candidateNames[sciper]
         })
     }
-    const { socket } = this.$store.state
-    socket.send('Reconstruct', 'ReconstructReply', {
-      id: this.election.id
-    })
-      .then(data => {
-        const { points } = data
-        for (let i = 0; i < points.length; i++) {
-          const point = curve.point()
-          point.unmarshalBinary(points[i])
-          const d = point.data()
-          const scipers = Uint8ArrayToScipers(d)
-          if (scipers.length !== d.length / 3) {
-            console.log(`iteration ${i} invalid ballot: duplicate scipers`)
-            this.invalidCount++
-            continue
-          }
-          const filtered = scipers.filter(x => c.includes(x))
-          if (filtered.length !== scipers.length) {
-            this.invalidCount++
-            console.log(`iteration ${i} invalid ballot: invalid candidate`)
-            continue
-          }
-          for (let j = 0; j < scipers.length; j++) {
-            const sciper = scipers[j]
-            this.counts[sciper] += 1
-          }
-          this.votes.push(scipers.join(','))
-          this.totalCount += scipers.length
-        }
-        this.counted = true
-      })
-      .catch(e => {
-        console.error(e.message)
+    const worker = new ReconstructWorker()
+    worker.postMessage(this.election)
+    worker.onmessage = e => {
+      const { error, invalidCount, counts, votes, totalCount } = e.data
+      worker.terminate()
+      if (error) {
         this.$store.commit('SET_SNACKBAR', {
           color: 'error',
-          text: e.message,
+          text: error,
           model: true,
           timeout: 6000
         })
+        return
+      }
+      this.invalidCount = invalidCount
+      this.counts = counts
+      this.votes = votes
+      this.totalCount = totalCount
+      this.counted = true
+    }
+    worker.onerror = e => {
+      this.$store.commit('SET_SNACKBAR', {
+        color: 'error',
+        text: e.message,
+        model: true,
+        timeout: 6000
       })
+    }
   },
   watch: {
     candidateNames: {
