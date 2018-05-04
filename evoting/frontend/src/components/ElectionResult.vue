@@ -192,7 +192,8 @@ export default {
         })
     }
     const worker = new ReconstructWorker()
-    worker.postMessage(this.election)
+    const wss = window.location.protocol === 'https:'
+    worker.postMessage({ election: this.election, wss })
     worker.onmessage = e => {
       const { error, invalidCount, counts, votes, totalCount } = e.data
       worker.terminate()
