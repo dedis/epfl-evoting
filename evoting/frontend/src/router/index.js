@@ -52,6 +52,7 @@ router.beforeEach((to, from, next) => {
     return
   }
   // IE <= 10 is not supported. https://stackoverflow.com/a/17076008
+  /* eslint-disable no-new-func */
   if (document.getElementById('ie') || (Function('/*@cc_on return document.documentMode===10@*/')())) {
     next('/unsupported')
     return
