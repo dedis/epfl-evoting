@@ -6,6 +6,7 @@ import Logout from '@/components/Logout'
 import NewElection from '@/components/NewElection'
 import CastVote from '@/components/CastVote'
 import ElectionResult from '@/components/ElectionResult'
+import Unsupported from '@/components/Unsupported'
 import config from '../config'
 
 Vue.use(Router)
@@ -36,11 +37,25 @@ const router = new Router({
       path: '/election/:id/results',
       name: 'ElectionResult',
       component: ElectionResult
+    },
+    {
+      path: '/unsupported',
+      name: 'Unsupported',
+      component: Unsupported
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
+  if (to.path === '/unsupported') {
+    next()
+    return
+  }
+  // IE <= 10 is not supported. https://stackoverflow.com/a/17076008
+  if (document.getElementById('ie') || (Function('/*@cc_on return document.documentMode===10@*/')())) {
+    next('/unsupported')
+    return
+  }
   if (to.path === '/logout') {
     next()
     return

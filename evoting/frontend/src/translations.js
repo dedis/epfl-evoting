@@ -14,7 +14,9 @@ const messages = {
       ballotCast: 'Ballot cast in block {block}',
       logout: 'Logout',
       howItWorks: 'How it works',
-      invalidBallots: '{invalidCount} ballots were ignored while counting because they were invalid. Please check the browser console for more information.'
+      invalidBallots: '{invalidCount} ballots were ignored while counting because they were invalid. Please check the browser console for more information.',
+      sorry: 'Sorry',
+      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox, Internet Explorer 11 or Microsoft Edge'
     }
   },
   fr: {
@@ -32,7 +34,9 @@ const messages = {
       ballotCast: 'Vote enregistrée sous {block}',
       logout: 'Déconnexion',
       howItWorks: 'Comment ça marche',
-      invalidBallots: '{invalidCount} votes ont été ignorés pendant le dépouillement parce qu’ils étaient invalides. Veuillez vérifier la console du navigateur pour plus d’informations.'
+      invalidBallots: '{invalidCount} votes ont été ignorés pendant le dépouillement parce qu’ils étaient invalides. Veuillez vérifier la console du navigateur pour plus d’informations.',
+      sorry: 'Sorry',
+      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox, Internet Explorer 11 or Microsoft Edge'
     }
   },
   de: {
@@ -50,7 +54,9 @@ const messages = {
       ballotCast: 'Stimme in block {block} abgegeben',
       logout: 'Ausloggen',
       howItWorks: 'Wie es funktioniert',
-      invalidBallots: '{invalidCount} Stimmzettel wurden während der Zählung ignoriert, weil sie ungültig waren. Weitere Informationen finden Sie im Protokoll der Browserkonsole.'
+      invalidBallots: '{invalidCount} Stimmzettel wurden während der Zählung ignoriert, weil sie ungültig waren. Weitere Informationen finden Sie im Protokoll der Browserkonsole.',
+      sorry: 'Sorry',
+      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox, Internet Explorer 11 or Microsoft Edge'
     }
   },
   it: {
@@ -68,7 +74,9 @@ const messages = {
       ballotCast: 'Ballot registrato sul blocco {block}',
       logout: 'Disconnessione',
       howItWorks: 'Come funziona',
-      invalidBallots: '{invalidCount} voti sono stati ignorati durante il conteggio perché non erano validi. Si prega di controllare la console del browser per ulteriori informazioni.'
+      invalidBallots: '{invalidCount} voti sono stati ignorati durante il conteggio perché non erano validi. Si prega di controllare la console del browser per ulteriori informazioni.',
+      sorry: 'Sorry',
+      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox, Internet Explorer 11 or Microsoft Edge'
     }
   }
 }
