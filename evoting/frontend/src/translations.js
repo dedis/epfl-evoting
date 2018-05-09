@@ -16,7 +16,7 @@ const messages = {
       howItWorks: 'How it works',
       invalidBallots: '{invalidCount} ballots were ignored while counting because they were invalid. Please check the browser console for more information.',
       sorry: 'Sorry',
-      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox, Internet Explorer 11 or Microsoft Edge'
+      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox or Internet Explorer 11'
     }
   },
   fr: {
@@ -35,8 +35,8 @@ const messages = {
       logout: 'Déconnexion',
       howItWorks: 'Comment ça marche',
       invalidBallots: '{invalidCount} votes ont été ignorés pendant le dépouillement parce qu’ils étaient invalides. Veuillez vérifier la console du navigateur pour plus d’informations.',
-      sorry: 'Sorry',
-      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox, Internet Explorer 11 or Microsoft Edge'
+      sorry: 'Désolé',
+      unsupportedExplanation: 'Ce site ne supporte pas votre navigateur. Veuillez utiliser une version récente de Google Chrome, Mozilla Firefox ou Internet Explorer 11'
     }
   },
   de: {
@@ -55,8 +55,8 @@ const messages = {
       logout: 'Ausloggen',
       howItWorks: 'Wie es funktioniert',
       invalidBallots: '{invalidCount} Stimmzettel wurden während der Zählung ignoriert, weil sie ungültig waren. Weitere Informationen finden Sie im Protokoll der Browserkonsole.',
-      sorry: 'Sorry',
-      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox, Internet Explorer 11 or Microsoft Edge'
+      sorry: 'Entschuldigung',
+      unsupportedExplanation: 'Diese Seite unterstützt Ihren Browser nicht. Verwenden Sie eine aktuelle Version von Google Chrome, Mozilla Firefox oder Internet Explorer 11'
     }
   },
   it: {
@@ -75,8 +75,8 @@ const messages = {
       logout: 'Disconnessione',
       howItWorks: 'Come funziona',
       invalidBallots: '{invalidCount} voti sono stati ignorati durante il conteggio perché non erano validi. Si prega di controllare la console del browser per ulteriori informazioni.',
-      sorry: 'Sorry',
-      unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox, Internet Explorer 11 or Microsoft Edge'
+      sorry: 'Scusi',
+      unsupportedExplanation: 'Questo sito non supporta il tuo browser. Utilizza una versione recente di Google Chrome, Mozilla Firefox o Internet Explorer 11.'
     }
   }
 }
