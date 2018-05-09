@@ -47,6 +47,13 @@ module.exports = {
         options: vueLoaderConfig
       },
       {
+	test: /\.worker.js$/,
+	loader: 'worker-loader',
+	options: {
+          name: utils.assetsPath('js/[name].[hash:7].[ext]')
+	}
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
@@ -78,13 +85,6 @@ module.exports = {
       {
         test: /\.toml$/,
         loader: 'raw-loader'
-      },
-      {
-        test: /\.worker.js$/,
-        loader: 'worker-loader',
-        options: {
-          name: utils.assetsPath('js/[name].[hash:7].[ext]')
-        }
       }
     ]
   },
