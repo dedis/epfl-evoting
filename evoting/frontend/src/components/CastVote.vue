@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-    <v-flex sm12 offset-md3 md6>
+    <v-flex xs12 sm12 offset-md3 md6>
       <v-card>
         <v-toolbar card dark :class="election.theme">
           <v-toolbar-title class="white--text">{{  $t(`election_${getId(election)}.name`) }}</v-toolbar-title>

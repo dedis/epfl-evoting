@@ -1,5 +1,5 @@
 <template>
-  <div class="flex sm12 md4 election-card">
+  <div class="flex xs12 sm12 md4 election-card">
     <v-card>
       <v-toolbar card dark :class="theme">
         <v-toolbar-title class="white--text">{{ $t(`election_${this.id}.name`)}}</v-toolbar-title>
