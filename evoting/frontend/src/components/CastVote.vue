@@ -17,6 +17,14 @@
         </v-toolbar>
         <v-card-title>
           <v-container fluid>
+            <div v-if="voted">
+              <v-layout>
+                <v-flex xs12>
+                  <v-card light color="yellow lighten-5"> {{ $t('message.voteAgain') }} </v-card>
+		  <br>
+                </v-flex>
+              </v-layout>
+	    </div>
             <v-layout>
               <v-flex xs12>
                 {{ $t(`election_${getId(election)}.subtitle`) }}
