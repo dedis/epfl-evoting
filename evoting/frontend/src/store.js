@@ -4,6 +4,7 @@ import VueI18n from 'vue-i18n'
 import createPersistedState from 'vuex-persistedstate'
 import rosterTOML from './public.toml'
 import cothority from '@dedis/cothority'
+import config from '@/config'
 import messages from './translations'
 import { Uint8ArrayToHex } from './utils'
 
@@ -20,7 +21,18 @@ if (roster.identities[0].addr.startsWith('tls://demos.epfl.ch')) {
   path = 'conode/evoting'
 }
 
-console.log('Creating new store')
+if (localStorage.master !== undefined) {
+  if (localStorage.master === config.masterID.toString()) {
+    console.log('Existing store ok.')
+  } else {
+    console.log('Existing store has stale data: cleaning it.')
+    localStorage.removeItem('master')
+    localStorage.removeItem('evoting')
+  }
+} else {
+  console.log('New local store.')
+}
+localStorage.setItem('master', config.masterID)
 
 const getLang = () => {
   const navLangs = window.navigator.languages || [window.navigator.userLanguage]
