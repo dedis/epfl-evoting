@@ -20,7 +20,7 @@
     "vue": "^2.5.2",
     "vue-i18n": "^7.6.0",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.0.16",
+    "vuetify": "^1.0.18",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.2",
     "worker-loader": "^1.1.1"

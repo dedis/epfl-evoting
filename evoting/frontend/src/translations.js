@@ -17,7 +17,9 @@ const messages = {
       invalidBallots: '{invalidCount} ballots were ignored while counting because they were invalid. Please check the browser console for more information.',
       sorry: 'Sorry',
       unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox or Internet Explorer 11',
-      voteAgain: 'You have already voted in this election. If you choose to vote again, only your last vote will be counted.'
+      voteAgain: 'You have already voted in this election. If you choose to vote again, only your last vote will be counted.',
+      maxAllowed: 'Maximum {max} allowed',
+      cast: 'Your vote has been cast successfully'
     }
   },
   fr: {
@@ -38,7 +40,9 @@ const messages = {
       invalidBallots: '{invalidCount} votes ont été ignorés pendant le dépouillement parce qu’ils étaient invalides. Veuillez vérifier la console du navigateur pour plus d’informations.',
       sorry: 'Désolé',
       unsupportedExplanation: 'Ce site ne supporte pas votre navigateur. Veuillez utiliser une version récente de Google Chrome, Mozilla Firefox ou Internet Explorer 11',
-      voteAgain: 'Vous avez déjà voté pour cette élection. Si vous choisissez de voter à nouveau, seul votre dernier vote sera compté.'
+      voteAgain: 'Vous avez déjà voté pour cette élection. Si vous choisissez de voter à nouveau, seul votre dernier vote sera compté.',
+      maxAllowed: 'Maximum {max} permis',
+      cast: 'Votre vote etait enregistré.'
     }
   },
   de: {
@@ -59,7 +63,9 @@ const messages = {
       invalidBallots: '{invalidCount} Stimmzettel wurden während der Zählung ignoriert, weil sie ungültig waren. Weitere Informationen finden Sie im Protokoll der Browserkonsole.',
       sorry: 'Entschuldigung',
       unsupportedExplanation: 'Diese Seite unterstützt Ihren Browser nicht. Verwenden Sie eine aktuelle Version von Google Chrome, Mozilla Firefox oder Internet Explorer 11',
-      voteAgain: 'Sie haben bei dieser Wahl bereits abgestimmt. Wenn Sie erneut wählen, wird nur Ihre letzte Stimme gezählt.'
+      voteAgain: 'Sie haben bei dieser Wahl bereits abgestimmt. Wenn Sie erneut wählen, wird nur Ihre letzte Stimme gezählt.',
+      maxAllowed: 'Maximal {max} erlaubt',
+      cast: 'Deine Stimme wurde abgegeben.'
     }
   },
   it: {
@@ -80,7 +86,9 @@ const messages = {
       invalidBallots: '{invalidCount} voti sono stati ignorati durante il conteggio perché non erano validi. Si prega di controllare la console del browser per ulteriori informazioni.',
       sorry: 'Scusi',
       unsupportedExplanation: 'Questo sito non supporta il tuo browser. Utilizza una versione recente di Google Chrome, Mozilla Firefox o Internet Explorer 11.',
-      voteAgain: 'Hai già votato in queste elezioni. Se scegli di votare di nuovo, verrà conteggiato solo il tuo ultimo voto.'
+      voteAgain: 'Hai già votato in queste elezioni. Se scegli di votare di nuovo, verrà conteggiato solo il tuo ultimo voto.',
+      maxAllowed: 'Massimo {max} consentito',
+      cast: 'Il tuo voto è stato scelto.'
     }
   }
 }

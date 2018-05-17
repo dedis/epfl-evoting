@@ -101,10 +101,13 @@ export default {
     },
     validateBallot (ballot) {
       const { election } = this
-      return (
-        ballot.length <= election.maxChoices ||
-        `Maximum ${election.maxChoices} allowed`
-      )
+      var i18n = this.$i18n
+      if (ballot.length <= election.maxChoices) {
+        this.valid = true
+        return true
+      }
+      this.valid = false
+      return i18n._t('message.maxAllowed', i18n.locale, i18n._getMessages(), this, { max: election.maxChoices })
     },
     dateStr (timestamp) {
       return timestampToString(timestamp, true)
@@ -146,9 +149,10 @@ export default {
           this.submitted = false
           this.$store.state.voted[Uint8ArrayToHex(this.election.id).substring(0, 10)] =
             Uint8ArrayToHex(data.id).substring(0, 10)
+          var i18n = this.$i18n
           this.$store.commit('SET_SNACKBAR', {
             color: 'success',
-            text: 'Your vote has been cast successfully',
+            text: i18n._t('message.cast', i18n.locale, i18n._getMessages()),
             model: true,
             timeout: 6000
           })
@@ -192,8 +196,8 @@ export default {
     const scipers = this.election.candidates
     for (let i = 0; i < scipers.length; i++) {
       const sciper = scipers[i]
-      this.candidateNames[sciper] = this.$store.state.names[sciper] || ''
-      if (this.candidateNames[sciper]) {
+      this.candidateNames[sciper] = this.$store.state.names[sciper] || 'loading...'
+      if (this.candidateNames[sciper] !== 'loading...') {
         continue
       }
       this.$store.state.socket
@@ -207,6 +211,12 @@ export default {
           }
           // cache
           this.$store.state.names[sciper] = this.candidateNames[sciper]
+        })
+        .catch(e => {
+          this.candidateNames = {
+            ...this.candidateNames,
+            [sciper]: 'not found'
+          }
         })
     }
   },
