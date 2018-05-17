@@ -8,5 +8,5 @@ module.exports = {
   ldap: {
     hostname: 'ldap.epfl.ch'
   },
-  masterID: hexToUint8Array('4c55d13264f30b9d607631cfe50f970ad81c9f1df9d064bc04e932224e1d99f6')
+  masterID: hexToUint8Array('6b1cde648f427d1c4ea4d3e4a3df4270b82663ca9e514700597ee3ad64464f65')
 }
