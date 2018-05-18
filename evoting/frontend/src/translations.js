@@ -1,7 +1,7 @@
 const messages = {
   en: {
     message: {
-      activeElections: 'Active Elections',
+      activeElections: 'Your Elections',
       finalizedElections: 'Finalized Elections',
       vote: 'Vote',
       finalize: 'Finalize',
@@ -19,12 +19,13 @@ const messages = {
       unsupportedExplanation: 'This site does not support your browser. Please switch to a recent version of Google Chrome, Mozilla Firefox or Internet Explorer 11',
       voteAgain: 'You have already voted in this election. If you choose to vote again, only your last vote will be counted.',
       maxAllowed: 'Maximum {max} allowed',
-      cast: 'Your vote has been cast successfully'
+      cast: 'Your vote has been cast successfully',
+      noElections: 'There are not currently any elections for you to vote in.'
     }
   },
   fr: {
     message: {
-      activeElections: 'Scrutins actifs',
+      activeElections: 'Vos Scrutins',
       finalizedElections: 'Scrutins finalisés',
       vote: 'Votez',
       finalize: 'Finalisez',
@@ -42,13 +43,14 @@ const messages = {
       unsupportedExplanation: 'Ce site ne supporte pas votre navigateur. Veuillez utiliser une version récente de Google Chrome, Mozilla Firefox ou Internet Explorer 11',
       voteAgain: 'Vous avez déjà voté pour cette élection. Si vous choisissez de voter à nouveau, seul votre dernier vote sera compté.',
       maxAllowed: 'Maximum {max} permis',
-      cast: 'Votre vote etait enregistré.'
+      cast: 'Votre vote etait enregistré.',
+      noElections: 'Il n\'y a actuellement aucune élection pour que vous puissiez voter.'
     }
   },
   de: {
     message: {
-      activeElections: 'Aktive Wahl',
-      finalizedElections: 'Abgeschlossene Wahl',
+      activeElections: 'Ihre Wahlen',
+      finalizedElections: 'Abgeschlossene Wahlen',
       vote: 'Wählen',
       finalize: 'Abschließen',
       electionInstruction: 'Wählen Sie bitte maximal {maxChoices} Kandidaten von der nachfolgenden Liste. Durch einen Klick auf den Namen eines Kandidaten können Sie dessen Motivation und Präsentation einsehen.',
@@ -65,12 +67,13 @@ const messages = {
       unsupportedExplanation: 'Diese Seite unterstützt Ihren Browser nicht. Verwenden Sie eine aktuelle Version von Google Chrome, Mozilla Firefox oder Internet Explorer 11',
       voteAgain: 'Sie haben bei dieser Wahl bereits abgestimmt. Wenn Sie erneut wählen, wird nur Ihre letzte Stimme gezählt.',
       maxAllowed: 'Maximal {max} erlaubt',
-      cast: 'Deine Stimme wurde abgegeben.'
+      cast: 'Deine Stimme wurde abgegeben.',
+      noElections: 'Derzeit gibt es keine Wahlen, in denen Sie wählen können.'
     }
   },
   it: {
     message: {
-      activeElections: 'Elezioni in corso',
+      activeElections: 'Le vostre elezioni',
       finalizedElections: 'Elezioni chiuse',
       vote: 'Vota',
       finalize: 'Chiudi',
@@ -88,7 +91,8 @@ const messages = {
       unsupportedExplanation: 'Questo sito non supporta il tuo browser. Utilizza una versione recente di Google Chrome, Mozilla Firefox o Internet Explorer 11.',
       voteAgain: 'Hai già votato in queste elezioni. Se scegli di votare di nuovo, verrà conteggiato solo il tuo ultimo voto.',
       maxAllowed: 'Massimo {max} consentito',
-      cast: 'Il tuo voto è stato scelto.'
+      cast: 'Il tuo voto è stato scelto.',
+      noElections: 'Al momento non ci sono elezioni in cui votare.'
     }
   }
 }

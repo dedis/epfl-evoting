@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@dedis/cothority": "^1.1.8",
+    "@dedis/cothority": "^1.1.12",
     "@dedis/kyber-js": "^0.0.9",
     "babel-polyfill": "^6.26.0",
     "vue": "^2.5.2",

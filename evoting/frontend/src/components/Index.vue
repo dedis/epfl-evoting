@@ -16,6 +16,13 @@
       </div>
       <div class="election-group">
         <h3>{{ $t("message.activeElections") }}</h3>
+	<div v-if="noElections">
+          <v-layout>
+            <v-flex xs12>
+              <v-card light color="yellow lighten-5"> {{ $t('message.noElections') }} </v-card>
+            </v-flex>
+          </v-layout>
+	</div>
         <v-layout
           v-for="(layout, idx) in active(elections)"
           :key="idx"
@@ -118,12 +125,14 @@ export default {
   methods: {
     active: (elections) => {
       return createArray(elections.filter(e => {
-        return e.stage < 3
+        var now = Date.now() / 100
+        return e.stage < 3 && now > e.start && now < e.end
       }))
     },
     finalized: (elections) => {
       return createArray(elections.filter(e => {
-        return e.stage === 3
+        var now = Date.now() / 100
+        return !(now > e.start && now < e.end) || e.stage === 3
       }))
     },
     getId: (id) => {
@@ -133,6 +142,9 @@ export default {
   computed: {
     elections () {
       return this.$store.getters.elections
+    },
+    noElections () {
+      return this.active(this.$store.getters.elections).length === 0
     }
   },
   data () {
