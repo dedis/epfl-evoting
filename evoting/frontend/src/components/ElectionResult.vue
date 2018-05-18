@@ -94,8 +94,9 @@ export default {
     downloadVoteCount () {
       // https://stackoverflow.com/a/18849208
       const filename = Uint8ArrayToHex(this.election.id).substring(0, 10) + '_result.csv'
-      let comment = '# Each column is one candidate. Each row is one ballot.'
-      let rows = [ comment, this.election.candidates.join(','), ...this.votes ]
+      let comment = 'Ballot #,Candidates:'
+      let row0 = [ '', ...this.election.candidates ]
+      let rows = [ comment, row0.join(','), ...this.votes ]
       const csvContent = rows.join('\n')
 
       // https://stackoverflow.com/a/24922761
