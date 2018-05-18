@@ -104,7 +104,7 @@ export default {
         const link = document.createElement('a')
         if (link.download !== undefined) {
           // Browsers that support HTML5 download attribute
-          var url = URL.createObjectURL(blob)
+          const url = URL.createObjectURL(blob)
           link.setAttribute('href', url)
           link.setAttribute('download', filename)
           link.style.visibility = 'hidden'
@@ -178,8 +178,8 @@ export default {
     }
     for (let i = 0; i < c.length; i++) {
       const sciper = c[i]
-      this.candidateNames[sciper] = this.$store.state.names[sciper] || null
-      if (this.candidateNames[sciper]) {
+      this.candidateNames[sciper] = this.$store.state.names[sciper] || 'loading...'
+      if (this.candidateNames[sciper] !== 'loading...') {
         continue
       }
       this.$store.state.socket.send('LookupSciper', 'LookupSciperReply', {
@@ -189,6 +189,12 @@ export default {
           this.candidateNames = {...this.candidateNames, [sciper]: response.fullName}
           // cache
           this.$store.state.names[sciper] = this.candidateNames[sciper]
+        })
+        .catch(e => {
+          this.candidateNames = {
+            ...this.candidateNames,
+            [sciper]: 'SCIPER ' + sciper + ' not found'
+          }
         })
     }
     const worker = new ReconstructWorker()
@@ -202,7 +208,7 @@ export default {
           color: 'error',
           text: error,
           model: true,
-          timeout: 6000
+          timeout: 10000
         })
         return
       }
@@ -217,7 +223,7 @@ export default {
         color: 'error',
         text: e.message,
         model: true,
-        timeout: 6000
+        timeout: 10000
       })
     }
   },

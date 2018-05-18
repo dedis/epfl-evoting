@@ -101,7 +101,7 @@ export default {
     },
     validateBallot (ballot) {
       const { election } = this
-      var i18n = this.$i18n
+      const i18n = this.$i18n
       if (ballot.length <= election.maxChoices) {
         this.valid = true
         return true
@@ -149,12 +149,12 @@ export default {
           this.submitted = false
           this.$store.state.voted[Uint8ArrayToHex(this.election.id).substring(0, 10)] =
             Uint8ArrayToHex(data.id).substring(0, 10)
-          var i18n = this.$i18n
+          const i18n = this.$i18n
           this.$store.commit('SET_SNACKBAR', {
             color: 'success',
             text: i18n._t('message.cast', i18n.locale, i18n._getMessages()),
             model: true,
-            timeout: 6000
+            timeout: 10000
           })
           this.$router.push('/')
         })
@@ -164,7 +164,7 @@ export default {
             color: 'error',
             text: e.message,
             model: true,
-            timeout: 6000
+            timeout: 10000
           })
         })
     }
@@ -174,25 +174,11 @@ export default {
       ballot: [],
       valid: false,
       submitted: false,
-      creatorName: '',
       candidateNames: {},
       version: config.version
     }
   },
   created () {
-    if (this.election.creator in this.$store.state.names) {
-      this.creatorName = this.$store.state.names[this.election.creator]
-    } else {
-      this.$store.state.socket
-        .send('LookupSciper', 'LookupSciperReply', {
-          sciper: this.election.creator.toString()
-        })
-        .then(response => {
-          this.creatorName = response.fullName
-          // cache
-          this.$store.state.names[this.creator] = this.creatorName
-        })
-    }
     const scipers = this.election.candidates
     for (let i = 0; i < scipers.length; i++) {
       const sciper = scipers[i]
@@ -215,7 +201,7 @@ export default {
         .catch(e => {
           this.candidateNames = {
             ...this.candidateNames,
-            [sciper]: 'not found'
+            [sciper]: 'SCIPER ' + sciper + ' not found'
           }
         })
     }

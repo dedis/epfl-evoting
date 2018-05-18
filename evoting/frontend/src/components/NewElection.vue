@@ -352,7 +352,7 @@ export default {
           this.$store.commit('SET_SNACKBAR', {
             color: 'success',
             text: 'New election created',
-            timeout: 6000,
+            timeout: 10000,
             model: true
           })
           const { sciper, signature } = this.$store.state.user
@@ -374,7 +374,7 @@ export default {
           this.$store.commit('SET_SNACKBAR', {
             color: 'error',
             text: e.message,
-            timeout: 6000,
+            timeout: 10000,
             model: true
           })
         })

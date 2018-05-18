@@ -125,13 +125,13 @@ export default {
   methods: {
     active: (elections) => {
       return createArray(elections.filter(e => {
-        var now = Date.now() / 100
+        const now = Date.now() / 100
         return e.stage < 3 && now > e.start && now < e.end
       }))
     },
     finalized: (elections) => {
       return createArray(elections.filter(e => {
-        var now = Date.now() / 100
+        const now = Date.now() / 100
         return !(now > e.start && now < e.end) || e.stage === 3
       }))
     },

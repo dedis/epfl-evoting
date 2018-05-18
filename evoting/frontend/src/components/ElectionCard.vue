@@ -84,7 +84,7 @@ export default {
           color: 'error',
           text: e.message,
           model: true,
-          timeout: 6000
+          timeout: 10000
         })
         this.disabled = false
       }
@@ -102,7 +102,7 @@ export default {
           color: 'success',
           text: 'Election finalized',
           model: true,
-          timeout: 6000
+          timeout: 10000
         })
         this.disabled = false
         const master = config.masterID
@@ -126,25 +126,10 @@ export default {
       voteLink: `/election/${this.id}/vote`,
       resultLink: `/election/${this.id}/results`,
       disabled: false,
-      creatorName: '',
       candidateNames: []
     }
   },
   created () {
-    // creator
-    if (this.creator in this.$store.state.names) {
-      this.creatorName = this.$store.state.names[this.creator]
-      return
-    }
-    this.$store.state.socket
-      .send('LookupSciper', 'LookupSciperReply', {
-        sciper: this.creator.toString()
-      })
-      .then(response => {
-        this.creatorName = response.fullName
-        // cache
-        this.$store.state.names[this.creator] = this.creatorName
-      })
   }
 }
 </script>
