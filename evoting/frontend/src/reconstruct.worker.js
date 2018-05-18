@@ -45,11 +45,16 @@ self.addEventListener('message', event => {
         console.log(`iteration ${i} invalid ballot: invalid candidate`)
         continue
       }
+      let row = []
       for (let j = 0; j < scipers.length; j++) {
         const sciper = scipers[j]
         counts[sciper] += 1
+	let col = candidates.indexOf(sciper)
+	if (col !== -1) {
+	  row[col] = 1
+	}
       }
-      votes.push(scipers.join(','))
+      votes.push(row.join(','))
       totalCount += scipers.length
     }
     postMessage({
