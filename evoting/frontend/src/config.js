@@ -14,7 +14,7 @@ export default {
     { text: 'epflAssembly', href: 'https://ae.epfl.ch' },
     { text: 'elections2018', href: 'https://ae.epfl.ch/elections' }
   ],
-  version: '1.2.0',
+  version: '1.3.0',
   masterID: hexToUint8Array('6b1cde648f427d1c4ea4d3e4a3df4270b82663ca9e514700597ee3ad64464f65'),
   // Put election IDs in here that you want the UI to not show. (They are still
   // visible in the skipchain!)
