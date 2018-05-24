@@ -15,7 +15,12 @@
           </v-breadcrumbs-item>
         </v-breadcrumbs>
         </v-card>
-        <router-view/>
+	<div v-if="maintenance">
+	  <v-card light color="yellow lighten-5"> {{ $t('message.maint') }} </v-card>
+	</div>
+	<div v-if="! maintenance">
+          <router-view/>
+	</div>
         <v-snackbar
           :timeout="$store.getters.snackbar.timeout"
           :color="$store.getters.snackbar.color"
@@ -39,7 +44,8 @@ export default {
     return {
       fixed: false,
       title: 'Elections 2018',
-      breadcrumbs: config.breadcrumbs
+      breadcrumbs: config.breadcrumbs,
+      maintenance: config.maintenance
     }
   },
   mounted () {

@@ -1,6 +1,8 @@
 import { hexToUint8Array } from './utils'
 
 export default {
+  // Set this to true to put up a "system is unavailable" message.
+  maintenance: false,
   tequila: {
     hostname: 'tequila.epfl.ch'
   },

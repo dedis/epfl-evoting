@@ -20,7 +20,8 @@ const messages = {
       voteAgain: 'You have already voted in this election. If you choose to vote again, only your last vote will be counted.',
       maxAllowed: 'Maximum {max} allowed',
       cast: 'Your vote has been cast successfully',
-      noElections: 'There are not currently any elections for you to vote in.'
+      noElections: 'There are not currently any elections for you to vote in.',
+      maint: 'The system is currently unavailable. Please try again later.'
     }
   },
   fr: {
@@ -44,7 +45,8 @@ const messages = {
       voteAgain: 'Vous avez déjà voté pour cette élection. Si vous choisissez de voter à nouveau, seul votre dernier vote sera compté.',
       maxAllowed: 'Maximum {max} permis',
       cast: 'Votre vote etait enregistré.',
-      noElections: 'Il n\'y a actuellement aucune élection pour que vous puissiez voter.'
+      noElections: 'Il n\'y a actuellement aucune élection pour que vous puissiez voter.',
+      maint: 'Le système est actuellement indisponible. Veuillez réessayer plus tard.'
     }
   },
   de: {
@@ -68,7 +70,8 @@ const messages = {
       voteAgain: 'Sie haben bei dieser Wahl bereits abgestimmt. Wenn Sie erneut wählen, wird nur Ihre letzte Stimme gezählt.',
       maxAllowed: 'Maximal {max} erlaubt',
       cast: 'Deine Stimme wurde abgegeben.',
-      noElections: 'Derzeit gibt es keine Wahlen, in denen Sie wählen können.'
+      noElections: 'Derzeit gibt es keine Wahlen, in denen Sie wählen können.',
+      maint: 'Das System ist derzeit nicht verfügbar. Bitte versuche es später erneut.'
     }
   },
   it: {
@@ -92,7 +95,8 @@ const messages = {
       voteAgain: 'Hai già votato in queste elezioni. Se scegli di votare di nuovo, verrà conteggiato solo il tuo ultimo voto.',
       maxAllowed: 'Massimo {max} consentito',
       cast: 'Il tuo voto è stato scelto.',
-      noElections: 'Al momento non ci sono elezioni in cui votare.'
+      noElections: 'Al momento non ci sono elezioni in cui votare.',
+      maint: 'Il sistema non è attualmente disponibile. Per favore riprova più tardi.'
     }
   }
 }
