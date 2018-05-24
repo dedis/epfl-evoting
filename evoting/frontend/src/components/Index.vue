@@ -118,6 +118,11 @@ const createArray = filteredArray => {
   return res
 }
 
+const hidden = (id) => {
+  id = Uint8ArrayToHex(id)
+  return config.electionsToHide.includes(id)
+}
+
 export default {
   components: {
     'election-card': ElectionCard
@@ -126,12 +131,18 @@ export default {
     active: (elections) => {
       return createArray(elections.filter(e => {
         const now = Date.now() / 100
+        if (hidden(e.id)) {
+          return false
+        }
         return e.stage < 3 && now > e.start && now < e.end
       }))
     },
     finalized: (elections) => {
       return createArray(elections.filter(e => {
         const now = Date.now() / 100
+        if (hidden(e.id)) {
+          return false
+        }
         return !(now > e.start && now < e.end) || e.stage === 3
       }))
     },
