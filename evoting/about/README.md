@@ -19,7 +19,9 @@ A solution to this is that the voting system can make each transaction it receiv
 
 ## Protecting privacy: Shuffling the ballots
 
-If the voters encrypt their votes via public key encryption before they send them in to the voting system, they can have privacy. But the voting system must be able to unlock the votes later, in order to count them. And once the votes are unlocked, the privacy is lost.
+Voters need to be identified to the system, so that each voter gets one vote, and so that they can change their vote, but the system will only count the last one. But if the system (and, as a result of the transparency log, the public) knows the names of the voters, should we also see the votes themselves? No!
+
+Voters encrypt their votes via public key encryption before they send them in to the voting system. But the voting system must be able to unlock the votes later, in order to count them. And once the votes are unlocked, the privacy would be lost if the unlocked ballot was connected to the proof that a certain voter cast it.
 
 What is needed is to separate the votes from who cast them, so that the votes can be unlocked without losing privacy. In this system, privacy is assured using ideas from Andrew Neff, and from the Helios voting system [1,2].
 
@@ -47,7 +49,7 @@ In the middle of the page, you can see the list of nodes which are working toget
 
 At the bottom of the page, you can see a live view of the skipchains for elections run on this system. Depending on when you view it, you may see the election config and some ballots cast. When an election is finalized and the votes are unlocked, there are a series of "Ballot shuffle operations" and "Partial decryption operations" which are permanently recorded onto the skipchain. Because you are looking at the skipchain, you'll see that some blocks are skipped over. By following links from the blocks you have, you can find the blocks that are skipped. For efficiency, this web page does not follow all of those links, but someone who wanted to audit the election would be able to.
 
-When all of the partial decryption operations are done, the votes are in plaintext. They can be downloaded, decoded, and counted.
+When enough partial decryption operations are done, they can be combined together in order to reconstruct the original votes in plaintext. They can be downloaded, decoded, and counted in the browser. An auditor can download all the blocks from the skipchain and verify that the election was conducted fairly.
 
 # Who
 
