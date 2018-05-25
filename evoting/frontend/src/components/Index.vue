@@ -130,7 +130,7 @@ export default {
   methods: {
     active: (elections) => {
       return createArray(elections.filter(e => {
-        const now = Date.now() / 100
+        const now = Date.now() / 1000
         if (hidden(e.id)) {
           return false
         }
@@ -139,7 +139,7 @@ export default {
     },
     finalized: (elections) => {
       return createArray(elections.filter(e => {
-        const now = Date.now() / 100
+        const now = Date.now() / 1000
         if (hidden(e.id)) {
           return false
         }
