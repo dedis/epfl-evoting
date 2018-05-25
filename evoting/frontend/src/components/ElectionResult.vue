@@ -96,7 +96,11 @@ export default {
       const filename = Uint8ArrayToHex(this.election.id).substring(0, 10) + '_result.csv'
       let comment = 'Ballot #,Candidates:'
       let row0 = [ '', ...this.election.candidates ]
-      let rows = [ comment, row0.join(','), ...this.votes ]
+      if (this.invalidBallots.length > 0) {
+        this.invalidBallots.unshift('Invalid ballots:')
+        this.invalidBallots.unshift('')
+      }
+      let rows = [ comment, row0.join(','), ...this.votes, ...this.invalidBallots ]
       const csvContent = rows.join('\n')
 
       // https://stackoverflow.com/a/24922761
@@ -170,6 +174,7 @@ export default {
         'orange darken-4'
       ],
       invalidCount: 0,
+      invalidBallots: [],
       counted: false,
       version: config.version
     }
@@ -202,9 +207,10 @@ export default {
     }
     const worker = new ReconstructWorker()
     const wss = window.location.protocol === 'https:'
+    console.log('election', this.election)
     worker.postMessage({ election: this.election, wss })
     worker.onmessage = e => {
-      const { error, invalidCount, counts, votes, totalCount } = e.data
+      const { error, invalidCount, counts, votes, totalCount, invalidBallots } = e.data
       worker.terminate()
       if (error) {
         this.$store.commit('SET_SNACKBAR', {
@@ -216,6 +222,7 @@ export default {
         return
       }
       this.invalidCount = invalidCount
+      this.invalidBallots = invalidBallots
       this.counts = counts
       this.votes = votes
       this.totalCount = totalCount

@@ -22,6 +22,7 @@ self.addEventListener('message', event => {
   }).then(data => {
     const { points } = data
     let invalidCount = 0
+    let invalidBallots = []
     const counts = {}
     const votes = []
     let totalCount = 0
@@ -34,15 +35,29 @@ self.addEventListener('message', event => {
       const d = point.data()
       const scipers = Uint8ArrayToScipers(d)
       if (scipers.length !== d.length / 3) {
-        console.log(`iteration ${i} invalid ballot: duplicate scipers`)
+        console.log(`iteration ${i} invalid ballot: duplicate candidates`)
         invalidCount++
+	scipers.unshift(i+1)
+	scipers.push('duplicate candidate')
+	invalidBallots.push(scipers)
         continue
       }
-      const { candidates } = election
+      const { candidates, maxChoices } = election
       const filtered = scipers.filter(x => candidates.includes(x))
       if (filtered.length !== scipers.length) {
         invalidCount++
         console.log(`iteration ${i} invalid ballot: invalid candidate`)
+	scipers.unshift(i+1)
+	scipers.push('invalid candidate')
+	invalidBallots.push(scipers)
+        continue
+      }
+      if (filtered.length > maxChoices) {
+        console.log(`iteration ${i} invalid ballot: too many candidates`)
+        invalidCount++
+	scipers.unshift(i+1)
+	scipers.push('too many candidates')
+	invalidBallots.push(scipers)
         continue
       }
       let row = [i+1]
@@ -61,7 +76,8 @@ self.addEventListener('message', event => {
       invalidCount,
       counts,
       votes,
-      totalCount
+      totalCount,
+      invalidBallots
     })
   }).catch(e => {
     postMessage({
