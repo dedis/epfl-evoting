@@ -22,12 +22,12 @@ cd ../server
 npm install
 ```
 
-Edit `frontend/src/config.js` and `server/config.js` and update `masterKey` to the
-one logged by cothority
+Copy `frontend/src/config.example.js` and `server/config.example.js` to `config.js` and
+update `masterID` to match the one from the evoting-admin tool.
 
-Copy/Symlink the conodes `public.toml` to `frontend/src`. If you'd rather use
-a single conode or connect to WS over reverse proxy, edit `frontend/src/store.js`
-and replace `RosterSocket` with `Socket('ws://<path>', 'evoting')`
+Copy/Symlink the `public.toml` file from the leader node to `frontend/src`. This
+will be the WebSocket endpoint where all requests from the frontend to the
+cothority are transmitted.
 
 ## Dev
 
