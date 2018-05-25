@@ -50,7 +50,7 @@
                   </v-radio-group>
                 </v-flex>
                 <v-flex xs12 class="text-xs-center">
-                  <v-btn type="submit" :disabled="!(valid && ballot.length !== 0) || submitted" color="primary">Submit</v-btn>
+                  <v-btn type="submit" :disabled="!(valid && ballot.length !== 0) || submitted" color="primary">{{ $t('message.vote') }}</v-btn>
                 </v-flex>
               </v-layout>
             </v-form>

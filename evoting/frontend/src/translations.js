@@ -44,7 +44,7 @@ const messages = {
       unsupportedExplanation: 'Ce site ne supporte pas votre navigateur. Veuillez utiliser une version récente de Google Chrome, Mozilla Firefox ou Internet Explorer 11',
       voteAgain: 'Vous avez déjà voté pour cette élection. Si vous choisissez de voter à nouveau, seul votre dernier vote sera compté.',
       maxAllowed: 'Maximum {max} permis',
-      cast: 'Votre vote etait enregistré.',
+      cast: 'Votre bulletin de vote a été enregistré.',
       noElections: 'Il n\'y a actuellement aucune élection pour que vous puissiez voter.',
       maint: 'Le système est actuellement indisponible. Veuillez réessayer plus tard.'
     }
