@@ -76,7 +76,7 @@ import {
   scipersToUint8Array,
   timestampToString
 } from '../utils'
-import config from '@/config'
+import version from '@/version'
 
 const curve = new kyber.curve.edwards25519.Curve()
 
@@ -175,7 +175,7 @@ export default {
       valid: false,
       submitted: false,
       candidateNames: {},
-      version: config.version
+      version: version.version
     }
   },
   created () {

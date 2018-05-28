@@ -75,7 +75,7 @@ import {
   Uint8ArrayToHex,
   timestampToString
 } from '@/utils'
-import config from '@/config'
+import version from '@/version'
 import ReconstructWorker from '@/reconstruct.worker.js'
 
 export default {
@@ -176,7 +176,7 @@ export default {
       invalidCount: 0,
       invalidBallots: [],
       counted: false,
-      version: config.version
+      version: version.version
     }
   },
   created () {

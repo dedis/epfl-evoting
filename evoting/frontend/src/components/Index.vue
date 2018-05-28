@@ -101,6 +101,7 @@
 import ElectionCard from './ElectionCard'
 import { Uint8ArrayToHex } from '@/utils'
 import config from '@/config'
+import version from '@/version'
 
 const createArray = filteredArray => {
   const res = []
@@ -160,7 +161,7 @@ export default {
   },
   data () {
     return {
-      version: config.version
+      version: version.version
     }
   }
 }
