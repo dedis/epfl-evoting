@@ -96,11 +96,12 @@ export default {
       const filename = Uint8ArrayToHex(this.election.id).substring(0, 10) + '_result.csv'
       let comment = 'Ballot #,Candidates:'
       let row0 = [ '', ...this.election.candidates ]
+      let rows = [ comment, row0.join(','), ...this.votes ]
       if (this.invalidBallots.length > 0) {
-        this.invalidBallots.unshift('Invalid ballots:')
-        this.invalidBallots.unshift('')
+        rows.push('')
+        rows.push('Invalid ballots:')
+        rows.push(...this.invalidBallots)
       }
-      let rows = [ comment, row0.join(','), ...this.votes, ...this.invalidBallots ]
       const csvContent = rows.join('\n')
 
       // https://stackoverflow.com/a/24922761
