@@ -68,6 +68,18 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
+
+  // Workaround for Safari font rendering bug. It strikes when
+  // downloading the Material Icons font is interrupted by the redirect to get
+  // authenticated. The workaround is that after we are sure we won't be redirecting to
+  // auth, then we add the CSS into the page header.
+  const head = document.head
+  const link = document.createElement('link')
+  link.type = 'text/css'
+  link.rel = 'stylesheet'
+  link.href = 'static/material-icons.css'
+  head.appendChild(link)
+
   if (store.getters.hasElections) {
     next()
     return
