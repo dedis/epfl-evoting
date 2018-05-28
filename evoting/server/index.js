@@ -145,16 +145,14 @@ router.get('/auth/verify', (req, res) => {
         sections.push(match[1])
       }
 
-      // Sign the data
-      signature = generateSignature(sciper, config.masterID)
       user = {
         name,
         sciper,
         groups,
         sections,
-        signature: Array.from(signature) // JSON stringification is messed up with TypedArray
       }
-      res.render('template', { state: JSON.stringify({ user }) })
+      signature = util.Uint8ArrayToHex(generateSignature(sciper, config.masterID))
+      res.render('template', { state: JSON.stringify({ user }), signature: signature })
     })
     .catch(e => {
       console.error(e)

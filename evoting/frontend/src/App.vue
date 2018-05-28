@@ -36,6 +36,8 @@
 <script>
 import Navbar from './components/Navbar'
 import config from '@/config'
+import { getSig } from '@/utils'
+
 export default {
   components: {
     'navbar': Navbar
@@ -59,7 +61,7 @@ export default {
         user: parseInt(user.sciper),
         master: config.masterID,
         stage: 0,
-        signature: Uint8Array.from(user.signature)
+        signature: getSig()
       })
         .then((reply) => {
           this.$store.commit('SET_ELECTIONS', reply.elections)

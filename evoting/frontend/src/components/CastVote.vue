@@ -84,7 +84,8 @@ import kyber from '@dedis/kyber-js'
 import {
   Uint8ArrayToHex,
   scipersToUint8Array,
-  timestampToString
+  timestampToString,
+  getSig
 } from '../utils'
 import version from '@/version'
 
@@ -150,7 +151,7 @@ export default {
           beta: v.marshalBinary()
         },
         user: parseInt(this.$store.state.user.sciper),
-        signature: Uint8Array.from(this.$store.state.user.signature)
+        signature: getSig()
       }
       const { socket } = this.$store.state
       socket

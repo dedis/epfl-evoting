@@ -200,7 +200,7 @@
 import config from '../config'
 import DateTimePicker from './DateTimePicker'
 import UploadButton from './UploadButton'
-import { timestampToString } from '@/utils'
+import { getSig, timestampToString } from '@/utils'
 
 export default {
   computed: {
@@ -342,7 +342,7 @@ export default {
           }
         },
         user: parseInt(this.$store.state.user.sciper),
-        signature: Uint8Array.from(this.$store.state.user.signature)
+        signature: getSig()
       }
       const { socket } = this.$store.state
       socket.send('Open', 'OpenReply', openProto)

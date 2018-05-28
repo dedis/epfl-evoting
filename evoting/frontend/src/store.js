@@ -63,9 +63,6 @@ const store = new Vuex.Store({
     scipersReadFromFile: 0
   },
   getters: {
-    isAuthenticated: state => {
-      return state.user !== null
-    },
     hasElections: state => {
       return state.elections !== null
     },

@@ -7,7 +7,8 @@ import NewElection from '@/components/NewElection'
 import CastVote from '@/components/CastVote'
 import ElectionResult from '@/components/ElectionResult'
 import Unsupported from '@/components/Unsupported'
-import config from '../config'
+import { getSig } from '@/utils'
+import config from '@/config'
 
 Vue.use(Router)
 
@@ -61,7 +62,7 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
-  if (!store.getters.isAuthenticated) {
+  if (getSig() === null) {
     const authUrl = '/auth/login'
     // we do not use next('/auth/login') here because it redirects inside the spa
     window.location.replace(authUrl)
@@ -91,7 +92,7 @@ router.beforeEach((to, from, next) => {
     user: parseInt(user.sciper),
     master: config.masterID,
     stage: 0,
-    signature: Uint8Array.from(user.signature),
+    signature: getSig(),
     checkVoted
   }
   const sendingMessageName = 'GetElections'

@@ -45,7 +45,7 @@
 
 <script>
 import config from '@/config'
-import { hexToUint8Array, timestampToString } from '@/utils'
+import { hexToUint8Array, timestampToString, getSig } from '@/utils'
 
 export default {
   computed: {
@@ -73,7 +73,7 @@ export default {
       this.disabled = true
       let { sciper, signature } = this.$store.state.user
       sciper = parseInt(sciper)
-      signature = Uint8Array.from(signature)
+      signature = getSig()
       const msg = {
         id: hexToUint8Array(this.id),
         user: sciper,
