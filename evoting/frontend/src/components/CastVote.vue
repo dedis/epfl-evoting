@@ -66,6 +66,16 @@
         <v-flex xs6 text-xs-right>{{ election.footer.contactPhone }}, <a :href="`mailto:${election.footer.contactEmail}`">{{ election.footer.contactTitle }}</a> <span class="grey--text">v{{ version }}</span></v-flex>
       </v-layout>
     </v-footer>
+    <v-dialog v-model="dialog3" persistent="true" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span> {{ $t('message.cast') }} </span>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn color="primary" flat @click.stop="dialog3=false; $router.push('/')">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -149,14 +159,7 @@ export default {
           this.submitted = false
           this.$store.state.voted[Uint8ArrayToHex(this.election.id).substring(0, 10)] =
             Uint8ArrayToHex(data.id).substring(0, 10)
-          const i18n = this.$i18n
-          this.$store.commit('SET_SNACKBAR', {
-            color: 'success',
-            text: i18n._t('message.cast', i18n.locale, i18n._getMessages()),
-            model: true,
-            timeout: 10000
-          })
-          this.$router.push('/')
+          this.dialog3 = true
         })
         .catch(e => {
           this.submitted = false
@@ -175,7 +178,8 @@ export default {
       valid: false,
       submitted: false,
       candidateNames: {},
-      version: version.version
+      version: version.version,
+      dialog3: false
     }
   },
   created () {
