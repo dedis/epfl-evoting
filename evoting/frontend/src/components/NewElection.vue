@@ -355,13 +355,13 @@ export default {
             timeout: 10000,
             model: true
           })
-          const { sciper, signature } = this.$store.state.user
+          const { sciper } = this.$store.state.user
           const master = config.masterID
           return socket.send('GetElections', 'GetElectionsReply', {
             user: parseInt(sciper),
             master,
             stage: 0,
-            signature: Uint8Array.from(signature)
+            signature: getSig()
           })
         })
         .then(response => {
