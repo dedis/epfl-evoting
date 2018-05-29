@@ -32,7 +32,16 @@ self.addEventListener('message', event => {
     for (let i = 0; i < points.length; i++) {
       const point = curve.point()
       point.unmarshalBinary(points[i])
-      const d = point.data()
+      var d
+      try {
+        d = point.data()
+      } catch (e) {
+        console.log(`iteration ${i} invalid ballot: ` + e.toString())
+        invalidCount++
+        const ballot=[ i+1, 'ballot empty' ]
+	invalidBallots.push(ballot)
+        continue
+      }
       const scipers = Uint8ArrayToScipers(d)
       if (scipers.length !== d.length / 3) {
         console.log(`iteration ${i} invalid ballot: duplicate candidates`)
