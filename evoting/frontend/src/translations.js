@@ -47,7 +47,7 @@ const messages = {
       voteAgain: 'Vous avez déjà voté pour cette élection. Si vous choisissez de voter à nouveau, seul votre dernier vote sera compté.',
       maxAllowed: 'Maximum {max} permis',
       cast: 'Votre bulletin de vote a été enregistré.',
-      noElections: 'Il n\'y a actuellement aucune élection pour que vous puissiez voter.',
+      noElections: 'Aucune élection en cours: pas de possibilité de voter.',
       maint: 'Le système est actuellement indisponible. Veuillez réessayer plus tard.'
     }
   },
