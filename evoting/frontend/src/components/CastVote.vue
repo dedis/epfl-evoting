@@ -179,7 +179,7 @@ export default {
       valid: false,
       submitted: false,
       candidateNames: {},
-      version: version.version,
+      version: version,
       dialog3: false
     }
   },

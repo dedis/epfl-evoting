@@ -42,7 +42,12 @@
                   <span class="count">({{ val.count }}/{{ totalCount }})</span>
                 </v-flex>
               </v-layout>
-              <v-layout v-if="invalidCount > 0">
+              <v-layout v-if="invalidCount === 1">
+                <v-flex xs12>
+                  <p>{{ $t('message.invalidBallot', { invalidCount })}}</p>
+                </v-flex>
+              </v-layout>
+              <v-layout v-if="invalidCount > 1">
                 <v-flex xs12>
                   <p>{{ $t('message.invalidBallots', { invalidCount })}}</p>
                 </v-flex>
@@ -177,7 +182,7 @@ export default {
       invalidCount: 0,
       invalidBallots: [],
       counted: false,
-      version: version.version
+      version: version
     }
   },
   created () {

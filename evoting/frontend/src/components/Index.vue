@@ -161,7 +161,7 @@ export default {
   },
   data () {
     return {
-      version: version.version
+      version: version
     }
   }
 }
