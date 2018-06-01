@@ -66,7 +66,7 @@
         <v-flex xs6 text-xs-right>{{ election.footer.contactPhone }}, <a :href="`mailto:${election.footer.contactEmail}`">{{ election.footer.contactTitle }}</a> <span class="grey--text">v{{ version }}</span></v-flex>
       </v-layout>
     </v-footer>
-    <v-dialog v-model="dialog3" persistent="true" max-width="500px">
+    <v-dialog v-model="dialog3" persistent max-width="500px">
       <v-card>
         <v-card-title>
           <span> {{ $t('message.cast') }} </span>
@@ -90,6 +90,10 @@ import {
 import version from '@/version'
 
 const curve = new kyber.curve.edwards25519.Curve()
+
+function sleep (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 export default {
   computed: {
@@ -191,24 +195,29 @@ export default {
       if (this.candidateNames[sciper] !== 'loading...') {
         continue
       }
-      this.$store.state.socket
-        .send('LookupSciper', 'LookupSciperReply', {
-          sciper: sciper.toString()
-        })
-        .then(response => {
-          this.candidateNames = {
-            ...this.candidateNames,
-            [sciper]: response.fullName
-          }
-          // cache
-          this.$store.state.names[sciper] = this.candidateNames[sciper]
-        })
-        .catch(e => {
-          this.candidateNames = {
-            ...this.candidateNames,
-            [sciper]: 'SCIPER ' + sciper + ' not found'
-          }
-        })
+      var sltime = 0
+      if (i > 5) {
+        sltime = 2000
+      }
+      sleep(sltime).then(() => {
+        this.$store.state.socket
+          .send('LookupSciper', 'LookupSciperReply', {
+            sciper: sciper.toString()
+          }).then(response => {
+            this.candidateNames = {
+              ...this.candidateNames,
+              [sciper]: response.fullName
+            }
+            // cache
+            this.$store.state.names[sciper] = this.candidateNames[sciper]
+          })
+          .catch(e => {
+            this.candidateNames = {
+              ...this.candidateNames,
+              [sciper]: 'SCIPER ' + sciper + ' not found'
+            }
+          })
+      })
     }
   },
   watch: {
