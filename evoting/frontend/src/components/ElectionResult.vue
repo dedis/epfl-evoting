@@ -36,7 +36,7 @@
                   <p class="candidate">{{ candidateNames[val.sciper] }}</p>
                 </v-flex>
                 <v-flex xs5 md7>
-                  <v-progress-linear :color="colors[idx % colors.length]" :value="percentage(val.count, totalCount)"></v-progress-linear>
+                  <v-progress-linear :color="colors[(idx < election.maxChoices) ? 0 : 1]" :value="percentage(val.count, totalCount)"></v-progress-linear>
                 </v-flex>
                 <v-flex xs2 md2 class="text-md-center">
                   <span class="count">({{ val.count }}/{{ totalCount }})</span>
@@ -158,26 +158,10 @@ export default {
       totalCount: 0,
       candidateNames: {},
       votes: [],
+      // color 0: elected, color 1: not elected
       colors: [
         'green accent-4',
-        'green accent-3',
-        'green accent-2',
-        'yellow lighten-2',
-        'yellow lighten-1',
-        'yellow',
-        'yellow darken-1',
-        'yellow darken-2',
-        'yellow darken-3',
-        'amber',
-        'amber darken-1',
-        'amber darken-2',
-        'amber darken-3',
-        'amber darken-4',
-        'orange',
-        'orange darken-1',
-        'orange darken-2',
-        'orange darken-3',
-        'orange darken-4'
+        'yellow'
       ],
       invalidCount: 0,
       invalidBallots: [],
