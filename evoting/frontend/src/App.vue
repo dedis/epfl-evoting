@@ -43,6 +43,7 @@ export default {
     'navbar': Navbar
   },
   data () {
+    const i18n = this.$i18n
     return {
       fixed: false,
       title: i18n._t('message.elections', i18n.locale, i18n._getMessages(), this),
