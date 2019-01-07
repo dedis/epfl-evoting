@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       fixed: false,
-      title: 'Elections 2018',
+      title: i18n._t('message.elections', i18n.locale, i18n._getMessages(), this),
       breadcrumbs: config.breadcrumbs,
       maintenance: config.maintenance
     }
