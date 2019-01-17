@@ -22,7 +22,8 @@ const messages = {
       maxAllowed: 'Maximum {max} allowed',
       cast: 'Your vote has been cast successfully',
       noElections: 'There are not currently any elections for you to vote in.',
-      maint: 'The system is currently unavailable. Please try again later.'
+      maint: 'The system is currently unavailable. Please try again later.',
+      notagree: 'I do not agree'
     }
   },
   fr: {
@@ -48,7 +49,8 @@ const messages = {
       maxAllowed: 'Maximum {max} permis',
       cast: 'Votre bulletin de vote a été enregistré.',
       noElections: 'Aucune élection en cours: pas de possibilité de voter.',
-      maint: 'Le système est actuellement indisponible. Veuillez réessayer plus tard.'
+      maint: 'Le système est actuellement indisponible. Veuillez réessayer plus tard.',
+      notagree: 'Je ne suis pas d\'accord.'
     }
   },
   de: {
@@ -74,7 +76,8 @@ const messages = {
       maxAllowed: 'Maximal {max} erlaubt',
       cast: 'Deine Stimme wurde abgegeben.',
       noElections: 'Derzeit gibt es keine Wahlen, in denen Sie wählen können.',
-      maint: 'Das System ist derzeit nicht verfügbar. Bitte versuche es später erneut.'
+      maint: 'Das System ist derzeit nicht verfügbar. Bitte versuche es später erneut.',
+      notagree: 'Ich stimme nicht zu.'
     }
   },
   it: {
@@ -100,7 +103,8 @@ const messages = {
       maxAllowed: 'Massimo {max} consentito',
       cast: 'Il tuo voto è stato scelto.',
       noElections: 'Al momento non ci sono elezioni in cui votare.',
-      maint: 'Il sistema non è attualmente disponibile. Per favore riprova più tardi.'
+      maint: 'Il sistema non è attualmente disponibile. Per favore riprova più tardi.',
+      notagree: 'Non sono d\'accordo.'
     }
   }
 }

@@ -21,10 +21,10 @@
               <v-layout>
                 <v-flex xs12>
                   <v-card light color="yellow lighten-5"> {{ $t('message.voteAgain') }} </v-card>
-		  <br>
+                  <br>
                 </v-flex>
               </v-layout>
-	    </div>
+            </div>
             <v-layout>
               <v-flex xs12>
                 {{ $t(`election_${getId(election)}.subtitle`) }}
@@ -200,6 +200,14 @@ export default {
         sltime = 2000
       }
       sleep(sltime).then(() => {
+        if (sciper === 999999) {
+          const i18n = this.$i18n
+          const ag = i18n._t('message.notagree', i18n.locale, i18n._getMessages(), this)
+          this.candidateNames = {
+            ...this.candidateNames,
+            [sciper]: ag
+          }
+        }
         this.$store.state.socket
           .send('LookupSciper', 'LookupSciperReply', {
             sciper: sciper.toString()
