@@ -176,6 +176,12 @@ export default {
     }
     for (let i = 0; i < c.length; i++) {
       const sciper = c[i]
+      if (sciper === 999999) {
+        const i18n = this.$i18n
+        const ag = i18n._t('message.notagree', i18n.locale, i18n._getMessages(), this)
+        this.candidateNames[sciper] = ag
+        continue
+      }
       this.candidateNames[sciper] = this.$store.state.names[sciper] || 'loading...'
       if (this.candidateNames[sciper] !== 'loading...') {
         continue

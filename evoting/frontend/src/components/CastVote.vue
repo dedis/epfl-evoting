@@ -207,6 +207,7 @@ export default {
             ...this.candidateNames,
             [sciper]: ag
           }
+          return
         }
         this.$store.state.socket
           .send('LookupSciper', 'LookupSciperReply', {
