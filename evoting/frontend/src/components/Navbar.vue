@@ -4,7 +4,7 @@
     app
   >
     <div class="logo">
-      <a href="/"><img src="@/assets/epfl_logo.png"></a>
+      <a href="/"><img src="@/assets/new_epfl_logo.png"></a>
     </div>
     <v-toolbar-title v-text="title"></v-toolbar-title>
     <v-spacer></v-spacer>

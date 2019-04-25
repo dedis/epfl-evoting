@@ -29,7 +29,8 @@ module.exports = {
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+      : config.dev.assetsPublicPath,
+	globalObject: 'this'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -47,11 +48,11 @@ module.exports = {
         options: vueLoaderConfig
       },
       {
-	test: /\.worker.js$/,
-	loader: 'worker-loader',
-	options: {
+        test: /\.worker.js$/,
+        loader: 'worker-loader',
+        options: {
           name: utils.assetsPath('js/[name].[hash:7].[ext]')
-	}
+        }
       },
       {
         test: /\.js$/,

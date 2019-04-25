@@ -1,0 +1,8 @@
+document.cookie='signature=c7dc5161300ffa41ad456c38cb83672ed7b000e4471b7965282fd653beba8267ae50475f1d020c79737701de4eec02891bc831a0eaf3ba53cc76693a40aef208';
+localStorage.evoting='{"user":{"name":"Jeffrey Richard Allen","sciper":"289938","groups":["IC-Calendar","IC-Portal","Seminar-Crypto","personnel-epfl","PrivaSec","ICCalendrierFaculte-RO","DEDIS_TEAM","evoting-v2","Blockchain","pop-party","Grp_mail_dedis","intranet-epfl","Recruiting"],"sections":["dedis","iinfcom","ic"]},"voted":{}}'
+
+Noemien:
+
+document.cookie='signature=12241008f86d247b14e48f069371f847bd57a7efeebe201c91d436d12fca551a0d1f7f033f5571cbe2d40e39b0ce4746972da301a9f1cbd956764c816a56c108'
+
+localStorage.evoting='{"user":{"name":"Noémien Kocher","sciper":"228271","groups":["IC-Calendar","IC-Portal","ICCalendrierFaculte-RO","Seminar-Crypto","sap-aim-epfl02","PrivaSec","intranet-epfl","personnel-epfl","pop-party","DEDIS_TEAM","evoting-v2"],"sections":["dedis","iinfcom","ic"]},"voted":{}}'

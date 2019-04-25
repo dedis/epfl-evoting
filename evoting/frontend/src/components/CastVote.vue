@@ -142,7 +142,8 @@ export default {
       const u = curve.point().mul(r, null)
       // v = m + yr
       const y = curve.point()
-      y.unmarshalBinary(key)
+      // v3 point marshaling has the point type in the first 8 characters
+      y.unmarshalBinary(key.subarray(8))
       const yr = curve.point().mul(r, y)
       const v = curve.point().add(m, yr)
 

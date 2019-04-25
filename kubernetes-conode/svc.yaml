@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: prod-conode
+spec:
+  type: LoadBalancer
+  selector:
+    app: conode
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 6879
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 6880
+    targetPort: 6880

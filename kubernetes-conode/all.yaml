@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: prod-conode
+  labels:
+    app: prod-conode
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prod-conode
+  template:
+    metadata:
+      labels:
+        app: prod-conode
+    spec:
+      hostNetwork: true
+      volumes:
+        - name: dedis-prod-conode
+          persistentVolumeClaim:
+            claimName: dedis-prod-conode-scratch
+      containers:
+        - name: conode
+          image: dedis/conode:e2d7253a
+          volumeMounts:
+            - mountPath: "/conode_data"
+              name: dedis-prod-conode
+          ports:
+            - containerPort: 6879
+              containerPort: 6880
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: prod-conode
+spec:
+  type: LoadBalancer
+  selector:
+    app: prod-conode
+  ports:
+  - name: conodeport
+    protocol: TCP
+    port: 30000
+    targetPort: 6879
+  - name: websocket
+    protocol: TCP
+    port: 30001
+    targetPort: 6880

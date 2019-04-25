@@ -1,18 +1,9 @@
 <template>
   <v-app>
     <navbar :title="title" />
-    <!--<main>-->
       <v-container class="root-container" fluid full-height>
         <v-card class="mb-3">
-        <v-breadcrumbs divider=">">
-          <v-breadcrumbs-item
-            v-for="item in breadcrumbs"
-            :href="item.href"
-            target="_blank"
-            :key="item.text"
-          >
-            {{ $t(`message.${item.text}`) }}
-          </v-breadcrumbs-item>
+        <v-breadcrumbs :items="items" divider=">">
         </v-breadcrumbs>
         </v-card>
 	<div v-if="maintenance">
@@ -47,7 +38,11 @@ export default {
     return {
       fixed: false,
       title: i18n._t('message.elections', i18n.locale, i18n._getMessages(), this),
-      breadcrumbs: config.breadcrumbs,
+      items: config.breadcrumbs.map(x => {
+        x.text = i18n._t('message.' + x.text, i18n.locale, i18n._getMessages(), this)
+        x.target = '_blank'
+        return x
+      }),
       maintenance: config.maintenance
     }
   },
