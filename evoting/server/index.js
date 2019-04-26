@@ -34,8 +34,7 @@ const getLdapData = (sciper) => {
 }
 
 if (!isProd) {
-  router.get('/', (req, res) => res.sendFile(path.join(__dirname, '/dist/index.html')))
-  router.use('/static', express.static(path.join(__dirname, '/dist/static')))
+  router.use('/', express.static(path.join(__dirname, '/dist')))
 }
 
 const generateSignature = (sciper, masterID) => {

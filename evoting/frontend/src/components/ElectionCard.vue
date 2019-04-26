@@ -68,7 +68,7 @@ export default {
     theme: String
   },
   methods: {
-    async finalize (event) {
+    async finalize () {
       const { socket } = this.$store.state
       this.disabled = true
       let { sciper, signature } = this.$store.state.user

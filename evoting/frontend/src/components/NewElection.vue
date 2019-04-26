@@ -346,7 +346,7 @@ export default {
       }
       const { socket } = this.$store.state
       socket.send('Open', 'OpenReply', openProto)
-        .then(data => {
+        .then(function () {
           this.submitted = false
           this.$router.push('/')
           this.$store.commit('SET_SNACKBAR', {

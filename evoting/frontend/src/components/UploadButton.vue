@@ -3,10 +3,9 @@
   <div class="upload-input input-group">
     <div class="input-group__input">
       <i aria-hidden="true" class="icon material-icons input-group__prepend-icon">{{ prependIcon }}</i>
-      <div class="btn btn-primary jbtn-file"> {{ title }}
+      <div class="btn btn-primary jbtn-file"> {{ title }}:
         <input type="file" v-on:change="fileSelected">
       </div>
-      <div class="upload-info flex">{{ fileName || 'No file selected' }}</div>
       <div class="sciper-info" v-if="$store.state.scipersReadFromFile !== 0">Read {{ $store.state.scipersReadFromFile }} scipers</div>
     </div>
   </div>
@@ -44,25 +43,24 @@
 </script>
 
 <style scoped>
-  .jbtn-file {
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
+  /* .jbtn-file { */
+  /*   cursor: pointer; */
+  /*   position: relative; */
+  /*   overflow: hidden; */
+  /* } */
 
-  .jbtn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    cursor: inherit;
-    display: block;
-  }
+  /* .jbtn-file input[type=file] {  */
+  /*     position: absolute; */
+  /*     top: 0; */
+  /*     right: 0; */
+  /*     min-width: 100%; */
+  /*     min-height: 100%; */
+  /*     opacity: 0; */
+  /*     outline: none; */
+  /*     cursor: inherit; */
+  /*     display: block; */
+  /*     background-color: #1976d2; */
+  /* } */
 
   .upload-info {
     display: flex;

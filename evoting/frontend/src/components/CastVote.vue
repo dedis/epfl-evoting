@@ -222,6 +222,7 @@ export default {
             this.$store.state.names[sciper] = this.candidateNames[sciper]
           })
           .catch(e => {
+            console.log('SCIPER not found', e)
             this.candidateNames = {
               ...this.candidateNames,
               [sciper]: 'SCIPER ' + sciper + ' not found'
@@ -233,7 +234,7 @@ export default {
   watch: {
     candidateNames: {
       deep: true,
-      handler (val, oldVal) {}
+      handler: function() {}
     }
   }
 }

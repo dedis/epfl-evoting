@@ -1,22 +1,18 @@
-import 'babel-polyfill'
 import kyber from '@dedis/kyber-js'
 import cothority from '@dedis/cothority'
 import rosterTOML from './public.toml'
 import { Uint8ArrayToScipers } from '@/utils'
 
-const curve = new kyber.curve.edwards25519.Curve()
-const net = cothority.net
-
-var path = 'evoting'
-
 self.addEventListener('message', event => {
+  if (!event.data.request) {
+    // Not ours, keep processing it.
+    return false
+  }    
+  console.log('worker request', event)
   const { election, wss } = event.data
+
   const roster = cothority.Roster.fromTOML(rosterTOML, wss)
-  if (roster.identities[0].addr.startsWith('tls://demos.epfl.ch')) {
-    console.log('activating demos.epfl.ch hack')
-    path = 'conode/evoting'
-  }
-  const socket = new net.LeaderSocket(roster, path)
+  const socket = new cothority.net.LeaderSocket(roster, 'evoting')
   socket.send('Reconstruct', 'ReconstructReply', {
     id: election.id
   }).then(data => {
@@ -29,9 +25,12 @@ self.addEventListener('message', event => {
     for (let i = 0; i < election.candidates.length; i++) {
       counts[election.candidates[i]] = 0
     }
+
+    const curve = new kyber.curve.edwards25519.Curve()
+
     for (let i = 0; i < points.length; i++) {
       const point = curve.point()
-	  // v3 point marshaling has the point type in the first 8 characters
+      // v3 point marshaling has the point type in the first 8 characters
       point.unmarshalBinary(points[i].subarray(8))
       var d
       try {
@@ -83,6 +82,7 @@ self.addEventListener('message', event => {
       totalCount += scipers.length
     }
     postMessage({
+      reply: true,
       invalidCount,
       counts,
       votes,
@@ -91,6 +91,7 @@ self.addEventListener('message', event => {
     })
   }).catch(e => {
     postMessage({
+      reply: true,
       error: e.message
     })
     setTimeout(() => {
@@ -98,3 +99,13 @@ self.addEventListener('message', event => {
     })
   })
 })
+
+const send = r => {
+  self.postMessage({  'request': true,  ...r })
+  // return the worker instance so that the caller can set event listeners
+  return self
+}
+
+export default {
+  send
+}

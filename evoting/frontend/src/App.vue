@@ -6,12 +6,12 @@
         <v-breadcrumbs :items="items" divider=">">
         </v-breadcrumbs>
         </v-card>
-	<div v-if="maintenance">
-	  <v-card light color="yellow lighten-5"> {{ $t('message.maint') }} </v-card>
-	</div>
-	<div v-if="! maintenance">
+        <div v-if="maintenance">
+          <v-card light color="yellow lighten-5"> {{ $t('message.maint') }} </v-card>
+        </div>
+        <div v-if="! maintenance">
           <router-view/>
-	</div>
+        </div>
         <v-snackbar
           :timeout="$store.getters.snackbar.timeout"
           :color="$store.getters.snackbar.color"

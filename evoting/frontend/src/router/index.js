@@ -74,11 +74,12 @@ router.beforeEach((to, from, next) => {
   // downloading the Material Icons font is interrupted by the redirect to get
   // authenticated. The workaround is that after we are sure we won't be redirecting to
   // auth, then we add the CSS into the page header.
+  // 	<link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' rel="stylesheet">
   const head = document.head
   const link = document.createElement('link')
   link.type = 'text/css'
   link.rel = 'stylesheet'
-  link.href = 'static/material-icons.css'
+  link.href = 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons'
   head.appendChild(link)
 
   if (store.getters.hasElections) {
@@ -86,6 +87,10 @@ router.beforeEach((to, from, next) => {
     return
   }
   let { user, voted } = store.state
+  if (! user) {
+    console.log("no user?")
+    return
+  }
   voted = voted || {}
   const checkVoted = Object.keys(voted).length === 0
   const deviceMessage = {

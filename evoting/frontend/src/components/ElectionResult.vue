@@ -81,7 +81,7 @@ import {
   timestampToString
 } from '@/utils'
 import version from '@/version'
-import ReconstructWorker from '@/reconstruct.worker.js'
+import worker from '@/reconstruct.worker.js'
 
 export default {
   computed: {
@@ -199,15 +199,21 @@ export default {
             ...this.candidateNames,
             [sciper]: 'SCIPER ' + sciper + ' not found'
           }
+          console.log('SCIPER not found', e)
         })
     }
-    const worker = new ReconstructWorker()
     const wss = window.location.protocol === 'https:'
     console.log('election', this.election)
-    worker.postMessage({ election: this.election, wss })
-    worker.onmessage = e => {
-      const { error, invalidCount, counts, votes, totalCount, invalidBallots } = e.data
-      worker.terminate()
+    const w = worker.send({ election: this.election, wss })
+    // https://stackoverflow.com/questions/36179415/data-not-updating-in-vue
+    const self = this
+    w.addEventListener('message', function (event) {
+      if (!event.data.reply) {
+        // not ours
+        return false
+      }
+      console.log('worker reply', event)
+      const { error, invalidCount, counts, votes, totalCount, invalidBallots } = event.data
       if (error) {
         this.$store.commit('SET_SNACKBAR', {
           color: 'error',
@@ -217,26 +223,26 @@ export default {
         })
         return
       }
-      this.invalidCount = invalidCount
-      this.invalidBallots = invalidBallots
-      this.counts = counts
-      this.votes = votes
-      this.totalCount = totalCount
-      this.counted = true
-    }
-    worker.onerror = e => {
+      self.invalidCount = invalidCount
+      self.invalidBallots = invalidBallots
+      self.counts = counts
+      self.votes = votes
+      self.totalCount = totalCount
+      self.counted = true
+    })
+    w.addEventListener( 'error', function(err) {
       this.$store.commit('SET_SNACKBAR', {
         color: 'error',
-        text: e.message,
+        text: err.message,
         model: true,
         timeout: 10000
       })
-    }
+    })
   },
   watch: {
     candidateNames: {
       deep: true,
-      handler (val, oldVal) {}
+      handler: function () {}
     }
   }
 }
