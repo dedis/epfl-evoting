@@ -19,3 +19,5 @@ src/version.js
 *.ntvs*
 *.njsproj
 *.sln
+
+src/cheat.txt
