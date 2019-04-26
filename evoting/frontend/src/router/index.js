@@ -62,6 +62,7 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
+
   if (getSig() === null) {
     const authUrl = '/auth/login'
     // we do not use next('/auth/login') here because it redirects inside the spa
@@ -87,10 +88,6 @@ router.beforeEach((to, from, next) => {
     return
   }
   let { user, voted } = store.state
-  if (! user) {
-    console.log("no user?")
-    return
-  }
   voted = voted || {}
   const checkVoted = Object.keys(voted).length === 0
   const deviceMessage = {
