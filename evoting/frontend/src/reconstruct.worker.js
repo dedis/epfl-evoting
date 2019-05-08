@@ -31,7 +31,7 @@ self.addEventListener('message', event => {
     }
     for (let i = 0; i < points.length; i++) {
       const point = curve.point()
-      point.unmarshalBinary(points[i])
+      point.unmarshalBinary(points[i].subarray(8))
       var d
       try {
         d = point.data()
