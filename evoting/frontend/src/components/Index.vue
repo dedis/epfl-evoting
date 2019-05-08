@@ -4,15 +4,13 @@
       <div v-if="$store.state.isAdmin">
         <v-btn
           fixed
-          dark
           fab
+          dark
           bottom
           right
           to="/election/new"
           color="primary"
-        >
-          <v-icon>add</v-icon>
-        </v-btn>
+        ><font size=6>+</font></v-btn>
       </div>
       <div class="election-group">
         <h3>{{ $t("message.activeElections") }}</h3>
@@ -121,6 +119,9 @@ const createArray = filteredArray => {
 
 const hidden = (id) => {
   id = Uint8ArrayToHex(id)
+  if (!config.electionsToHide) {
+    return false
+  }
   return config.electionsToHide.includes(id)
 }
 
