@@ -6,7 +6,7 @@
           <v-toolbar-title class="white--text">{{ name[$i18n.locale] || 'New Election' }}</v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
-          <v-form v-model="valid" v-on:submit="submitHandler">
+          <form @submit="submitHandler">
           <v-layout row wrap>
             <v-flex xs12>
               <v-expansion-panel>
@@ -19,7 +19,6 @@
                         prepend-icon="create"
                         :rules=[validateName]
                         :validate-on-blur="true"
-                        required
                       ></v-text-field>
                     </div>
                   </div>
@@ -32,7 +31,6 @@
                         prepend-icon="create"
                         :rules=[validateName]
                         :validate-on-blur="true"
-                        required
                       ></v-text-field>
                     </v-card-text>
                   </v-card>
@@ -50,7 +48,6 @@
                         prepend-icon="mode_comment"
                         :rules=[validateSubtitle]
                         :validate-on-blur="true"
-                        required
                       ></v-text-field>
                     </div>
                   </div>
@@ -63,7 +60,6 @@
                         prepend-icon="mode_comment"
                         :rules=[validateSubtitle]
                         :validate-on-blur="true"
-                        required
                       ></v-text-field>
                     </v-card-text>
                   </v-card>
@@ -98,7 +94,6 @@
                 type="number"
                 prepend-icon="format_list_numbered"
                 :rules=[validateMaxChoices]
-                required
               ></v-text-field>
             </v-flex>
             <v-flex xs12>
@@ -109,7 +104,6 @@
                 tags
                 :rules=[validateSciper]
                 clearable
-                required
                 v-model="candidateScipers"
               > 
                 <template slot="selection" slot-scope="data">
@@ -137,7 +131,6 @@
                 item-text="name"
                 item-value="class"
                 :rules=[validateTheme]
-                required
               >
                 <template slot="item" slot-scope="data">
                   <v-avatar
@@ -183,13 +176,13 @@
             <v-flex xs12 class="text-xs-center">
               <v-btn
                 type="submit"
-                :disabled="!valid || this.name[$i18n.locale] === null || this.subtitle[$i18n.locale] === null || submitted || voterScipers.length === 0"
+                :disabled="this.name[$i18n.locale] === null || this.subtitle[$i18n.locale] === null || voterScipers.length === 0"
                 color="primary">
                 Create Election
                </v-btn>
             </v-flex>
           </v-layout>
-        </v-form>
+        </form>
         </v-container>
       </v-card>
     </v-flex>
@@ -230,7 +223,7 @@ export default {
         const scipersStrArr = result.trim().split('\n')
         if (scipersStrArr.length === 0) {
           // show snackbar
-          console.error(new Error('Atleast one sciper is required'))
+          console.error(new Error('At least one sciper is required'))
           return
         }
         for (let i = 0; i < scipersStrArr.length; i++) {
@@ -313,7 +306,6 @@ export default {
     },
     submitHandler (e) {
       e.preventDefault()
-      this.submitted = true
       const name = {}
       const subtitle = {}
       const langs = ['en', 'fr', 'de', 'it']
@@ -347,7 +339,6 @@ export default {
       const { socket } = this.$store.state
       socket.send('Open', 'OpenReply', openProto)
         .then(function () {
-          this.submitted = false
           this.$router.push('/')
           this.$store.commit('SET_SNACKBAR', {
             color: 'success',
@@ -370,7 +361,6 @@ export default {
         })
         .catch(e => {
           console.error(e)
-          this.submitted = false
           this.$store.commit('SET_SNACKBAR', {
             color: 'error',
             text: e.message,
@@ -402,7 +392,6 @@ export default {
       voterScipers: [],
       candidateScipers: [],
       valid: false,
-      submitted: false,
       today,
       moreInfo: '',
       maxChoices: null,

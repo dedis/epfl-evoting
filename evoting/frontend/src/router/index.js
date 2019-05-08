@@ -90,8 +90,14 @@ router.beforeEach((to, from, next) => {
   let { user, voted } = store.state
   voted = voted || {}
   const checkVoted = Object.keys(voted).length === 0
+  var u
+  try {
+    u = parseInt(user.sciper)
+  } catch {
+    u = 0
+  }
   const deviceMessage = {
-    user: parseInt(user.sciper),
+    user: u,
     master: config.masterID,
     stage: 0,
     signature: getSig(),
