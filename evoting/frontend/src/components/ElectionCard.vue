@@ -8,10 +8,12 @@
           <a class="election-info" target="_blank" :href="moreInfo"><v-icon>info</v-icon></a>
         </div>
         <div v-if="voted">
-          <v-tooltip bottom>
-            <v-icon dark class="election-voted" color="white" slot="activator">check</v-icon>
-            <span>{{ $t('message.ballotCast', { block: voted }) }} </span>
-          </v-tooltip>
+          <a :href="explorerUrl" target="_blank">
+            <v-tooltip bottom>
+              <v-icon dark class="election-voted" color="white" slot="activator">check</v-icon>
+              <span>{{ $t('message.ballotCast', { block: voted }) }}</span>
+            </v-tooltip>
+          </a>
         </div>
       </v-toolbar>
       <v-card-title class="election-card-name">
@@ -46,9 +48,13 @@
 <script>
 import config from '@/config'
 import { hexToUint8Array, timestampToString, getSig } from '@/utils'
+import { GetElections, GetElectionsReply, Shuffle, ShuffleReply, Decrypt, DecryptReply } from '@/proto'
 
 export default {
   computed: {
+    explorerUrl () {
+      return `http://voting-web-prod.epfl.ch/#${this.id}/blocks/${this.voted}`
+    },
     endDate () {
       return timestampToString(this.end, true)
     },
@@ -72,12 +78,10 @@ export default {
       const { socket } = this.$store.state
       this.disabled = true
       let { sciper, signature } = this.$store.state.user
-      sciper = parseInt(sciper)
-      signature = getSig()
       const msg = {
         id: hexToUint8Array(this.id),
-        user: sciper,
-        signature
+        user: parseInt(sciper),
+        signature: getSig()
       }
       const setError = (e) => {
         this.$store.commit('SET_SNACKBAR', {
@@ -89,7 +93,7 @@ export default {
         this.disabled = false
       }
       try {
-        await socket.send('Shuffle', 'ShuffleReply', msg)
+        await socket.send(new Shuffle(msg), ShuffleReply)
       } catch (e) {
         setError(e)
         if (e.message.indexOf('already shuffled') === -1) {
@@ -97,7 +101,7 @@ export default {
         }
       }
       try {
-        await socket.send('Decrypt', 'DecryptReply', msg)
+        await socket.send(new Decrypt(msg), DecryptReply)
         this.$store.commit('SET_SNACKBAR', {
           color: 'success',
           text: 'Election finalized',
@@ -106,12 +110,13 @@ export default {
         })
         this.disabled = false
         const master = config.masterID
-        const response = await socket.send('GetElections', 'GetElectionsReply', {
+        const ge = new GetElections({
           user: sciper,
           master,
           stage: 0,
           signature
         })
+        const response = await socket.send(ge, GetElectionsReply)
         this.$store.commit('SET_ELECTIONS', response.elections)
         this.$store.commit('SET_ISADMIN', response.isAdmin)
         this.$router.push('/')

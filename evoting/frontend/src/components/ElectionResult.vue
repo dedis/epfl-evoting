@@ -36,7 +36,7 @@
                   <p class="candidate">{{ candidateNames[val.sciper] }}</p>
                 </v-flex>
                 <v-flex xs5 md7>
-                  <v-progress-linear :color="colors[(idx < election.maxChoices) ? 0 : 1]" :value="percentage(val.count, totalCount)"></v-progress-linear>
+                  <v-progress-linear :color="colors[(idx < election.maxchoices) ? 0 : 1]" :value="percentage(val.count, totalCount)"></v-progress-linear>
                 </v-flex>
                 <v-flex xs2 md2 class="text-md-center">
                   <span class="count">({{ val.count }}/{{ totalCount }})</span>
@@ -82,6 +82,7 @@ import {
 } from '@/utils'
 import version from '@/version'
 import ReconstructWorker from '@/reconstruct.worker.js'
+import { LookupSciper, LookupSciperReply } from '@/proto'
 
 export default {
   computed: {
@@ -186,11 +187,9 @@ export default {
       if (this.candidateNames[sciper] !== 'loading...') {
         continue
       }
-      this.$store.state.socket.send('LookupSciper', 'LookupSciperReply', {
-        sciper: sciper.toString()
-      })
+      this.$store.state.socket.send(new LookupSciper({ sciper: sciper.toString() }), LookupSciperReply)
         .then(response => {
-          this.candidateNames = {...this.candidateNames, [sciper]: response.fullName}
+          this.candidateNames = {...this.candidateNames, [sciper]: response.fullname}
           // cache
           this.$store.state.names[sciper] = this.candidateNames[sciper]
         })
@@ -203,7 +202,6 @@ export default {
     }
     const worker = new ReconstructWorker()
     const wss = window.location.protocol === 'https:'
-    console.log('election', this.election)
     worker.postMessage({ election: this.election, wss })
     worker.onmessage = e => {
       const { error, invalidCount, counts, votes, totalCount, invalidBallots } = e.data

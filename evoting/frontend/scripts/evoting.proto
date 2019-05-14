@@ -1,0 +1,208 @@
+// This is a automatically-created, and then hand-hacked proto file for
+// the types used in the cothority/evoting directory. That service is
+// too old to do protobuf's completely automatically like ByzCoin does,
+// which is why this is hand-hacked.
+//
+// This file is here, and we use addJSON to add it into the cothority models
+// because... we wanted evoting dev to be more nimble than cothority right now.
+//
+// After hacking this file, run "npm run proto" to make a new models.json file.
+//
+// Jeff Allen
+
+syntax = "proto2";
+
+package evoting;
+import "network.proto";
+import "skipchain.proto";
+import "onet.proto";
+
+// Mix contains the shuffled ballots.
+message Mix {
+  repeated Ballot ballots = 1;
+  required bytes proof = 2;
+  required network.ServerIdentityID nodeid = 3;
+  required bytes signature = 4;
+}
+
+// Ballot represents an encrypted vote.
+message Ballot {
+  required uint32 user = 1;
+  required bytes alpha = 2;
+  required bytes beta = 3;
+}
+
+// Partial contains the partially decrypted ballots.
+message Partial {
+  repeated bytes points = 1;
+  required network.ServerIdentityID nodeid = 2;
+  required bytes signature = 3;
+}
+
+message Open {
+  required bytes id = 1;
+  optional Election election = 2;
+  required uint32 user = 3;
+  required bytes signature = 4;
+}
+
+message Election {
+  map<string, string> name = 1;
+  required uint32 creator = 2;
+  repeated uint32 users = 3 [packed=true];
+  required bytes id = 4;
+  required bytes master = 5;
+  optional onet.Roster roster = 6;
+  required bytes key = 7;
+  required bytes masterkey = 8;
+  required uint32 stage = 9;
+  repeated uint32 candidates = 10 [packed=true];
+  required sint32 maxchoices = 11;
+  map<string, string> subtitle = 12;
+  required string moreinfo = 13;
+  required sint64 start = 14;
+  required sint64 end = 15;
+  required string theme = 16;
+  required Footer footer = 17;
+  required bytes voted = 18;
+}
+
+message Footer {
+  required string text = 1;
+  required string contacttitle = 2;
+  required string contactphone = 3;
+  required string contactemail = 4;
+}
+
+message Master {
+  required bytes id = 1;
+  optional onet.Roster roster = 2;
+  repeated uint32 admins = 3 [packed=true];
+  required bytes key = 4;
+}
+
+// LookupSciper takes a sciper number and returns elements of the user.
+message LookupSciper {
+  required string sciper = 1;
+  required string lookupurl = 2;
+}
+
+// LookupSciperReply returns the elements of the vcard from
+// https://people.epfl.ch/cgi-bin/people/vCard?id=sciper
+message LookupSciperReply {
+  required string fullname = 1;
+  required string email = 2;
+  required string url = 3;
+  required string title = 4;
+}
+
+// Link message.
+message Link {
+  required string pin = 1;
+  optional onet.Roster roster = 2;
+  required bytes key = 3;
+  repeated uint32 admins = 4 [packed=true];
+  optional bytes id = 5;
+  optional uint32 user = 6;
+  optional bytes signature = 7;
+}
+
+// LinkReply message.
+message LinkReply {
+  required bytes id = 1;
+}
+
+// OpenReply message.
+message OpenReply {
+  required bytes id = 1;
+  required bytes key = 2;
+}
+
+// Cast message.
+message Cast {
+  required bytes id = 1;
+  optional Ballot ballot = 2;
+  required uint32 user = 3;
+  required bytes signature = 4;
+}
+
+// CastReply message.
+message CastReply {
+  required bytes id = 1;
+}
+
+// Shuffle message.
+message Shuffle {
+  required bytes id = 1;
+  required uint32 user = 2;
+  required bytes signature = 3;
+}
+
+// ShuffleReply message.
+message ShuffleReply {
+}
+
+message Decrypt {
+  required bytes id = 1;
+  required uint32 user = 2;
+  required bytes signature = 3;
+}
+
+// DecryptReply message.
+message DecryptReply {
+}
+
+message GetElections {
+  required uint32 user = 1;
+  required bytes master = 2;
+  required uint32 stage = 3;
+  required bytes signature = 4;
+  required bool checkvoted = 5;
+}
+
+// GetElectionsReply message.
+message GetElectionsReply {
+  repeated Election elections = 1;
+  required bool isadmin = 2;
+  required Master master = 3;
+}
+
+// GetBox message.
+message GetBox {
+  required bytes id = 1;
+}
+
+// GetBoxReply message.
+message GetBoxReply {
+  optional lib.Box box = 1;
+}
+
+// GetMixes message.
+message GetMixes {
+  required bytes id = 1;
+}
+
+// GetMixesReply message.
+message GetMixesReply {
+  repeated Mix mixes = 1;
+}
+
+// GetPartials message.
+message GetPartials {
+  required bytes id = 1;
+}
+
+// GetPartialsReply message.
+message GetPartialsReply {
+  repeated Partial partials = 1;
+}
+
+// Reconstruct message.
+message Reconstruct {
+  required bytes id = 1;
+}
+
+// ReconstructReply message.
+message ReconstructReply {
+  repeated bytes points = 1;
+}

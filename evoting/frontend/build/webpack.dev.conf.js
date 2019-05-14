@@ -39,7 +39,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       : false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
-    quiet: true, // necessary for FriendlyErrorsPlugin
+    //quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
     }
@@ -84,9 +84,9 @@ module.exports = new Promise((resolve, reject) => {
         compilationSuccessInfo: {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
-        onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
+ //       onErrors: config.dev.notifyOnErrors
+ //       ? utils.createNotifierCallback()
+ //       : undefined
       }))
 
       resolve(devWebpackConfig)

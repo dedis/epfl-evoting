@@ -201,6 +201,8 @@ import config from '../config'
 import DateTimePicker from './DateTimePicker'
 import UploadButton from './UploadButton'
 import { getSig, timestampToString } from '@/utils'
+import { Open, OpenReply, Footer, Election, GetElections, GetElectionsReply } from '@/proto'
+import kyber from '@dedis/kyber'
 
 export default {
   computed: {
@@ -322,9 +324,11 @@ export default {
         name[lang] = this.name[lang] === null ? '' : this.name[lang]
         subtitle[lang] = this.subtitle[lang] === null ? '' : this.subtitle[lang]
       }
-      const openProto = {
+      const curve = new kyber.curve.edwards25519.Curve()
+      const zeroKey = curve.point()
+      const open = new Open({
         id: config.masterID,
-        election: {
+        election: new Election({
           name,
           users: this.voterScipers,
           subtitle,
@@ -332,20 +336,22 @@ export default {
           start: Math.floor(this.start / 1000),
           end: Math.floor(this.end / 1000),
           candidates: this.candidateScipers.map(x => parseInt(x)),
-          maxChoices: parseInt(this.maxChoices),
+          maxchoices: parseInt(this.maxChoices),
           theme: this.theme,
-          footer: {
+          footer: new Footer({
             text: this.footerText,
             contactTitle: this.footerContactTitle,
             contactEmail: this.footerContactEmail,
             contactPhone: this.footerContactPhone
-          }
-        },
+          }),
+          key: zeroKey.toProto(),
+          masterkey: zeroKey.toProto()
+        }),
         user: parseInt(this.$store.state.user.sciper),
         signature: getSig()
-      }
+      })
       const { socket } = this.$store.state
-      socket.send('Open', 'OpenReply', openProto)
+      socket.send(open, OpenReply)
         .then(data => {
           this.submitted = false
           this.$router.push('/')
@@ -356,13 +362,13 @@ export default {
             model: true
           })
           const { sciper } = this.$store.state.user
-          const master = config.masterID
-          return socket.send('GetElections', 'GetElectionsReply', {
+          const ge = new GetElections({
             user: parseInt(sciper),
-            master,
+            master: config.masterID,
             stage: 0,
             signature: getSig()
           })
+          return socket.send(ge, GetElectionsReply)
         })
         .then(response => {
           this.$store.commit('SET_ELECTIONS', response.elections)

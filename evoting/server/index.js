@@ -119,11 +119,10 @@ router.get('/auth/verify/txt', (req, res) => {
 router.get('/auth/verify', (req, res) => {
   payload = { key: req.query.key }
   if (isTest) {
-    const { sciper } = req.query
-    const masterID = util.hexToUint8Array(process.env.MASTER_ID.trim())
-    signature = generateSignature(sciper, masterID);
-    res.setHeader('Content-Type', 'application/json')
-    res.send(JSON.stringify({ signature: Array.from(signature), masterID: Array.from(masterID) }));
+    const { sciper } = req.query    
+    signature = util.Uint8ArrayToHex(generateSignature(sciper, config.masterID))
+    res.setHeader('Content-Type', 'text/plain')
+    res.render('template', { state: JSON.stringify({ }), signature: signature })
     return
   }
 

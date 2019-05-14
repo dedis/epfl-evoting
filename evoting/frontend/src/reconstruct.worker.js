@@ -1,25 +1,33 @@
 import 'babel-polyfill'
-import kyber from '@dedis/kyber-js'
-import cothority from '@dedis/cothority'
+import kyber from '@dedis/kyber'
 import rosterTOML from './public.toml'
-import { Uint8ArrayToScipers } from '@/utils'
+import { Reconstruct, ReconstructReply } from '@/proto'
+import { Roster } from '@dedis/cothority/network'
+import { RosterWSConnection } from '@dedis/cothority/network/connection'
+
+console.log('worker imported')
+
+export const Uint8ArrayToScipers = bytes => {
+  if (bytes.length % 3 !== 0) {
+    // invalid ballot
+    return []
+  }
+  const res = []
+  for (let i = 0; i < bytes.length; i += 3) {
+    const sciper = bytes[i] + bytes[i + 1] * (1 << 8) + bytes[i + 2] * (1 << 16)
+    res.push(sciper)
+  }
+  // return unique scipers
+  return Array.from(new Set(res))
+}
 
 const curve = new kyber.curve.edwards25519.Curve()
-const net = cothority.net
-
-var path = 'evoting'
+const roster = Roster.fromTOML(rosterTOML)
+const socket = new RosterWSConnection(roster, 'evoting')
 
 self.addEventListener('message', event => {
-  const { election, wss } = event.data
-  const roster = cothority.Roster.fromTOML(rosterTOML, wss)
-  if (roster.identities[0].addr.startsWith('tls://demos.epfl.ch')) {
-    console.log('activating demos.epfl.ch hack')
-    path = 'conode/evoting'
-  }
-  const socket = new net.LeaderSocket(roster, path)
-  socket.send('Reconstruct', 'ReconstructReply', {
-    id: election.id
-  }).then(data => {
+  const { election } = event.data
+  socket.send(new Reconstruct({ id: election.id }), ReconstructReply).then(data => {
     const { points } = data
     let invalidCount = 0
     let invalidBallots = []
@@ -38,17 +46,17 @@ self.addEventListener('message', event => {
       } catch (e) {
         console.log(`iteration ${i} invalid ballot: ` + e.toString())
         invalidCount++
-        const ballot=[ i+1, 'ballot empty' ]
-	invalidBallots.push(ballot)
+        const ballot = [ i + 1, 'ballot empty' ]
+        invalidBallots.push(ballot)
         continue
       }
       const scipers = Uint8ArrayToScipers(d)
       if (scipers.length !== d.length / 3) {
         console.log(`iteration ${i} invalid ballot: duplicate candidates`)
         invalidCount++
-	scipers.unshift(i+1)
-	scipers.push('duplicate candidate')
-	invalidBallots.push(scipers)
+        scipers.unshift(i + 1)
+        scipers.push('duplicate candidate')
+        invalidBallots.push(scipers)
         continue
       }
       const { candidates, maxChoices } = election
@@ -56,27 +64,27 @@ self.addEventListener('message', event => {
       if (filtered.length !== scipers.length) {
         invalidCount++
         console.log(`iteration ${i} invalid ballot: invalid candidate`)
-	scipers.unshift(i+1)
-	scipers.push('invalid candidate')
-	invalidBallots.push(scipers)
+        scipers.unshift(i + 1)
+        scipers.push('invalid candidate')
+        invalidBallots.push(scipers)
         continue
       }
       if (filtered.length > maxChoices) {
         console.log(`iteration ${i} invalid ballot: too many candidates`)
         invalidCount++
-	scipers.unshift(i+1)
-	scipers.push('too many candidates')
-	invalidBallots.push(scipers)
+        scipers.unshift(i + 1)
+        scipers.push('too many candidates')
+        invalidBallots.push(scipers)
         continue
       }
-      let row = [i+1]
+      let row = [i + 1]
       for (let j = 0; j < scipers.length; j++) {
         const sciper = scipers[j]
         counts[sciper] += 1
-	let col = candidates.indexOf(sciper)
-	if (col !== -1) {
-	  row[col+1] = 1
-	}
+        let col = candidates.indexOf(sciper)
+        if (col !== -1) {
+          row[col + 1] = 1
+        }
       }
       votes.push(row.join(','))
       totalCount += scipers.length

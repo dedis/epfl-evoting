@@ -9,6 +9,7 @@ import ElectionResult from '@/components/ElectionResult'
 import Unsupported from '@/components/Unsupported'
 import { getSig } from '@/utils'
 import config from '@/config'
+import { GetElections, GetElectionsReply } from '@/proto'
 
 Vue.use(Router)
 
@@ -63,8 +64,8 @@ router.beforeEach((to, from, next) => {
     return
   }
   if (getSig() === null) {
-    const authUrl = '/auth/login'
     // we do not use next('/auth/login') here because it redirects inside the spa
+    const authUrl = '/auth/login'
     window.location.replace(authUrl)
     next()
     return
@@ -88,21 +89,25 @@ router.beforeEach((to, from, next) => {
   let { user, voted } = store.state
   voted = voted || {}
   const checkVoted = Object.keys(voted).length === 0
-  const deviceMessage = {
-    user: parseInt(user.sciper),
+  var u
+  try {
+    u = parseInt(user.sciper)
+  } catch (e) {
+    u = 0
+  }
+  const ge = new GetElections({
+    user: u,
     master: config.masterID,
     stage: 0,
     signature: getSig(),
     checkVoted
-  }
-  const sendingMessageName = 'GetElections'
-  const expectedMessageName = 'GetElectionsReply'
+  })
   const { socket } = store.state
   socket
-    .send(sendingMessageName, expectedMessageName, deviceMessage)
+    .send(ge, GetElectionsReply)
     .then(data => {
       store.commit('SET_ELECTIONS', data.elections)
-      store.commit('SET_ISADMIN', data.isAdmin)
+      store.commit('SET_ISADMIN', data.isadmin)
       if (checkVoted) {
         const votedElections = data.elections.filter(e => e.voted.length > 0)
         store.commit('SET_VOTED', votedElections)
@@ -112,7 +117,7 @@ router.beforeEach((to, from, next) => {
     .catch(err => {
       // probably a stale signature
       console.error(err)
-      next('/logout')
+      // next('/logout')
     })
 })
 

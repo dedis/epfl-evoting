@@ -34,7 +34,7 @@
             <v-form v-model="valid" v-on:submit="submitHandler">
               <v-layout row wrap>
                 <v-flex xs12>
-                  <p>{{ $t("message.electionInstruction", { maxChoices: election.maxChoices }) }}</p>
+                  <p>{{ $t("message.electionInstruction", { maxChoices: election.maxchoices }) }}</p>
                   <v-radio-group>
                     <v-checkbox
                       v-for="candidate in election.candidates"
@@ -80,16 +80,31 @@
 </template>
 
 <script>
-import kyber from '@dedis/kyber-js'
+import kyber from '@dedis/kyber'
 import {
   Uint8ArrayToHex,
-  scipersToUint8Array,
   timestampToString,
   getSig
 } from '../utils'
 import version from '@/version'
+import rosterTOML from '../public.toml'
+import { Ballot, Cast, CastReply, LookupSciper, LookupSciperReply } from '@/proto'
+import { Roster } from '@dedis/cothority/network'
+import { SkipchainRPC } from '@dedis/cothority/skipchain'
 
 const curve = new kyber.curve.edwards25519.Curve()
+
+export const encodeScipers = scipers => {
+  return Buffer.from([].concat(...scipers.map(sciper => {
+    const ret = []
+    let tmp = parseInt(sciper)
+    for (let i = 0; i < 3; i++) {
+      ret.push(tmp & 0xff)
+      tmp = tmp >> 8
+    }
+    return ret
+  })))
+}
 
 function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -117,12 +132,12 @@ export default {
     validateBallot (ballot) {
       const { election } = this
       const i18n = this.$i18n
-      if (ballot.length <= election.maxChoices) {
+      if (ballot.length <= election.maxchoices) {
         this.valid = true
         return true
       }
       this.valid = false
-      return i18n._t('message.maxAllowed', i18n.locale, i18n._getMessages(), this, { max: election.maxChoices })
+      return i18n._t('message.maxAllowed', i18n.locale, i18n._getMessages(), this, { max: election.maxchoices })
     },
     dateStr (timestamp) {
       return timestampToString(timestamp, true)
@@ -135,7 +150,7 @@ export default {
       // encrypt the ballot
       let { ballot } = this
       ballot = new Set(ballot)
-      const embedMsg = scipersToUint8Array(Array.from(ballot))
+      const embedMsg = encodeScipers(Array.from(ballot))
       const m = curve.point().embed(embedMsg)
       const r = curve.scalar().pick()
       // u = gr
@@ -147,24 +162,29 @@ export default {
       const v = curve.point().add(m, yr)
 
       // prepare and the message
-      const castMsg = {
+      const cast = new Cast({
         id: this.election.id,
-        ballot: {
+        ballot: new Ballot({
           user: parseInt(this.$store.state.user.sciper),
           alpha: u.marshalBinary(),
           beta: v.marshalBinary()
-        },
+        }),
         user: parseInt(this.$store.state.user.sciper),
         signature: getSig()
-      }
-      const { socket } = this.$store.state
-      socket
-        .send('Cast', 'CastReply', castMsg)
+      })
+      this.$store.state.socket
+        .send(cast, CastReply)
         .then(data => {
           this.submitted = false
-          this.$store.state.voted[Uint8ArrayToHex(this.election.id).substring(0, 10)] =
-            Uint8ArrayToHex(data.id).substring(0, 10)
           this.dialog3 = true
+          // Turn the block id we get back into a block number, which is more useful in
+          // the skipchain explorer url.
+          const roster = Roster.fromTOML(rosterTOML)
+          const sc = new SkipchainRPC(roster)
+          sc.getSkipBlock(data.id)
+            .then(b => {
+              this.$store.state.voted[Uint8ArrayToHex(this.election.id).substring(0, 10)] = b.index
+            })
         })
         .catch(e => {
           this.submitted = false
@@ -210,12 +230,10 @@ export default {
           return
         }
         this.$store.state.socket
-          .send('LookupSciper', 'LookupSciperReply', {
-            sciper: sciper.toString()
-          }).then(response => {
+          .send(new LookupSciper({sciper: sciper.toString()}), LookupSciperReply).then(response => {
             this.candidateNames = {
               ...this.candidateNames,
-              [sciper]: response.fullName
+              [sciper]: response.fullname
             }
             // cache
             this.$store.state.names[sciper] = this.candidateNames[sciper]

@@ -11,12 +11,14 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "build": "genversion src/version.js && node build/build.js"
+    "build": "genversion src/version.js && node build/build.js",
+    "proto": "node scripts/build_proto.js "
   },
   "dependencies": {
-    "@dedis/cothority": "^1.1.12",
-    "@dedis/kyber-js": "^0.0.9",
+    "@dedis/cothority": "^3.0.6",
+    "@dedis/kyber": "^3.0.6",
     "babel-polyfill": "^6.26.0",
+    "protobufjs": "^6.8.8",
     "vue": "^2.5.2",
     "vue-i18n": "^7.6.0",
     "vue-router": "^3.0.1",

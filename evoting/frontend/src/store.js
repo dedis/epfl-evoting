@@ -3,23 +3,18 @@ import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import createPersistedState from 'vuex-persistedstate'
 import rosterTOML from './public.toml'
-import cothority from '@dedis/cothority'
+import { Roster } from '@dedis/cothority/network'
+import { RosterWSConnection } from '@dedis/cothority/network/connection'
 import config from '@/config'
 import messages from './translations'
 import { Uint8ArrayToHex } from './utils'
+// import { Election, Footer, Open, OpenReply } from '@/proto'
+// import { getSig } from '@/utils'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
 
-const net = cothority.net
-const wss = window.location.protocol === 'https:'
-const roster = cothority.Roster.fromTOML(rosterTOML, wss)
-
-var path = 'evoting'
-if (roster.identities[0].addr.startsWith('tls://demos.epfl.ch')) {
-  console.log('activating demos.epfl.ch hack')
-  path = 'conode/evoting'
-}
+const roster = Roster.fromTOML(rosterTOML)
 
 if (localStorage.master !== undefined) {
   if (localStorage.master === config.masterID.toString()) {
@@ -28,6 +23,7 @@ if (localStorage.master !== undefined) {
     console.log('Existing store has stale data: cleaning it.')
     localStorage.removeItem('master')
     localStorage.removeItem('evoting')
+    document.cookie = 'signature=; path=/'
   }
 } else {
   console.log('New local store.')
@@ -51,7 +47,8 @@ const store = new Vuex.Store({
     user: null,
     elections: null,
     isAdmin: false,
-    socket: new net.LeaderSocket(roster, path),
+
+    socket: new RosterWSConnection(roster, 'evoting'),
     snackbar: {
       text: '',
       timeout: 6000,
@@ -75,6 +72,10 @@ const store = new Vuex.Store({
   },
   mutations: {
     SET_ELECTIONS (state, elections) {
+      for (let i = 0; i < elections.length; i++) {
+        elections[i].start = elections[i].start.toNumber()
+        elections[i].end = elections[i].end.toNumber()
+      }
       if (elections === null) {
         state.electiosn = null
         return

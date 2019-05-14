@@ -37,6 +37,7 @@
 import Navbar from './components/Navbar'
 import config from '@/config'
 import { getSig } from '@/utils'
+import { GetElections, GetElectionsReply } from '@/proto'
 
 export default {
   components: {
@@ -58,12 +59,13 @@ export default {
 
     setInterval(() => {
       const { socket, user } = this.$store.state
-      socket.send('GetElections', 'GetElectionsReply', {
+      const ge = new GetElections({
         user: parseInt(user.sciper),
         master: config.masterID,
         stage: 0,
         signature: getSig()
       })
+      socket.send(ge, GetElectionsReply)
         .then((reply) => {
           this.$store.commit('SET_ELECTIONS', reply.elections)
           this.$store.commit('SET_ISADMIN', reply.isAdmin)
