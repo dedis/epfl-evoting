@@ -65,7 +65,7 @@
     </div>
     <v-footer app>
       <v-layout row wrap>
-        <v-flex><span class="grey--text">v{{ version }}</span></v-flex>
+        <v-flex><span class="pa-2 grey--text">v{{ version }}</span></v-flex>
       </v-layout>
     </v-footer>
   </div>

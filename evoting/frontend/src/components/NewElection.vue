@@ -340,9 +340,9 @@ export default {
           theme: this.theme,
           footer: new Footer({
             text: this.footerText,
-            contactTitle: this.footerContactTitle,
-            contactEmail: this.footerContactEmail,
-            contactPhone: this.footerContactPhone
+            contacttitle: this.footerContactTitle,
+            contactemail: this.footerContactEmail,
+            contactphone: this.footerContactPhone
           }),
           key: zeroKey.toProto(),
           masterkey: zeroKey.toProto()

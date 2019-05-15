@@ -52,7 +52,7 @@
       </v-menu>
     </v-toolbar-items>
     <v-toolbar-items v-if="$store.getters.hasElections" class="hidden-sm-and-down">
-        <v-btn href="http://voting-web-prod.epfl.ch/#/f6ecc8f3b6323f15d587b68e26016742fbc64f4083cdcd523f115d3f0c3b9564/status" target="_blank" flat><v-icon>group_work</v-icon></v-btn>
+        <v-btn :href="explorerUrl" target="_blank" flat><v-icon>group_work</v-icon></v-btn>
         <v-btn flat>{{ $store.state.user.name ? $store.state.user.name : '' }}</v-btn>
         <v-btn to="/logout" flat><v-icon>exit_to_app</v-icon></v-btn>
     </v-toolbar-items>
@@ -68,6 +68,9 @@
 </style>
 
 <script>
+import config from '@/config'
+import { Uint8ArrayToHex } from '@/utils'
+
 export default {
   props: {
     title: String
@@ -79,6 +82,11 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  computed: {
+    explorerUrl () {
+      return `http://voting-web-prod.epfl.ch/#/${Uint8ArrayToHex(config.masterID)}/status`
     }
   }
 }

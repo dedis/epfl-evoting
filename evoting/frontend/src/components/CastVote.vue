@@ -63,7 +63,7 @@
         <v-flex xs6 text-xs-left>
           &copy; 2018 {{ election.footer.text }}
         </v-flex>
-        <v-flex xs6 text-xs-right>{{ election.footer.contactPhone }}, <a :href="`mailto:${election.footer.contactEmail}`">{{ election.footer.contactTitle }}</a> <span class="grey--text">v{{ version }}</span></v-flex>
+        <v-flex xs6 text-xs-right>{{ election.footer.contactphone }}, <a :href="`mailto:${election.footer.contactemail}`">{{ election.footer.contacttitle }}</a> <span class="grey--text">v{{ version }}</span></v-flex>
       </v-layout>
     </v-footer>
     <v-dialog v-model="dialog3" persistent max-width="500px">
