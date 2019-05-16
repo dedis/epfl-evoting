@@ -46,7 +46,7 @@ const store = new Vuex.Store({
   state: {
     user: null,
     elections: null,
-    isAdmin: false,
+    isadmin: false,
 
     socket: new RosterWSConnection(roster, 'evoting'),
     snackbar: {
@@ -104,8 +104,8 @@ const store = new Vuex.Store({
     SET_USER (state, data) {
       state.user = data
     },
-    SET_ISADMIN (state, isAdmin) {
-      state.isAdmin = isAdmin
+    SET_ISADMIN (state, isadmin) {
+      state.isadmin = isadmin
     },
     SET_SNACKBAR (state, snackbar) {
       state.snackbar = snackbar

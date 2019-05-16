@@ -68,7 +68,7 @@ export default {
       socket.send(ge, GetElectionsReply)
         .then((reply) => {
           this.$store.commit('SET_ELECTIONS', reply.elections)
-          this.$store.commit('SET_ISADMIN', reply.isAdmin)
+          this.$store.commit('SET_ISADMIN', reply.isadmin)
         })
     }, 570000)
   },

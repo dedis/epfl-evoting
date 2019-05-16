@@ -1,7 +1,7 @@
 <template>
   <div v-if='$store.getters.hasElections'>
     <div>
-      <div v-if="$store.state.isAdmin">
+      <div v-if="$store.state.isadmin">
         <v-btn
           fixed
           fab

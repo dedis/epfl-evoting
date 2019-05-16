@@ -26,7 +26,7 @@
         <v-flex v-if="stage < 3" xs6>
           <v-btn :disabled="stage == 2 || disabled || $store.state.now > end || $store.state.now < start" :to="voteLink" color="primary">{{ $t("message.vote") }}</v-btn>
         </v-flex>
-        <v-flex v-if="$store.state.isAdmin && stage < 3 && creator === parseInt($store.state.user.sciper)" class="text-xs-right" xs6>
+        <v-flex v-if="$store.state.isadmin && stage < 3 && creator === parseInt($store.state.user.sciper)" class="text-xs-right" xs6>
           <v-btn :disabled="disabled || $store.state.now < start" v-on:click.native="finalize" color="orange">{{ $t("message.finalize") }} </v-btn>
         </v-flex>
         <v-flex v-if="stage === 3" xs12>
@@ -118,7 +118,7 @@ export default {
         })
         const response = await socket.send(ge, GetElectionsReply)
         this.$store.commit('SET_ELECTIONS', response.elections)
-        this.$store.commit('SET_ISADMIN', response.isAdmin)
+        this.$store.commit('SET_ISADMIN', response.isadmin)
         this.$router.push('/')
       } catch (e) {
         setError(e)
