@@ -1,9 +1,10 @@
 # Evoting
 
-This package is split into two parts
+This package is split into two parts:
 
 * Frontend - made using [Vue](https://vuejs.org/)
-* Server - written in node. Responsible for managing auth with Tequila.
+* Server - written in node. Responsible for managing auth with Tequila,
+and also for serving the HTML/JS/CSS files during development.
 
 # Setup
 
@@ -11,23 +12,27 @@ This package is split into two parts
 
 The authentication server requires an environment variable
 
-* `PRIVATE_KEY` - ed25519 private key to generate schnorr signature
+* `PRIVATE_KEY` - ed25519 private key to generate schnorr signature (64 hex digits)
 
 ## Common steps
 
-```
-cd frontend
-npm install 
-cd ../server
-npm install
-```
-
 Copy `frontend/src/config.example.js` and `server/config.example.js` to `config.js` and
-update `masterID` to match the one from the evoting-admin tool.
+update `masterID` to match the one from the `evoting-admin` tool.
 
 Copy/Symlink the `public.toml` file from the leader node to `frontend/src`. This
 will be the WebSocket endpoint where all requests from the frontend to the
 cothority are transmitted.
+
+```
+cd frontend
+npm install
+npm run build
+cd ../server
+npm install
+```
+
+On the frontend, `config.js` and `public.toml` are transpiled into the final
+app, so each change to them must be followed by `npm run build`.
 
 ## Dev
 
@@ -38,8 +43,28 @@ just run `npm run build` in the `frontend` directory. Then run the server by:
 
 ```
 cd server
-npm run dev
+PRIVATE_KEY=723765abc node index.js
 ```
+
+You can then access the frontend on: http://localhost:3000/
+
+The frontend will detect that you are not logged in and send you
+to Tequila. Tequila will return your browser to http://localhost/auth/verify
+(because Tequila does not allow redirecting to non-standard ports).
+This will result in an error, because the dev server is on port 3000.
+You should now edit the URL to add the missing
+`:3000` in. The authentication signature cookie will be written into your
+browser, and then the frontend can start running.
+
+It is more comfortable to develop the frontend when the Vue-aware webserver
+is running, so that hot-reload works. To do so, you can stop the dev server
+and instead run run "PORT=3000 npm start" from the `frontend` directory.
+
+Debugging authentication problems resulting in endless redirect loops
+through Tequila is much easier if you set the JavaScript console to *not*
+clear on navigation to a new page. In this way, you can see the log messages
+and/or failed network accesses that resulted in the redirect back to
+the `/auth/login` endpoint, and onwards to Tequila.
 
 ## Production
 
@@ -69,7 +94,7 @@ the server root. Run the server in production mode by executing
 
 ```
 cd server
-npm run prod # TODO: replace with PM2
+PRIVATE_KEY=723765abc node index.js
 ```
 
 ### Nginx configuration
