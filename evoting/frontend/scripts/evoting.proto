@@ -116,22 +116,6 @@ message LookupSciperReply {
   required string title = 4;
 }
 
-// Link message.
-message Link {
-  required string pin = 1;
-  optional Roster roster = 2;
-  required bytes key = 3;
-  repeated uint32 admins = 4 [packed=true];
-  optional bytes id = 5;
-  optional uint32 user = 6;
-  optional bytes signature = 7;
-}
-
-// LinkReply message.
-message LinkReply {
-  required bytes id = 1;
-}
-
 // OpenReply message.
 message OpenReply {
   required bytes id = 1;
@@ -225,6 +209,10 @@ message Reconstruct {
 // ReconstructReply message.
 message ReconstructReply {
   repeated bytes points = 1;
+}
+
+message Link {
+  required bytes id = 1;
 }
 
 message Transaction {
