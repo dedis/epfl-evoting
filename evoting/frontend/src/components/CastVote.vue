@@ -5,8 +5,8 @@
         <v-toolbar card dark :class="election.theme">
           <v-toolbar-title class="white--text">{{  $t(`election_${getId(election)}.name`) }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <div v-if="election.moreInfo">
-            <a class="election-info" target="_blank" :href="election.moreInfo"><v-icon>info</v-icon></a>
+          <div v-if="election.moreinfo">
+            <a class="election-info" target="_blank" :href="election.moreinfo"><v-icon>info</v-icon></a>
           </div>
           <div v-if="voted">
             <v-tooltip bottom>
@@ -61,7 +61,7 @@
     <v-footer app>
       <v-layout row wrap>
         <v-flex xs6 text-xs-left>
-          &copy; 2018 {{ election.footer.text }}
+          &copy; 2019 {{ election.footer.text }}
         </v-flex>
         <v-flex xs6 text-xs-right>{{ election.footer.contactphone }}, <a :href="`mailto:${election.footer.contactemail}`">{{ election.footer.contacttitle }}</a> <span class="grey--text">v{{ version }}</span></v-flex>
       </v-layout>

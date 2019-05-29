@@ -39,7 +39,7 @@
           <v-list-tile>
             <v-list-tile-avatar><v-icon>account_circle</v-icon></v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>{{ $store.state.user.name ? $store.state.user.name : '' }}</v-list-tile-title>
+              <v-list-tile-title>{{ $store.state.user ? $store.state.user.name : '' }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-list-tile to="/logout">
@@ -53,7 +53,7 @@
     </v-toolbar-items>
     <v-toolbar-items v-if="$store.getters.hasElections" class="hidden-sm-and-down">
         <v-btn :href="explorerUrl" target="_blank" flat><v-icon>group_work</v-icon></v-btn>
-        <v-btn flat>{{ $store.state.user.name ? $store.state.user.name : '' }}</v-btn>
+        <v-btn flat>{{ $store.state.user ? $store.state.user.name : '' }}</v-btn>
         <v-btn to="/logout" flat><v-icon>exit_to_app</v-icon></v-btn>
     </v-toolbar-items>
   </v-toolbar>

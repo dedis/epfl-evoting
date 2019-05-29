@@ -72,13 +72,13 @@ const store = new Vuex.Store({
   },
   mutations: {
     SET_ELECTIONS (state, elections) {
+      if (elections === null) {
+        state.elections = null
+        return
+      }
       for (let i = 0; i < elections.length; i++) {
         elections[i].start = elections[i].start.toNumber()
         elections[i].end = elections[i].end.toNumber()
-      }
-      if (elections === null) {
-        state.electiosn = null
-        return
       }
       // with new elections come new translations
       let { fallbackLocale } = i18n

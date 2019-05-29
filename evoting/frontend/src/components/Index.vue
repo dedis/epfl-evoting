@@ -36,7 +36,7 @@
             :theme="election.theme"
             :creator="election.creator"
             :subtitle="election.subtitle"
-            :moreInfo="election.moreInfo"
+            :moreInfo="election.moreinfo"
             :stage="election.stage"
             ></election-card>
         </v-layout>
@@ -58,7 +58,7 @@
             :theme="election.theme"
             :creator="election.creator"
             :subtitle="election.subtitle"
-            :moreInfo="election.moreInfo"
+            :moreInfo="election.moreinfo"
             :stage="election.stage"></election-card>
         </v-layout>
       </div>

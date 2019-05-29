@@ -332,7 +332,7 @@ export default {
           name,
           users: this.voterScipers,
           subtitle,
-          moreInfo: this.moreInfo,
+          moreinfo: this.moreInfo,
           start: Math.floor(this.start / 1000),
           end: Math.floor(this.end / 1000),
           candidates: this.candidateScipers.map(x => parseInt(x)),

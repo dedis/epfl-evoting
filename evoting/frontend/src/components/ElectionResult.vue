@@ -5,8 +5,8 @@
         <v-toolbar card dark :class="election.theme">
           <v-toolbar-title class="white--text">{{ $t(`election_${getId(election)}.name`) }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <div v-if="election.moreInfo">
-            <a class="election-info" target="_blank" :href="election.moreInfo"><v-icon>info</v-icon></a>
+          <div v-if="election.moreinfo">
+            <a class="election-info" target="_blank" :href="election.moreinfo"><v-icon>info</v-icon></a>
           </div>
           <v-tooltip bottom>
             <v-icon slot="activator" class="results-download" @click="downloadVoteCount()">file_download</v-icon>
