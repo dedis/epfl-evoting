@@ -47,6 +47,7 @@ const store = new Vuex.Store({
     user: null,
     elections: null,
     isadmin: false,
+    config: config,
 
     socket: new RosterWSConnection(roster, 'evoting'),
     snackbar: {

@@ -136,6 +136,9 @@ export default {
         if (hidden(e.id)) {
           return false
         }
+        if (config.ignoreDateRange) {
+          return e.stage < 3
+        }
         return e.stage < 3 && now > e.start && now < e.end
       }))
     },
@@ -144,6 +147,9 @@ export default {
         const now = Date.now() / 1000
         if (hidden(e.id)) {
           return false
+        }
+        if (config.ignoreDateRange) {
+          return (e.stage === 3)
         }
         return !(now > e.start && now < e.end) || e.stage === 3
       }))

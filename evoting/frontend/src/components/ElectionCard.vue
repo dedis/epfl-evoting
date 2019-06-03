@@ -24,7 +24,7 @@
       <v-card-actions>
         <v-layout row wrap>
         <v-flex v-if="stage < 3" xs6>
-          <v-btn :disabled="stage == 2 || disabled || $store.state.now > end || $store.state.now < start" :to="voteLink" color="primary">{{ $t("message.vote") }}</v-btn>
+          <v-btn :disabled="stage == 2 || disabled || (!$store.state.config.ignoreDateRange && ($store.state.now > end || $store.state.now < start))" :to="voteLink" color="primary">{{ $t("message.vote") }}</v-btn>
         </v-flex>
         <v-flex v-if="$store.state.isadmin && stage < 3 && creator === parseInt($store.state.user.sciper)" class="text-xs-right" xs6>
           <v-btn :disabled="disabled || $store.state.now < start" v-on:click.native="finalize" color="orange">{{ $t("message.finalize") }} </v-btn>
