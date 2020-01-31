@@ -12,7 +12,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@dedis/kyber-js": "^0.0.7",
-    "axios": "^0.17.1",
+    "axios": "^0.18.1",
     "express": "^4.16.2",
     "express-promise-router": "^3.0.1",
     "hex-to-array-buffer": "^1.1.0",
