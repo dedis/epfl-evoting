@@ -61,7 +61,7 @@
     <v-footer app>
       <v-layout row wrap>
         <v-flex xs6 text-xs-left>
-          &copy; 2019 {{ election.footer.text }}
+          &copy; {{ year }} {{ election.footer.text }}
         </v-flex>
         <v-flex xs6 text-xs-right>{{ election.footer.contactphone }}, <a :href="`mailto:${election.footer.contactemail}`">{{ election.footer.contacttitle }}</a> <span class="grey--text">v{{ version }}</span></v-flex>
       </v-layout>
@@ -112,6 +112,9 @@ function sleep (ms) {
 
 export default {
   computed: {
+    year () {
+      return (new Date()).getFullYear()
+    },
     election () {
       return this.$store.state.elections.find(e => {
         return Uint8ArrayToHex(e.id) === this.$route.params.id

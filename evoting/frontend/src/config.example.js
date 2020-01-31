@@ -9,6 +9,7 @@ export default {
   ldap: {
     hostname: 'ldap.epfl.ch'
   },
+  explorerUrl: 'http://voting-web-prod.epfl.ch/',
   breadcrumbs: [
     { text: 'epfl', href: 'https://epfl.ch' },
     { text: 'epflAssembly', href: 'https://ae.epfl.ch' },

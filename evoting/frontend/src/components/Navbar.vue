@@ -30,7 +30,7 @@
       <v-menu>
         <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
         <v-list>
-          <v-list-tile href="http://voting-web-prod.epfl.ch/">
+          <v-list-tile :href="explorerUrl">
             <v-list-tile-avatar><v-icon>group_work</v-icon></v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>{{ $t("message.howItWorks") }}</v-list-tile-title>
@@ -86,7 +86,7 @@ export default {
   },
   computed: {
     explorerUrl () {
-      return `http://voting-web-prod.epfl.ch/#/${Uint8ArrayToHex(config.masterID)}/status`
+      return `${config.explorerUrl}#/${Uint8ArrayToHex(config.masterID)}/graph`
     }
   }
 }

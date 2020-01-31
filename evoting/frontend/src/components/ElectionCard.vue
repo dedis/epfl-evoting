@@ -53,7 +53,7 @@ import { GetElections, GetElectionsReply, Shuffle, ShuffleReply, Decrypt, Decryp
 export default {
   computed: {
     explorerUrl () {
-      return `http://voting-web-prod.epfl.ch/#${this.id}/blocks/${this.voted}`
+      return `${config.explorerUrl}#${this.id}/blocks/${this.voted}`
     },
     endDate () {
       return timestampToString(this.end, true)

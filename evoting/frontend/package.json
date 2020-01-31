@@ -1,6 +1,6 @@
 {
   "name": "evoting",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "A Vue.js project",
   "author": "DEDIS",
   "private": true,
@@ -15,8 +15,8 @@
     "proto": "node scripts/build_proto.js "
   },
   "dependencies": {
-    "@dedis/cothority": "^3.0.6",
-    "@dedis/kyber": "^3.0.6",
+    "@dedis/cothority": "^3.4.3",
+    "@dedis/kyber": "^3.4.2",
     "babel-polyfill": "^6.26.0",
     "protobufjs": "^6.8.8",
     "vue": "^2.5.2",

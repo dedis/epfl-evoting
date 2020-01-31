@@ -4,12 +4,10 @@ import VueI18n from 'vue-i18n'
 import createPersistedState from 'vuex-persistedstate'
 import rosterTOML from './public.toml'
 import { Roster } from '@dedis/cothority/network'
-import { RosterWSConnection } from '@dedis/cothority/network/connection'
+import { LeaderConnection } from '@dedis/cothority/network/connection'
 import config from '@/config'
 import messages from './translations'
 import { Uint8ArrayToHex } from './utils'
-// import { Election, Footer, Open, OpenReply } from '@/proto'
-// import { getSig } from '@/utils'
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -36,6 +34,14 @@ const getLang = () => {
   return navLangs.length > 0 ? navLangs[0].replace(/-.*/, '') : fallback
 }
 
+// Set the year in the messages
+let year = (new Date()).getFullYear()
+for (let lang in messages) {
+  for (let msg in messages[lang]['message']) {
+    messages[lang]['message'][msg] = messages[lang]['message'][msg].replace('YYYY', year)
+  }
+}
+
 const i18n = new VueI18n({
   locale: getLang(),
   fallbackLocale: 'en',
@@ -49,7 +55,7 @@ const store = new Vuex.Store({
     isadmin: false,
     config: config,
 
-    socket: new RosterWSConnection(roster, 'evoting'),
+    socket: new LeaderConnection(roster, 'evoting'),
     snackbar: {
       text: '',
       timeout: 6000,
