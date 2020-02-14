@@ -12,11 +12,10 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@dedis/kyber-js": "^0.0.7",
-    "axios": "^0.17.1",
-    "express": "^4.16.2",
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
     "express-promise-router": "^3.0.1",
     "hex-to-array-buffer": "^1.1.0",
-    "promised-ldap": "^0.3.0",
-    "pug": "^2.0.0-rc.4"
+    "promised-ldap": "^0.3.0"
   }
 }

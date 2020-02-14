@@ -116,13 +116,32 @@ router.get('/auth/verify/txt', (req, res) => {
     })
 })
 
+function fmt(user, sig) {
+	var u = JSON.stringify({ user })
+	return `
+<html>
+<head>
+<script>
+  localStorage.setItem('evoting', '${u}');
+  document.cookie = 'signature=${sig}; path=/';
+  var redirectUrl = window.location.protocol + '//' + window.location.hostname;
+  if (window.location.port) {
+    redirectUrl += ':' + window.location.port;
+  }
+  window.location.replace(redirectUrl);
+</script>
+</head>
+</html>
+`
+}
+
 router.get('/auth/verify', (req, res) => {
   payload = { key: req.query.key }
   if (isTest) {
     const { sciper } = req.query    
     signature = util.Uint8ArrayToHex(generateSignature(sciper, config.masterID))
     res.setHeader('Content-Type', 'text/plain')
-    res.render('template', { state: JSON.stringify({ }), signature: signature })
+    res.send(fmt({}, signature))
     return
   }
 
@@ -151,7 +170,7 @@ router.get('/auth/verify', (req, res) => {
         sections,
       }
       signature = util.Uint8ArrayToHex(generateSignature(sciper, config.masterID))
-      res.render('template', { state: JSON.stringify({ user }), signature: signature })
+      res.send(fmt(user, signature))
     })
     .catch(e => {
       console.error(e)
@@ -160,9 +179,10 @@ router.get('/auth/verify', (req, res) => {
 })
 
 app.use(router)
-app.set('view engine', 'pug')
+
 // req.hostname is read from X-FORWARDED-HOST header in prod
 if (isProd) {
   app.enable('trust proxy')
 }
+
 app.listen(PORT, () => console.log('Running the server on port ' + PORT))
