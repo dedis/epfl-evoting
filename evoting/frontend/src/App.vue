@@ -4,9 +4,10 @@
     <!--<main>-->
       <v-container class="root-container" fluid full-height>
         <v-card class="mb-3">
-        <v-breadcrumbs divider=">">
+        <v-breadcrumbs :items="breadcrumbs" divider=">" >
           <v-breadcrumbs-item
-            v-for="item in breadcrumbs"
+            slot="item"
+            slot-scope="{ item }"
             :href="item.href"
             target="_blank"
             :key="item.text"

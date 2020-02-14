@@ -439,7 +439,7 @@ export default {
 </script>
 
 <style scoped>
-.expansion-panel {
+.v-expansion-panel {
   box-shadow: none;
   -webkit-box-shadow: none;
 }
