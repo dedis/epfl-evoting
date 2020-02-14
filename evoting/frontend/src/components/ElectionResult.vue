@@ -174,6 +174,7 @@ export default {
     }
   },
   created () {
+    console.log('Election id', Uint8ArrayToHex(this.election.id))
     const c = this.election.candidates
     for (let i = 0; i < c.length; i++) {
       this.counts[c[i]] = 0

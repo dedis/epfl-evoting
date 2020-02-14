@@ -211,6 +211,7 @@ export default {
     }
   },
   created () {
+    console.log('Election id', Uint8ArrayToHex(this.election.id))
     const scipers = this.election.candidates
     for (let i = 0; i < scipers.length; i++) {
       const sciper = scipers[i]
