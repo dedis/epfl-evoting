@@ -101,19 +101,51 @@
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-flex>
-            <v-flex md6 xs12>
-              <datetime-picker
-                label="Start Time"
-                :datetime="`${today} 00:00`"
-                @input="updateStartTime"
-                ></datetime-picker>
+            <v-flex xs12 md6>
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+                >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="start"
+                    label="Start of election"
+                    prepend-icon="event"
+                    readonly
+                    v-on="on"
+                    ></v-text-field>
+                </template>
+                <v-date-picker v-model="start" @input="menu2 = false"></v-date-picker>
+              </v-menu>
             </v-flex>
-            <v-flex md6 xs12>
-              <datetime-picker
-                label="End Time"
-                :datetime="`${today} 23:59`"
-                @input="updateEndTime"
-                ></datetime-picker>
+            <v-flex xs12 md6>
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+                >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="end"
+                    label="End of election"
+                    prepend-icon="event"
+                    readonly
+                    v-on="on"
+                    ></v-text-field>
+                </template>
+                <v-date-picker v-model="end" @input="menu2 = false"></v-date-picker>
+              </v-menu>
             </v-flex>
             <v-flex xs12>
               <v-text-field
@@ -222,7 +254,6 @@
 
 <script>
 import config from '../config'
-import DateTimePicker from './DateTimePicker'
 import UploadButton from './UploadButton'
 import { getSig, timestampToString } from '@/utils'
 import { Open, OpenReply, Footer, Election, GetElections, GetElectionsReply } from '@/proto'
@@ -338,12 +369,6 @@ export default {
       }
       return maxChoices <= 9 || 'Max Choices can be atmost 9'
     },
-    updateStartTime (dt) {
-      this.start = dt
-    },
-    updateEndTime (dt) {
-      this.end = dt
-    },
     submitHandler (e) {
       e.preventDefault()
       this.submitted = true
@@ -365,8 +390,8 @@ export default {
           subtitle,
           moreinfo: '',
           moreinfolang: this.moreInfo,
-          start: Math.floor(this.start / 1000),
-          end: Math.floor(this.end / 1000),
+          start: Date.parse(this.start)/1000,
+          end: Date.parse(this.end)/1000,
           candidates: this.candidateScipers.map(x => parseInt(x)),
           maxchoices: parseInt(this.maxChoices),
           theme: this.theme,
@@ -427,8 +452,8 @@ export default {
         de: null,
         it: null
       },
-      end: new Date(`${today} 23:59:00`).getTime(),
-      start: new Date(`${today} 00:00:00`).getTime(),
+      start: new Date().toISOString().substr(0, 10),
+      end: new Date().toISOString().substr(0, 10),
       subtitle: {
         en: null,
         fr: null,
@@ -469,7 +494,6 @@ export default {
     }
   },
   components: {
-    'datetime-picker': DateTimePicker,
     'upload-button': UploadButton
   }
 }
