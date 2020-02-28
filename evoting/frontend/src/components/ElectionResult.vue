@@ -5,8 +5,8 @@
         <v-toolbar card dark :class="election.theme">
           <v-toolbar-title class="white--text">{{ $t(`election_${getId(election)}.name`) }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <div v-if="election.moreinfo">
-            <a class="election-info" target="_blank" :href="election.moreinfo"><v-icon>info</v-icon></a>
+          <div v-if="mi(election)">
+            <a class="election-info" target="_blank" :href="mi(election)"><v-icon>info</v-icon></a>
           </div>
           <v-tooltip bottom>
             <v-icon slot="activator" class="results-download" @click="downloadVoteCount()">file_download</v-icon>
@@ -100,6 +100,12 @@ export default {
     }
   },
   methods: {
+    mi (election) {
+      if (!election.moreinfolang[this.$i18n.locale]) {
+        return election.moreinfo
+      }
+      return election.moreinfolang[this.$i18n.locale]
+    },
     downloadVoteCount () {
       // https://stackoverflow.com/a/18849208
       const filename = Uint8ArrayToHex(this.election.id).substring(0, 10) + '_result.csv'

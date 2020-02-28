@@ -5,8 +5,8 @@
         <v-toolbar card dark :class="election.theme">
           <v-toolbar-title class="white--text">{{  $t(`election_${getId(election)}.name`) }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <div v-if="election.moreinfo">
-            <a class="election-info" target="_blank" :href="election.moreinfo"><v-icon>info</v-icon></a>
+          <div v-if="mi(election)">
+            <a class="election-info" target="_blank" :href="mi(election)"><v-icon>info</v-icon></a>
           </div>
           <div v-if="voted">
             <v-tooltip bottom>
@@ -128,6 +128,12 @@ export default {
   methods: {
     getId (election) {
       return Uint8ArrayToHex(election.id)
+    },
+    mi (election) {
+      if (!election.moreinfolang[this.$i18n.locale]) {
+        return election.moreinfo
+      }
+      return election.moreinfolang[this.$i18n.locale]
     },
     endDate (timestamp) {
       return timestampToString(timestamp, true)

@@ -63,15 +63,13 @@ export default {
     }
   },
   props: {
-    // name: String,
     end: Number,
     start: Number,
     creator: Number,
-    // subtitle: String,
-    moreInfo: String,
     stage: Number,
     id: String,
-    theme: String
+    theme: String,
+    moreInfo: String
   },
   methods: {
     async finalize (event) {

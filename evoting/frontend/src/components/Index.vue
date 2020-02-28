@@ -36,7 +36,7 @@
             :theme="election.theme"
             :creator="election.creator"
             :subtitle="election.subtitle"
-            :moreInfo="election.moreinfo"
+            :moreInfo="mi(election)"
             :stage="election.stage"
             ></election-card>
         </v-layout>
@@ -58,7 +58,7 @@
             :theme="election.theme"
             :creator="election.creator"
             :subtitle="election.subtitle"
-            :moreInfo="election.moreinfo"
+            :moreInfo="mi(election)"
             :stage="election.stage"></election-card>
         </v-layout>
       </div>
@@ -130,8 +130,14 @@ export default {
     'election-card': ElectionCard
   },
   methods: {
+    mi (election) {
+      if (!election.moreinfolang[this.$i18n.locale]) {
+        return election.moreinfo
+      }
+      return election.moreinfolang[this.$i18n.locale]
+    },
     active: (elections) => {
-      return createArray(elections.filter(e => {
+      var act = createArray(elections.filter(e => {
         const now = Date.now() / 1000
         if (hidden(e.id)) {
           return false
@@ -141,6 +147,7 @@ export default {
         }
         return e.stage < 3 && now > e.start && now < e.end
       }))
+      return act
     },
     finalized: (elections) => {
       return createArray(elections.filter(e => {

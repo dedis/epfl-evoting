@@ -85,6 +85,7 @@ message Election {
   required string theme = 16;
   required Footer footer = 17;
   required bytes voted = 18;
+  map<string, string> moreinfolang = 19;
 }
 
 message Footer {

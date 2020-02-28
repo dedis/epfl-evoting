@@ -71,11 +71,35 @@
               </v-expansion-panel>
             </v-flex>
             <v-flex md6 xs12>
-              <v-text-field
-                label="More Info Link"
-                v-model="moreInfo"
-                prepend-icon="info"
-              ></v-text-field>
+              <v-expansion-panel>
+                <v-expansion-panel-content>
+                  <div slot="header">
+                    <div class="depad">
+                      <v-text-field
+                        :label="getMoreInfoLabel($i18n.locale)"
+                        v-model="moreInfo[$i18n.locale]"
+                        prepend-icon="mode_comment"
+                        :rules=[validateMoreInfo]
+                        :validate-on-blur="true"
+                        required
+                      ></v-text-field>
+                    </div>
+                  </div>
+                  <v-card>
+                    <v-card-text>
+                      <v-text-field v-for="lang in langOrder"
+                        :key="lang"
+                        :label="getMoreInfoLabel(lang)"
+                        v-model="moreInfo[lang]"
+                        prepend-icon="mode_comment"
+                        :rules=[validateMoreInfo]
+                        :validate-on-blur="true"
+                        required
+                      ></v-text-field>
+                    </v-card-text>
+                  </v-card>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
             </v-flex>
             <v-flex md6 xs12>
               <datetime-picker
@@ -221,6 +245,9 @@ export default {
     getSubtitleLabel (locale) {
       return `Election Subtitle (${locale})`
     },
+    getMoreInfoLabel (locale) {
+      return `More Info URL (${locale})`
+    },
     parseVoterList (file) {
       if (file == null || file.type !== 'text/plain') {
         // show snackbar
@@ -298,6 +325,10 @@ export default {
       let { locale } = this.$i18n
       return subtitle === null || !!this.subtitle[locale] || 'Subtitle field is required for the current locale'
     },
+    validateMoreInfo (mi) {
+      let { locale } = this.$i18n
+      return mi === null || !!this.moreInfo[locale] || 'More info URL is required for the current locale'
+    },
     validateMaxChoices (maxChoices) {
       if (!maxChoices) {
         return 'Please enter the maximum votes allowed per ballot'
@@ -332,7 +363,8 @@ export default {
           name,
           users: this.voterScipers,
           subtitle,
-          moreinfo: this.moreInfo,
+          moreinfo: '',
+          moreinfolang: this.moreInfo,
           start: Math.floor(this.start / 1000),
           end: Math.floor(this.end / 1000),
           candidates: this.candidateScipers.map(x => parseInt(x)),
@@ -410,7 +442,12 @@ export default {
       valid: false,
       submitted: false,
       today,
-      moreInfo: '',
+      moreInfo: {
+        en: null,
+        fr: null,
+        de: null,
+        it: null
+      },
       maxChoices: null,
       departments: [
         { name: 'EPFL', class: 'epfl' },
