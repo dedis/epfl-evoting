@@ -126,7 +126,7 @@
             </v-flex>
             <v-flex xs12 md6>
               <v-menu
-                v-model="menu2"
+                v-model="menu3"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 lazy
@@ -144,7 +144,7 @@
                     v-on="on"
                     ></v-text-field>
                 </template>
-                <v-date-picker v-model="end" @input="menu2 = false"></v-date-picker>
+                <v-date-picker v-model="end" @input="menu3 = false"></v-date-picker>
               </v-menu>
             </v-flex>
             <v-flex xs12>
@@ -357,8 +357,10 @@ export default {
       return subtitle === null || !!this.subtitle[locale] || 'Subtitle field is required for the current locale'
     },
     validateMoreInfo (mi) {
-      let { locale } = this.$i18n
-      return mi === null || !!this.moreInfo[locale] || 'More info URL is required for the current locale'
+      if (mi !== null && !mi.startsWith('http:') && !mi.startsWith('https:')) {
+        return 'URLs must start with http or https.'
+      }
+      return true
     },
     validateMaxChoices (maxChoices) {
       if (!maxChoices) {
@@ -374,11 +376,20 @@ export default {
       this.submitted = true
       const name = {}
       const subtitle = {}
+      const moreInfo = {}
       const langs = ['en', 'fr', 'de', 'it']
       for (let i = 0; i < langs.length; i++) {
         const lang = langs[i]
         name[lang] = this.name[lang] === null ? '' : this.name[lang]
         subtitle[lang] = this.subtitle[lang] === null ? '' : this.subtitle[lang]
+        moreInfo[lang] = this.moreInfo[lang] === null ? '' : this.moreInfo[lang]
+      }
+      if (this.start === this.end) {
+        // https://stackoverflow.com/questions/563406/add-days-to-javascript-date
+        var tomorrow = new Date(this.start)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        this.end = tomorrow.toISOString().substr(0, 10)
+        console.log('start/end same, bumping end by one day', this.start, this.end)
       }
       const curve = new kyber.curve.edwards25519.Curve()
       const zeroKey = curve.point()
@@ -389,7 +400,7 @@ export default {
           users: this.voterScipers,
           subtitle,
           moreinfo: '',
-          moreinfolang: this.moreInfo,
+          moreinfolang: moreInfo,
           start: Date.parse(this.start) / 1000,
           end: Date.parse(this.end) / 1000,
           candidates: this.candidateScipers.map(x => parseInt(x)),
@@ -454,6 +465,8 @@ export default {
       },
       start: new Date().toISOString().substr(0, 10),
       end: new Date().toISOString().substr(0, 10),
+      menu2: null,
+      menu3: null,
       subtitle: {
         en: null,
         fr: null,

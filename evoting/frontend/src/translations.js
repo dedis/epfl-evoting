@@ -3,6 +3,7 @@ const messages = {
     message: {
       activeElections: 'Your Elections',
       finalizedElections: 'Finalized Elections',
+      futureElections: 'Future Elections',
       vote: 'Vote',
       finalize: 'Finalize',
       electionInstruction: 'In the following list, please select at most {maxChoices} candidates. You may click on a candidate\'s name to see their motivation and presentation.',
@@ -30,6 +31,7 @@ const messages = {
     message: {
       activeElections: 'Vos Scrutins',
       finalizedElections: 'Scrutins finalisés',
+      futureElections: 'Scrutins dans l\'avenir',
       vote: 'Votez',
       finalize: 'Finalisez',
       electionInstruction: 'Dans la liste suivante, veuillez sélectionner au maximum {maxChoices} candidats. Vous pouvez cliquer sur le nom d\'un candidat pour voir leur motivation et leur présentation.',
@@ -57,6 +59,7 @@ const messages = {
     message: {
       activeElections: 'Ihre Wahlen',
       finalizedElections: 'Abgeschlossene Wahlen',
+      futureElections: 'Zukünftige Wahlen',
       vote: 'Wählen',
       finalize: 'Abschließen',
       electionInstruction: 'Wählen Sie bitte maximal {maxChoices} Kandidaten von der nachfolgenden Liste. Durch einen Klick auf den Namen eines Kandidaten können Sie dessen Motivation und Präsentation einsehen.',
@@ -84,6 +87,7 @@ const messages = {
     message: {
       activeElections: 'Le vostre elezioni',
       finalizedElections: 'Elezioni chiuse',
+      futureElections: 'Elezioni per dopo',
       vote: 'Vota',
       finalize: 'Chiudi',
       electionInstruction: 'Scegli al massimo {maxChoices} candidati dalla lista seguente. Cliccando sul nome potrai scoprire la presentazione e la motivazione del candidato.',
