@@ -37,7 +37,7 @@
                   <p>{{ $t("message.electionInstruction", { maxChoices: election.maxchoices }) }}</p>
                   <v-radio-group>
                     <v-checkbox
-                      v-for="candidate in election.candidates"
+                      v-for="candidate in candidates"
                       :key="candidate"
                       :value="`${candidate}`"
                       v-model="ballot"
@@ -88,6 +88,7 @@ import {
 } from '../utils'
 import version from '@/version'
 import rosterTOML from '../public.toml'
+import config from '@/config'
 import { Ballot, Cast, CastReply, LookupSciper, LookupSciperReply } from '@/proto'
 import { Roster } from '@dedis/cothority/network'
 import { SkipchainRPC } from '@dedis/cothority/skipchain'
@@ -118,6 +119,12 @@ export default {
     election () {
       return this.$store.state.elections.find(e => {
         return Uint8ArrayToHex(e.id) === this.$route.params.id
+      })
+    },
+    candidates () {
+      const hideSet = new Set(config.candidatesToHide)
+      return this.election.candidates.filter(c => {
+        return !hideSet.has(c)
       })
     },
     voted () {
