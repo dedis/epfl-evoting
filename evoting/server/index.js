@@ -148,7 +148,12 @@ router.get('/auth/verify', (req, res) => {
   return tequilaRequest('/cgi-bin/tequila/fetchattributes', payload)
     .then(response => {
       const data = util.txt2dict(response.data.trim())
-      const sciper = data.uniqueid
+      var sciper = data.uniqueid
+      const override = process.env.SCIPER_OVERRIDE
+      if (override !== undefined) {
+        console.log("warning: override sciper " + sciper + " to " + override)
+        sciper = override
+      }
       return getLdapData(sciper)
     })
     .then(ldapReq => {

@@ -3,7 +3,7 @@ import kyber from '@dedis/kyber'
 import rosterTOML from './public.toml'
 import { Reconstruct, ReconstructReply } from '@/proto'
 import { Roster } from '@dedis/cothority/network'
-import { RosterWSConnection } from '@dedis/cothority/network/connection'
+import { LeaderConnection } from '@dedis/cothority/network/connection'
 
 console.log('worker imported')
 
@@ -23,7 +23,7 @@ export const Uint8ArrayToScipers = bytes => {
 
 const curve = new kyber.curve.edwards25519.Curve()
 const roster = Roster.fromTOML(rosterTOML)
-const socket = new RosterWSConnection(roster, 'evoting')
+const socket = new LeaderConnection(roster, 'evoting')
 
 self.addEventListener('message', event => {
   const { election } = event.data
