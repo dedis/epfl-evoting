@@ -1,4 +1,4 @@
-# frontend_new
+# evoting
 
 ## Project setup
 ```
