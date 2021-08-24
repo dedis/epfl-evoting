@@ -3,6 +3,7 @@ node_modules
 /dist
 src/public.toml
 src/config.js
+src/version.js
 
 
 # local env files
