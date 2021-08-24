@@ -1,0 +1,28 @@
+{
+  "message": {
+    "activeElections": "Ihre Wahlen",
+    "finalizedElections": "Abgeschlossene Wahlen",
+    "futureElections": "Zukünftige Wahlen",
+    "vote": "Wählen",
+    "finalize": "Abschließen",
+    "electionInstruction": "Wählen Sie bitte maximal {maxChoices} Kandidaten von der nachfolgenden Liste. Durch einen Klick auf den Namen eines Kandidaten können Sie dessen Motivation und Präsentation einsehen.",
+    "viewResults": "Ergebnisse anzeigen",
+    "epfl": "EPFL",
+    "epflAssembly": "EPFL Schulversammlung",
+    "elections": "Wahlen YYYY",
+    "exportResults": "Exportieren Sie die Ergebnisse im CSV-Format",
+    "ballotCast": "Stimme in block {block} abgegeben",
+    "logout": "Ausloggen",
+    "howItWorks": "Wie es funktioniert",
+    "invalidBallot": "{invalidCount} Stimmzettel wurde während der Zählung ignoriert, weil er ungültig war. Weitere Informationen finden Sie in der CSV Datei.",
+    "invalidBallots": "{invalidCount} Stimmzettel wurden während der Zählung ignoriert, weil sie ungültig waren. Weitere Informationen finden Sie in der CSV Datei.",
+    "sorry": "Entschuldigung",
+    "unsupportedExplanation": "Diese Seite unterstützt Ihren Browser nicht. Verwenden Sie eine aktuelle Version von Google Chrome, Mozilla Firefox oder Internet Explorer 11",
+    "voteAgain": "Sie haben bei dieser Wahl bereits abgestimmt. Wenn Sie erneut wählen, wird nur Ihre letzte Stimme gezählt.",
+    "maxAllowed": "Maximal {max} erlaubt",
+    "cast": "Deine Stimme wurde abgegeben.",
+    "noElections": "Derzeit gibt es keine Wahlen, in denen Sie wählen können.",
+    "maint": "Das System ist derzeit nicht verfügbar. Bitte versuche es später erneut.",
+    "notagree": "Ich stimme nicht zu."
+  }
+}

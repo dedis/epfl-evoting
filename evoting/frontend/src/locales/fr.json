@@ -1,0 +1,28 @@
+{
+  "message": {
+    "activeElections": "Vos Scrutins",
+    "finalizedElections": "Scrutins finalisés",
+    "futureElections": "Scrutins dans l\"avenir",
+    "vote": "Votez",
+    "finalize": "Finalisez",
+    "electionInstruction": "Dans la liste suivante, veuillez sélectionner au maximum {maxChoices} candidats. Vous pouvez cliquer sur le nom d\"un candidat pour voir leur motivation et leur présentation.",
+    "viewResults": "Voir les résultats",
+    "epfl": "EPFL",
+    "epflAssembly": "Assemblée d\"école de l\"EPFL",
+    "elections": "Élections YYYY",
+    "exportResults": "Exporter les résultats au format CSV",
+    "ballotCast": "Vote enregistré sous {block}",
+    "logout": "Déconnexion",
+    "howItWorks": "Comment ça marche",
+    "invalidBallot": "{invalidCount} vote a été ignoré pendant le dépouillement parce qu’il était invalide. Veuillez vérifier le ficher CSV pour plus d’informations.",
+    "invalidBallots": "{invalidCount} votes ont été ignorés pendant le dépouillement parce qu’ils étaient invalides. Veuillez vérifier le ficher CSV pour plus d’informations.",
+    "sorry": "Désolé",
+    "unsupportedExplanation": "Ce site ne supporte pas votre navigateur. Veuillez utiliser une version récente de Google Chrome, Mozilla Firefox ou Internet Explorer 11",
+    "voteAgain": "Vous avez déjà voté pour cette élection. Si vous choisissez de voter à nouveau, seul votre dernier vote sera compté.",
+    "maxAllowed": "Maximum {max} permis",
+    "cast": "Votre bulletin de vote a été enregistré.",
+    "noElections": "Aucune élection en cours: pas de possibilité de voter.",
+    "maint": "Le système est actuellement indisponible. Veuillez réessayer plus tard.",
+    "notagree": "Je ne suis pas d'accord."
+  }
+}

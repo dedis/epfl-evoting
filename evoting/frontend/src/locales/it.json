@@ -1,0 +1,28 @@
+{
+  "message": {
+    "activeElections": "Le vostre elezioni",
+    "finalizedElections": "Elezioni chiuse",
+    "futureElections": "Elezioni per dopo",
+    "vote": "Vota",
+    "finalize": "Chiudi",
+    "electionInstruction": "Scegli al massimo {maxChoices} candidati dalla lista seguente. Cliccando sul nome potrai scoprire la presentazione e la motivazione del candidato.",
+    "viewResults": "Vedi i risultati",
+    "epfl": "EPFL",
+    "epflAssembly": "Assemblea della scuola EPFL",
+    "elections": "Elezioni YYYY",
+    "exportResults": "Esporta i risultati in formato CSV",
+    "ballotCast": "Ballot registrato sul blocco {block}",
+    "logout": "Disconnessione",
+    "howItWorks": "Come funziona",
+    "invalidBallot": "{invalidCount} voto è stato ignorato durante il conteggio perché non era valido. Si prega di controllare la CSV per ulteriori informazioni.",
+    "invalidBallots": "{invalidCount} voti sono stati ignorati durante il conteggio perché non erano validi. Si prega di controllare la CSV per ulteriori informazioni.",
+    "sorry": "Scusi",
+    "unsupportedExplanation": "Questo sito non supporta il tuo browser. Utilizza una versione recente di Google Chrome, Mozilla Firefox o Internet Explorer 11.",
+    "voteAgain": "Hai già votato in queste elezioni. Se scegli di votare di nuovo, verrà conteggiato solo il tuo ultimo voto.",
+    "maxAllowed": "Massimo {max} consentito",
+    "cast": "Il tuo voto è stato scelto.",
+    "noElections": "Al momento non ci sono elezioni in cui votare.",
+    "maint": "Il sistema non è attualmente disponibile. Per favore riprova più tardi.",
+    "notagree": "Non sono d'accordo."
+  }
+}
