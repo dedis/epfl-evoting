@@ -2,12 +2,12 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 import createPersistedState from 'vuex-persistedstate'
-import rosterTOML from './public.toml'
+import rosterTOML from 'raw-loader!./public.toml'
 import { Roster } from '@dedis/cothority/network'
-import { LeaderConnection } from '@dedis/cothority/network/connection'
-import config from '@/config'
-import messages from './translations'
+import { LeaderConnection } from '@dedis/cothority/network/websocket'
+import config from './config'
 import { Uint8ArrayToHex } from './utils'
+import i18n from './i18n';
 
 Vue.use(Vuex)
 Vue.use(VueI18n)
@@ -27,26 +27,6 @@ if (localStorage.master !== undefined) {
   console.log('New local store.')
 }
 localStorage.setItem('master', config.masterID)
-
-const getLang = () => {
-  const navLangs = window.navigator.languages || [window.navigator.userLanguage]
-  const fallback = 'en'
-  return navLangs.length > 0 ? navLangs[0].replace(/-.*/, '') : fallback
-}
-
-// Set the year in the messages
-let year = (new Date()).getFullYear()
-for (let lang in messages) {
-  for (let msg in messages[lang]['message']) {
-    messages[lang]['message'][msg] = messages[lang]['message'][msg].replace('YYYY', year)
-  }
-}
-
-const i18n = new VueI18n({
-  locale: getLang(),
-  fallbackLocale: 'en',
-  messages
-})
 
 const store = new Vuex.Store({
   state: {
@@ -78,7 +58,7 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    SET_ELECTIONS (state, elections) {
+    SET_ELECTIONS(state, elections) {
       if (elections === null) {
         state.elections = null
         return
@@ -108,19 +88,19 @@ const store = new Vuex.Store({
       }
       state.elections = elections
     },
-    SET_USER (state, data) {
+    SET_USER(state, data) {
       state.user = data
     },
-    SET_ISADMIN (state, isadmin) {
+    SET_ISADMIN(state, isadmin) {
       state.isadmin = isadmin
     },
-    SET_SNACKBAR (state, snackbar) {
+    SET_SNACKBAR(state, snackbar) {
       state.snackbar = snackbar
     },
-    SET_NOW (state, now) {
+    SET_NOW(state, now) {
       state.now = now
     },
-    SET_VOTED (store, votedElections) {
+    SET_VOTED(store, votedElections) {
       const obj = {}
       for (let i = 0; i < votedElections.length; i++) {
         const election = votedElections[i]
@@ -135,5 +115,3 @@ const store = new Vuex.Store({
 })
 
 export default store
-
-export { store, i18n }

@@ -1,9 +1,8 @@
-import 'babel-polyfill'
 import kyber from '@dedis/kyber'
-import rosterTOML from './public.toml'
+import rosterTOML from 'raw-loader!./public.toml'
 import { Reconstruct, ReconstructReply } from '@/proto'
 import { Roster } from '@dedis/cothority/network'
-import { LeaderConnection } from '@dedis/cothority/network/connection'
+import { LeaderConnection } from '@dedis/cothority/network/websocket'
 
 console.log('worker imported')
 
@@ -46,7 +45,7 @@ self.addEventListener('message', event => {
       } catch (e) {
         console.log(`iteration ${i} invalid ballot: ` + e.toString())
         invalidCount++
-        const ballot = [ i + 1, 'ballot empty' ]
+        const ballot = [i + 1, 'ballot empty']
         invalidBallots.push(ballot)
         continue
       }

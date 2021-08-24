@@ -1,34 +1,32 @@
 <template>
-  <div v-if='$store.getters.hasElections'>
+  <div v-if="$store.getters.hasElections">
     <div>
       <div v-if="$store.state.isadmin">
-        <v-btn
-          fixed
-          fab
-          dark
-          bottom
-          right
-          to="/election/new"
-          color="primary"
-        ><font size=6>+</font></v-btn>
+        <v-btn fixed fab dark bottom right to="/election/new" color="primary"
+          ><font size="6">+</font></v-btn
+        >
       </div>
       <div class="election-group">
         <h3>{{ $t("message.activeElections") }}</h3>
-	      <div v-if="noElections">
+        <div v-if="noElections">
           <v-layout>
             <v-flex xs12>
-              <v-card light color="yellow lighten-5"> {{ $t('message.noElections') }} </v-card>
+              <v-card light color="yellow lighten-5">
+                {{ $t("message.noElections") }}
+              </v-card>
             </v-flex>
           </v-layout>
-	      </div>
+        </div>
         <v-layout
           v-for="(layout, idx) in active(elections)"
           :key="idx"
           class="election-cards"
           row
-          wrap>
+          wrap
+        >
           <election-card
-            v-for="election in layout" :key="getId(election.id)"
+            v-for="election in layout"
+            :key="getId(election.id)"
             :id="getId(election.id)"
             :name="election.name"
             :end="election.end"
@@ -38,7 +36,7 @@
             :subtitle="election.subtitle"
             :moreInfo="mi(election)"
             :stage="election.stage"
-            ></election-card>
+          ></election-card>
         </v-layout>
       </div>
       <div class="election-group">
@@ -48,9 +46,11 @@
           :key="idx"
           class="election-cards"
           row
-          wrap>
+          wrap
+        >
           <election-card
-            v-for="election in layout" :key="getId(election.id)"
+            v-for="election in layout"
+            :key="getId(election.id)"
             :id="getId(election.id)"
             :name="election.name"
             :end="election.end"
@@ -59,7 +59,8 @@
             :creator="election.creator"
             :subtitle="election.subtitle"
             :moreInfo="mi(election)"
-            :stage="election.stage"></election-card>
+            :stage="election.stage"
+          ></election-card>
         </v-layout>
       </div>
     </div>
@@ -70,9 +71,11 @@
         :key="idx"
         class="election-cards"
         row
-        wrap>
+        wrap
+      >
         <election-card
-          v-for="election in layout" :key="getId(election.id)"
+          v-for="election in layout"
+          :key="getId(election.id)"
           :id="getId(election.id)"
           :name="election.name"
           :end="election.end"
@@ -82,23 +85,23 @@
           :subtitle="election.subtitle"
           :moreInfo="mi(election)"
           :stage="election.stage"
-          ></election-card>
+        ></election-card>
       </v-layout>
     </div>
-    <v-footer app>
-      <v-layout row wrap>
-        <v-flex><span class="pa-2 grey--text">v{{ version }}</span></v-flex>
-      </v-layout>
+    <v-footer fixed padless>
+      <v-col class="text-center" cols="12">
+        <span class="pa-2 grey--text">v{{ version }}</span>
+      </v-col>
     </v-footer>
   </div>
   <div v-else>
     <v-layout row wrap align-center>
-      <v-flex xs12 class='text-xs-center'>
-        <div v-if='$store.getters.hasElections'>
+      <v-flex xs12 class="text-xs-center">
+        <div v-if="$store.getters.hasElections">
           <p>Welcome, {{ $store.state.user.name }}</p>
         </div>
         <div v-else>
-          <v-progress-circular :indeterminate='true' :size="50" />
+          <v-progress-circular :indeterminate="true" :size="50" />
         </div>
       </v-flex>
     </v-layout>
@@ -118,95 +121,101 @@
 </style>
 
 <script>
-import ElectionCard from './ElectionCard'
-import { Uint8ArrayToHex } from '@/utils'
-import config from '@/config'
-import version from '@/version'
-import store from '@/store'
+import ElectionCard from "./ElectionCard";
+import { Uint8ArrayToHex } from "@/utils";
+import config from "@/config";
+import version from "@/version";
+import store from "@/store";
 
-const createArray = filteredArray => {
-  const res = []
-  let tmp = []
+const createArray = (filteredArray) => {
+  const res = [];
+  let tmp = [];
   filteredArray.forEach((e, i) => {
     if (i > 0 && i % 3 === 0) {
-      res.push(tmp)
-      tmp = []
+      res.push(tmp);
+      tmp = [];
     }
-    tmp.push(e)
-  })
+    tmp.push(e);
+  });
   if (tmp.length > 0) {
-    res.push(tmp)
+    res.push(tmp);
   }
-  return res
-}
+  return res;
+};
 
 const hidden = (id) => {
-  id = Uint8ArrayToHex(id)
+  id = Uint8ArrayToHex(id);
   if (!config.electionsToHide) {
-    return false
+    return false;
   }
-  return config.electionsToHide.includes(id)
-}
+  return config.electionsToHide.includes(id);
+};
 
 export default {
   components: {
-    'election-card': ElectionCard
+    "election-card": ElectionCard,
   },
   methods: {
-    mi (election) {
+    mi(election) {
       if (!election.moreinfolang[this.$i18n.locale]) {
-        return election.moreinfo
+        return election.moreinfo;
       }
-      return election.moreinfolang[this.$i18n.locale]
+      return election.moreinfolang[this.$i18n.locale];
     },
     active: (elections) => {
-      var act = createArray(elections.filter(e => {
-        const now = Date.now() / 1000
-        if (hidden(e.id)) {
-          return false
-        }
-        return e.stage < 3 && now > e.start && now < e.end
-      }))
-      return act
+      var act = createArray(
+        elections.filter((e) => {
+          const now = Date.now() / 1000;
+          if (hidden(e.id)) {
+            return false;
+          }
+          return e.stage < 3 && now > e.start && now < e.end;
+        })
+      );
+      return act;
     },
     finalized: (elections) => {
-      return createArray(elections.filter(e => {
-        if (hidden(e.id)) {
-          return false
-        }
-        if (store.state.isadmin) {
-          // Show admins all, so they can finalise them.
-          return true
-        } else {
-          return e.stage === 3
-        }
-      }))
+      return createArray(
+        elections.filter((e) => {
+          if (hidden(e.id)) {
+            return false;
+          }
+          if (store.state.isadmin) {
+            // Show admins all, so they can finalise them.
+            return true;
+          } else {
+            return e.stage === 3;
+          }
+        })
+      );
     },
     future: (elections) => {
-      return createArray(elections.filter(e => {
-        const now = new Date()
-        if (hidden(e.id)) {
-          return false
-        }
-        return (now < new Date(1000 * e.start))
-      }))
+      return createArray(
+        elections.filter((e) => {
+          const now = new Date();
+          if (hidden(e.id)) {
+            return false;
+          }
+          return now < new Date(1000 * e.start);
+        })
+      );
     },
     getId: (id) => {
-      return Uint8ArrayToHex(id)
-    }
+      return Uint8ArrayToHex(id);
+    },
   },
   computed: {
-    elections () {
-      return this.$store.getters.elections
+    elections() {
+      return this.$store.getters.elections;
     },
-    noElections () {
-      return this.active(this.$store.getters.elections).length === 0
-    }
+    noElections() {
+      return this.active(this.$store.getters.elections).length === 0;
+    },
   },
-  data () {
+  data() {
     return {
-      version: version
-    }
-  }
-}
+      version: version,
+    };
+  },
+};
 </script>

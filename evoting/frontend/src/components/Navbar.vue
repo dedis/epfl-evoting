@@ -1,93 +1,117 @@
 <template>
   <div>
-  <v-toolbar
-    app
-  >
-    <div class="logo">
-      <a href="/"><img src="@/assets/epfl_logo.png"></a>
-    </div>
-    <v-toolbar-title v-text="title"></v-toolbar-title>
-    <v-spacer></v-spacer>
-    <v-toolbar-items>
-      <v-menu offset-y>
-        <v-btn slot="activator" icon><v-icon>translate</v-icon></v-btn>
-        <v-list>
-          <v-list-tile @click="changeLanguage('fr')">
-            <v-list-tile-title>Français</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile @click="changeLanguage('de')">
-            <v-list-tile-title>Deutsch</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile @click="changeLanguage('it')">
-            <v-list-tile-title>Italiano</v-list-tile-title> </v-list-tile>
-          <v-list-tile @click="changeLanguage('en')">
-            <v-list-tile-title>English</v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-    </v-toolbar-items>
-    <v-toolbar-items v-if="$store.getters.hasElections" class="hidden-md-and-up">
-      <v-menu>
-        <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
-        <v-list>
-          <v-list-tile :href="explorerUrl">
-            <v-list-tile-avatar><v-icon>group_work</v-icon></v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ $t("message.howItWorks") }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile>
-            <v-list-tile-avatar><v-icon>account_circle</v-icon></v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ $store.state.user ? $store.state.user.name : '' }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile to="/logout">
-            <v-list-tile-avatar><v-icon>exit_to_app</v-icon></v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ $t("message.logout") }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-    </v-toolbar-items>
-    <v-toolbar-items v-if="$store.getters.hasElections" class="hidden-sm-and-down">
-        <v-btn :href="explorerUrl" target="_blank" flat><v-icon>group_work</v-icon></v-btn>
-        <v-btn flat>{{ $store.state.user ? $store.state.user.name : '' }}</v-btn>
-        <v-btn to="/logout" flat><v-icon>exit_to_app</v-icon></v-btn>
-    </v-toolbar-items>
-  </v-toolbar>
+    <v-app-bar>
+      <div class="logo">
+        <a href="/"><img src="@/assets/epfl_logo.png" /></a>
+      </div>
+      <v-app-bar-title v-text="title"></v-app-bar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" text><v-icon>mdi-translate</v-icon></v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="changeLanguage('fr')">
+              <v-list-item-title>Français</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="changeLanguage('de')">
+              <v-list-item-title>Deutsch</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="changeLanguage('it')">
+              <v-list-item-title>Italiano</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="changeLanguage('en')">
+              <v-list-item-title>English</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
+      <v-toolbar-items
+        v-if="$store.getters.hasElections"
+        class="hidden-md-and-up"
+      >
+        <v-menu>
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" text><v-icon>mdi-dots-vertical</v-icon></v-btn>
+          </template>
+          <v-list>
+            <v-list-item :href="explorerUrl">
+              <v-list-item-avatar
+                ><v-icon>mdi-account-group</v-icon></v-list-item-avatar
+              >
+              <v-list-item-content>
+                <v-list-item-title>{{
+                  $t("message.howItWorks")
+                }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-avatar
+                ><v-icon>mdi-account-circle</v-icon></v-list-item-avatar
+              >
+              <v-list-item-content>
+                <v-list-item-title>{{
+                  $store.state.user ? $store.state.user.name : ""
+                }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item to="/logout">
+              <v-list-item-avatar
+                ><v-icon>mdi-exit-to-app</v-icon></v-list-item-avatar
+              >
+              <v-list-item-content>
+                <v-list-item-title>{{
+                  $t("message.logout")
+                }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
+      <v-toolbar-items
+        v-if="$store.getters.hasElections"
+        class="hidden-sm-and-down"
+      >
+        <v-btn :href="explorerUrl" target="_blank" text
+          ><v-icon>mdi-account-group</v-icon></v-btn
+        >
+        <v-btn text>{{
+          $store.state.user ? $store.state.user.name : ""
+        }}</v-btn>
+        <v-btn to="/logout" text><v-icon>mdi-exit-to-app</v-icon></v-btn>
+      </v-toolbar-items>
+    </v-app-bar>
   </div>
 </template>
 
 <style>
-  .logo img {
-    width: 108px;
-    padding: 5px 0 0 0;
-  }
+.logo img {
+  width: 108px;
+  padding: 5px 0 0 0;
+}
 </style>
 
 <script>
-import config from '@/config'
-import { Uint8ArrayToHex } from '@/utils'
+import config from "@/config";
+import { Uint8ArrayToHex } from "@/utils";
 
 export default {
   props: {
-    title: String
+    title: String,
   },
   methods: {
     changeLanguage: function (lang) {
-      this.$i18n.locale = lang
-    }
+      this.$i18n.locale = lang;
+    },
   },
-  data () {
-    return {
-    }
+  data() {
+    return {};
   },
   computed: {
-    explorerUrl () {
-      return `${config.explorerUrl}#/${Uint8ArrayToHex(config.masterID)}/graph`
-    }
-  }
-}
+    explorerUrl() {
+      return `${config.explorerUrl}#/${Uint8ArrayToHex(config.masterID)}/graph`;
+    },
+  },
+};
 </script>

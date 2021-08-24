@@ -1,23 +1,16 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import 'babel-polyfill'
 import Vue from 'vue'
-import App from './App'
+import App from './App.vue'
 import router from './router'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
-import { store, i18n } from './store'
-
-Vue.use(Vuetify)
+import vuetify from './plugins/vuetify'
+import i18n from './i18n'
+import store from './store'
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
 new Vue({
-  i18n,
-  el: '#app',
   router,
+  vuetify,
+  i18n,
   store,
-  components: { App },
-  template: '<App/>'
-})
+  render: h => h(App)
+}).$mount('#app')
