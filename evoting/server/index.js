@@ -62,7 +62,7 @@ router.get('/auth/login', (req, res) => {
     request: 'uniqueid',
     forcelogin: '1'
   }
-  tequilaRequest ('/cgi-bin/tequila/createrequest', data)
+  tequilaRequest('/cgi-bin/tequila/createrequest', data)
     .then(response => {
       const data = util.txt2dict(response.data.trim())
       res.redirect(307, `https://${config.tequila.hostname}/cgi-bin/tequila/auth?requestkey=${data.key}`)
@@ -80,7 +80,7 @@ router.get('/auth/login/txt', (req, res) => {
     request: 'uniqueid',
     forcelogin: '1'
   }
-  tequilaRequest ('/cgi-bin/tequila/createrequest', data)
+  tequilaRequest('/cgi-bin/tequila/createrequest', data)
     .then(response => {
       const data = util.txt2dict(response.data.trim())
       res.redirect(307, `https://${config.tequila.hostname}/cgi-bin/tequila/auth?requestkey=${data.key}`)
@@ -117,8 +117,8 @@ router.get('/auth/verify/txt', (req, res) => {
 })
 
 function fmt(user, sig) {
-	var u = JSON.stringify({ user })
-	return `
+  var u = JSON.stringify({ user })
+  return `
 <html>
 <head>
 <script>
@@ -138,11 +138,32 @@ function fmt(user, sig) {
 router.get('/auth/verify', (req, res) => {
   payload = { key: req.query.key }
   if (isTest) {
-    const { sciper } = req.query    
+    const { sciper } = req.query
     signature = util.Uint8ArrayToHex(generateSignature(sciper, config.masterID))
-    res.setHeader('Content-Type', 'text/plain')
-    res.send(fmt({}, signature))
-    return
+    return getLdapData(sciper).then(ldapReq => {
+      const ldapData = ldapReq.entries[0].object
+      const groups = ldapData.memberOf
+      const name = ldapData.displayName
+      const sciper = ldapData.uniqueIdentifier
+      const sections = []
+      let sectionRegex = /ou=(\w+)/g
+      let match
+      while ((match = sectionRegex.exec(ldapData.dn), match)) {
+        sections.push(match[1])
+      }
+
+      user = {
+        name,
+        sciper,
+        groups,
+        sections,
+      }
+      signature = util.Uint8ArrayToHex(generateSignature(sciper, config.masterID))
+      res.send(fmt(user, signature))
+    }).catch(e => {
+      console.error(e)
+      res.end()
+    })
   }
 
   return tequilaRequest('/cgi-bin/tequila/fetchattributes', payload)
