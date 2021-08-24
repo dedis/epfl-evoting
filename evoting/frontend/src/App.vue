@@ -86,10 +86,6 @@ export default {
 </script>
 
 <style scope>
-/* .root-container {
-  margin-top: 64px !important;
-} */
-
 .theme--light .breadcrumbs li:last-child .breadcrumbs__item {
   color: #1976d2 !important;
 }
