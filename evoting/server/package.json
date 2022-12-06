@@ -13,7 +13,7 @@
   "dependencies": {
     "@dedis/kyber-js": "^0.0.7",
     "axios": "^0.21.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "express-promise-router": "^3.0.1",
     "hex-to-array-buffer": "^1.1.0",
     "promised-ldap": "^0.3.0"
