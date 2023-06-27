@@ -39,6 +39,8 @@ export class Ballot extends Message {
     super(properties)
     this.alpha = Buffer.from(this.alpha || EMPTY_BUFFER)
     this.beta = Buffer.from(this.beta || EMPTY_BUFFER)
+    this.additionalalphas = this.additionalalphas
+    this.additionalbetas = this.additionalbetas
   }
 }
 

@@ -121,21 +121,33 @@ import { SkipchainRPC } from "@dedis/cothority/skipchain";
 
 const curve = new kyber.curve.edwards25519.Curve();
 
-export const encodeScipers = (scipers) => {
-  return Buffer.from(
-    [].concat(
-      ...scipers.map((sciper) => {
-        const ret = [];
-        let tmp = parseInt(sciper);
-        for (let i = 0; i < 3; i++) {
-          ret.push(tmp & 0xff);
-          tmp = tmp >> 8;
-        }
-        return ret;
-      })
-    )
-  );
-};
+export const encodeScipers = (scipers, maxchoices) => {
+  const numBuffers = Math.ceil(maxchoices / 9);
+  const step = scipers.length > 9 ? 9 : scipers.length;
+  const bufferv = [];
+  for (let i=0; i < scipers.length; i += step) {
+    let j = Math.min(scipers.length, i+step);
+    bufferv.push(
+      Buffer.from(
+        [].concat(
+          ...scipers.slice(i, j).map((sciper) => {
+            const ret = [];
+            let tmp = parseInt(sciper);
+            for (let i = 0; i < 3; i++) {
+              ret.push(tmp & 0xff);
+              tmp = tmp >> 8;
+            }
+            return ret;
+          })
+        )
+      )
+    );
+  }
+  for (let i=numBuffers-bufferv.length; i > 0; i--){
+    bufferv.push(Buffer.alloc(27));
+  }
+  return bufferv;
+}
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -202,8 +214,8 @@ export default {
       // encrypt the ballot
       let { ballot } = this;
       ballot = new Set(ballot);
-      const embedMsg = encodeScipers(Array.from(ballot));
-      const m = curve.point().embed(embedMsg);
+      const embedMsgv = encodeScipers(Array.from(ballot), this.election.maxchoices);
+      const m = curve.point().embed(embedMsgv[0]);
       const r = curve.scalar().pick();
       // u = gr
       const u = curve.point().mul(r, null);
@@ -212,6 +224,23 @@ export default {
       y.unmarshalBinary(key.subarray(8));
       const yr = curve.point().mul(r, y);
       const v = curve.point().add(m, yr);
+      const additionalalphas = [];
+      const additionalbetas = [];
+      if (embedMsgv.length > 1){
+        for (let i=1; i < embedMsgv.length; i++) {
+          const m = curve.point().embed(embedMsgv[i]);
+          const r = curve.scalar().pick();
+          // u = gr
+          const u = curve.point().mul(r, null);
+          // v = m + yr
+          const y = curve.point();
+          y.unmarshalBinary(key.subarray(8));
+          const yr = curve.point().mul(r, y);
+          const v = curve.point().add(m, yr);
+          additionalalphas.push(u.marshalBinary());
+          additionalbetas.push(v.marshalBinary());
+        }
+      }
 
       // prepare and the message
       const cast = new Cast({
@@ -220,6 +249,8 @@ export default {
           user: parseInt(this.$store.state.user.sciper),
           alpha: u.marshalBinary(),
           beta: v.marshalBinary(),
+          additionalalphas: additionalalphas,
+          additionalbetas: additionalbetas,
         }),
         user: parseInt(this.$store.state.user.sciper),
         signature: getSig(),
