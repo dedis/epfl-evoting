@@ -82,20 +82,6 @@
         </v-card-title>
       </v-card>
     </v-flex>
-    <v-footer fixed padless>
-      <v-col class="text-xs-left" cols="6">
-        <span>&copy; {{ election.footer.text }}</span>
-      </v-col>
-      <v-col class="text-xs-right" cols="6">
-        <span class="phone">{{ election.footer.contactphone }}</span>
-        <span class="email"
-          ><a :href="`mailto:${election.footer.contactemail}`">{{
-            election.footer.contacttitle
-          }}</a></span
-        >
-        <span class="version grey--text">v{{ version }}</span>
-      </v-col>
-    </v-footer>
     <v-dialog v-model="dialog3" persistent max-width="500px">
       <v-card>
         <v-card-title>
