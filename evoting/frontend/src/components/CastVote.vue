@@ -116,6 +116,7 @@ import {
   LookupSciper,
   LookupSciperReply,
 } from "@/proto";
+import { randomBytes } from "crypto-browserify";
 import { Roster } from "@dedis/cothority/network";
 import { SkipchainRPC } from "@dedis/cothority/skipchain";
 
@@ -133,6 +134,42 @@ export const encodeScipers = (scipers, maxchoices) => {
     bufferv.push(buf.slice(0, -1)); // slice is deprecated, but subarray doesn't return a Buffer...
   }
   return bufferv;
+}
+
+// This is a copy of github.com/dedis/cothority/external/js/kyber/src/curve/edwards25519/point.ts::embed
+// because the embedding of an empty buffer does not work.
+export const embed = (data) => {
+    let dl = curve.point().embedLen();
+    if (data.length > dl) {
+        throw new Error("data.length > embedLen");
+    }
+
+    if (dl > data.length) {
+        dl = data.length;
+    }
+
+    const pointObj = new curve.point();
+    for (;;) {
+        const buff = randomBytes(32);
+
+        buff[0] = dl; // encode length in lower 8 bits
+        if (dl > 0) {
+            data.copy(buff, 1); // copy data into buff starting from the 2nd position
+        }
+
+        try {
+            pointObj.unmarshalBinary(buff);
+        } catch (e) {
+            continue; // try again
+        }
+
+        // Verify it's on the curve by multiplying with the order of the base point
+        const q = pointObj.clone();
+        q.ref.point = q.ref.point.mul(curve.curve.n);
+        if (q.ref.point.isInfinity()) {
+            return pointObj;
+        }
+    }
 }
 
 function sleep(ms) {
@@ -201,9 +238,10 @@ export default {
       let { ballot } = this;
       ballot = new Set(ballot);
       const embedMsgv = encodeScipers(Array.from(ballot), this.election.maxchoices);
+
       const alphaBeta = embedMsgv.map((msg) => {
           // Calculate an ElGamal encryption
-          const m = curve.point().embed(msg);
+          const m = embed(msg);
           const r = curve.scalar().pick();
           // u = gr
           const u = curve.point().mul(r, null);
@@ -229,7 +267,6 @@ export default {
         user: parseInt(this.$store.state.user.sciper),
         signature: getSig(),
       });
-      console.dir(cast.ballot);
       this.$store.state.socket
         .send(cast, CastReply)
         .then((data) => {
@@ -267,7 +304,6 @@ export default {
     };
   },
   created() {
-    console.log("Election id", Uint8ArrayToHex(this.election.id));
     const scipers = this.election.candidates;
     for (let i = 0; i < scipers.length; i++) {
       const sciper = scipers[i];
