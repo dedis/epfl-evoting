@@ -27,7 +27,11 @@ const socket = new LeaderConnection(roster, 'evoting')
 self.addEventListener('message', event => {
   const { election } = event.data
   socket.send(new Reconstruct({ id: election.id }), ReconstructReply).then(data => {
-    const { points, additionalpoints } = data
+    let additionalpoints = []
+    const { points } = data
+    if ('additionalpoints' in data) {
+      additionalpoints = data.additionalpoints;
+    }
     let invalidCount = 0
     let invalidBallots = []
     const counts = {}
@@ -38,7 +42,9 @@ self.addEventListener('message', event => {
     }
     for (let i = 0; i < points.length; i++) {
       var results = [points[i].subarray(8)]
-      additionalpoints[i].additionalpoints.forEach((p) => results.push(p.subarray(8)));
+      if (additionalpoints.length > 0) {
+        additionalpoints[i].additionalpoints.forEach((p) => results.push(p.subarray(8)));
+      }
       results.forEach((pointBuf) => {
         const point = curve.point()
         point.unmarshalBinary(pointBuf)
