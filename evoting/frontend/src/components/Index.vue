@@ -180,12 +180,7 @@ export default {
           if (hidden(e.id)) {
             return false;
           }
-          if (store.state.isadmin) {
-            // Show admins all, so they can finalise them.
-            return true;
-          } else {
-            return e.stage === 3;
-          }
+          return e.stage === 3;
         })
       );
     },
