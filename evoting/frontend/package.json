@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "genversion src/version.js && vue-cli-service serve",
-    "build": "genversion src/version.js && vue-cli-service build",
-    "build-dev": "genversion src/version.js && vue-cli-service build --dest ../server/dist",
+    "build": "genversion src/version.js && vue-cli-service build --dest ../server/dist",
     "lint": "genversion src/version.js && vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\"",
     "proto": "node scripts/build_proto.js"
