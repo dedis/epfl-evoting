@@ -82,20 +82,6 @@
         </v-card-title>
       </v-card>
     </v-flex>
-    <v-footer fixed padless>
-      <v-col class="text-xs-left" cols="6">
-        <span>&copy; {{ election.footer.text }}</span>
-      </v-col>
-      <v-col class="text-xs-right" cols="6">
-        <span class="phone">{{ election.footer.contactphone }}</span>
-        <span class="email"
-          ><a :href="`mailto:${election.footer.contactemail}`">{{
-            election.footer.contacttitle
-          }}</a></span
-        >
-        <span class="version grey--text">v{{ version }}</span>
-      </v-col>
-    </v-footer>
     <v-dialog v-model="dialog3" persistent max-width="500px">
       <v-card>
         <v-card-title>
@@ -130,26 +116,61 @@ import {
   LookupSciper,
   LookupSciperReply,
 } from "@/proto";
+import { randomBytes } from "crypto-browserify";
 import { Roster } from "@dedis/cothority/network";
 import { SkipchainRPC } from "@dedis/cothority/skipchain";
 
 const curve = new kyber.curve.edwards25519.Curve();
 
-export const encodeScipers = (scipers) => {
-  return Buffer.from(
-    [].concat(
-      ...scipers.map((sciper) => {
-        const ret = [];
-        let tmp = parseInt(sciper);
-        for (let i = 0; i < 3; i++) {
-          ret.push(tmp & 0xff);
-          tmp = tmp >> 8;
+export const encodeScipers = (scipers, maxchoices) => {
+  const bufferv = [];
+  for (let i=0; i < maxchoices; i += 9) {
+    const start = Math.min(scipers.length, i);
+    const end = Math.min(scipers.length, i+9);
+    const buf = Buffer.alloc(3 * (end - start) + 1);
+    if (end > start){
+      scipers.slice(i,end).forEach((sciper, n) => buf.writeUInt32LE(sciper, n * 3));
+    }
+    bufferv.push(buf.slice(0, -1)); // slice is deprecated, but subarray doesn't return a Buffer...
+  }
+  return bufferv;
+}
+
+// This is a copy of github.com/dedis/cothority/external/js/kyber/src/curve/edwards25519/point.ts::embed
+// because the embedding of an empty buffer does not work.
+export const embed = (data) => {
+    let dl = curve.point().embedLen();
+    if (data.length > dl) {
+        throw new Error("data.length > embedLen");
+    }
+
+    if (dl > data.length) {
+        dl = data.length;
+    }
+
+    const pointObj = new curve.point();
+    for (;;) {
+        const buff = randomBytes(32);
+
+        buff[0] = dl; // encode length in lower 8 bits
+        if (dl > 0) {
+            data.copy(buff, 1); // copy data into buff starting from the 2nd position
         }
-        return ret;
-      })
-    )
-  );
-};
+
+        try {
+            pointObj.unmarshalBinary(buff);
+        } catch (e) {
+            continue; // try again
+        }
+
+        // Verify it's on the curve by multiplying with the order of the base point
+        const q = pointObj.clone();
+        q.ref.point = q.ref.point.mul(curve.curve.n);
+        if (q.ref.point.isInfinity()) {
+            return pointObj;
+        }
+    }
+}
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -216,24 +237,32 @@ export default {
       // encrypt the ballot
       let { ballot } = this;
       ballot = new Set(ballot);
-      const embedMsg = encodeScipers(Array.from(ballot));
-      const m = curve.point().embed(embedMsg);
-      const r = curve.scalar().pick();
-      // u = gr
-      const u = curve.point().mul(r, null);
-      // v = m + yr
-      const y = curve.point();
-      y.unmarshalBinary(key.subarray(8));
-      const yr = curve.point().mul(r, y);
-      const v = curve.point().add(m, yr);
+      const embedMsgv = encodeScipers(Array.from(ballot), this.election.maxchoices);
+
+      const alphaBeta = embedMsgv.map((msg) => {
+          // Calculate an ElGamal encryption
+          const m = embed(msg);
+          const r = curve.scalar().pick();
+          // u = gr
+          const u = curve.point().mul(r, null);
+          // v = m + yr
+          const y = curve.point();
+          y.unmarshalBinary(key.subarray(8));
+          const yr = curve.point().mul(r, y);
+          const v = curve.point().add(m, yr);
+          return [u.marshalBinary(), v.marshalBinary()];
+      });
+      const additionalAlphaBeta = alphaBeta.slice(1);
 
       // prepare and the message
       const cast = new Cast({
         id: this.election.id,
         ballot: new Ballot({
           user: parseInt(this.$store.state.user.sciper),
-          alpha: u.marshalBinary(),
-          beta: v.marshalBinary(),
+          alpha: alphaBeta[0][0],
+          beta: alphaBeta[0][1],
+          additionalalphas: additionalAlphaBeta.map((ab) => ab[0]),
+          additionalbetas: additionalAlphaBeta.map((ab) => ab[1]),
         }),
         user: parseInt(this.$store.state.user.sciper),
         signature: getSig(),
@@ -275,7 +304,6 @@ export default {
     };
   },
   created() {
-    console.log("Election id", Uint8ArrayToHex(this.election.id));
     const scipers = this.election.candidates;
     for (let i = 0; i < scipers.length; i++) {
       const sciper = scipers[i];

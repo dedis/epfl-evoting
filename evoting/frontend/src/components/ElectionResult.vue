@@ -259,7 +259,17 @@ export default {
       this.invalidCount = invalidCount;
       this.invalidBallots = invalidBallots;
       this.counts = counts;
-      this.votes = votes;
+      this.votes = [];
+      let voteIndex = 0;
+      for (const vote of votes){
+        if (vote[0] !== voteIndex){
+          this.votes.push(vote);
+          voteIndex = vote[0];
+        }
+        else {
+          this.votes[this.votes.length-1] += vote.slice(1);
+        }
+      }
       this.totalCount = totalCount;
       this.counted = true;
     };

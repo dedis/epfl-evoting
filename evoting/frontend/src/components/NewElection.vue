@@ -415,7 +415,7 @@ export default {
       if (maxChoices <= 0) {
         return "Max Choices should atleast be 1";
       }
-      return maxChoices <= 9 || "Max Choices can be atmost 9";
+      return true;
     },
     submitHandler(e) {
       e.preventDefault();

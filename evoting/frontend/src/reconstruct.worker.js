@@ -27,7 +27,11 @@ const socket = new LeaderConnection(roster, 'evoting')
 self.addEventListener('message', event => {
   const { election } = event.data
   socket.send(new Reconstruct({ id: election.id }), ReconstructReply).then(data => {
+    let additionalpoints = []
     const { points } = data
+    if ('additionalpoints' in data) {
+      additionalpoints = data.additionalpoints;
+    }
     let invalidCount = 0
     let invalidBallots = []
     const counts = {}
@@ -37,44 +41,53 @@ self.addEventListener('message', event => {
       counts[election.candidates[i]] = 0
     }
     for (let i = 0; i < points.length; i++) {
-      const point = curve.point()
-      point.unmarshalBinary(points[i].subarray(8))
-      var d
-      try {
-        d = point.data()
-      } catch (e) {
-        console.log(`iteration ${i} invalid ballot: ` + e.toString())
-        invalidCount++
-        const ballot = [i + 1, 'ballot empty']
-        invalidBallots.push(ballot)
-        continue
+
+      // Start with concatenating all points we have for this vote
+      var results = [points[i].subarray(8)]
+      if (additionalpoints.length > 0) {
+        additionalpoints[i].additionalpoints.forEach((p) => results.push(p.subarray(8)));
       }
-      const scipers = Uint8ArrayToScipers(d)
-      if (scipers.length !== d.length / 3) {
-        console.log(`iteration ${i} invalid ballot: duplicate candidates`)
-        invalidCount++
-        scipers.unshift(i + 1)
-        scipers.push('duplicate candidate')
-        invalidBallots.push(scipers)
-        continue
+      const prevInvalid = invalidCount;
+      const scipers = results.map((pointBuf) => {
+        const point = curve.point()
+        point.unmarshalBinary(pointBuf)
+        try {
+          const d = point.data()
+          const s = Uint8ArrayToScipers(d);
+          if (s.length !== d.length / 3){
+            invalidCount++
+            const ballot = [i + 1, 'invalid ballot']
+            invalidBallots.push(ballot)
+          }
+          return s;
+        } catch (e) {
+          invalidCount++
+          const ballot = [i + 1, 'invalid ballot']
+          invalidBallots.push(ballot)
+          return []
+        }
+      }).flat();
+
+      if (invalidCount > prevInvalid){
+        continue;
       }
+
+      // Then test if the votes are valid, and proceed if yes
       const { candidates, maxChoices } = election
       const filtered = scipers.filter(x => candidates.includes(x))
       if (filtered.length !== scipers.length) {
         invalidCount++
-        console.log(`iteration ${i} invalid ballot: invalid candidate`)
         scipers.unshift(i + 1)
         scipers.push('invalid candidate')
         invalidBallots.push(scipers)
-        continue
+        return
       }
       if (filtered.length > maxChoices) {
-        console.log(`iteration ${i} invalid ballot: too many candidates`)
         invalidCount++
         scipers.unshift(i + 1)
         scipers.push('too many candidates')
         invalidBallots.push(scipers)
-        continue
+        return
       }
       let row = [i + 1]
       for (let j = 0; j < scipers.length; j++) {

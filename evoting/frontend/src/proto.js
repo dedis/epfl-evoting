@@ -39,6 +39,8 @@ export class Ballot extends Message {
     super(properties)
     this.alpha = Buffer.from(this.alpha || EMPTY_BUFFER)
     this.beta = Buffer.from(this.beta || EMPTY_BUFFER)
+    this.additionalalphas = this.additionalalphas.map(a => Buffer.from(a || EMPTY_BUFFER))
+    this.additionalbetas = this.additionalbetas.map(b => Buffer.from(b || EMPTY_BUFFER))
   }
 }
 
@@ -68,6 +70,10 @@ export class Reconstruct extends Message {
 
 export class ReconstructReply extends Message {
   static register () { registerMessage('ReconstructReply', ReconstructReply) }
+}
+
+export class AddPoints extends Message {
+  static register() {registerMessage('AddPoints', AddPoints) }
 }
 
 export class Cast extends Message {
@@ -105,6 +111,7 @@ LookupSciper.register()
 LookupSciperReply.register()
 Reconstruct.register()
 ReconstructReply.register()
+AddPoints.register()
 Cast.register()
 CastReply.register()
 Shuffle.register()
