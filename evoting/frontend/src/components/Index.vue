@@ -125,6 +125,7 @@ import ElectionCard from "./ElectionCard";
 import { Uint8ArrayToHex } from "@/utils";
 import config from "@/config";
 import version from "@/version";
+import store from "@/store";
 
 const createArray = (filteredArray) => {
   const res = [];
